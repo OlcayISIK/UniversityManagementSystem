@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UMS.Core;
 using UMS.Core.Utils;
 using UMS.Data.Entities;
+using UMS.Data.Entities.UniversityBoundEntities;
 
 namespace UMS.Data.EF
 {

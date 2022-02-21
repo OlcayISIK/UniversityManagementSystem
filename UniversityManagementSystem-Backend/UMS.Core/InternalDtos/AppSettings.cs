@@ -20,7 +20,6 @@ namespace UMS.Core.InternalDtos
 
     public class TokenOptions
     {
-        public string SecretKey { get; set; }
         public string StudentRepresentativeSecretKey { get; set; }
         public string StudentSecretKey { get; set; }
         public string TeacherSecretKey { get; set; }

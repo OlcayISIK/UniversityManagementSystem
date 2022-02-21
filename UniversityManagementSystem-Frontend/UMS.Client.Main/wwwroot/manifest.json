@@ -1,6 +1,6 @@
 {
-  "name": "UniversityManagementSystem",
-  "short_name": "UniversityManagementSystem",
+  "name": "UMS.Client.Main",
+  "short_name": "UMS.Client.Main",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

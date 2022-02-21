@@ -84,7 +84,39 @@ namespace UMS.Api
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenOptions.SecretKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenOptions.StudentSecretKey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            }).AddJwtBearer(Constants.AuthenticationSchemes.Teacher, x =>
+            {
+                // this section is for authenticating signalR requests
+                x.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/refreshHub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+                // TODO look into this
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = false;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_appSettings.TokenOptions.TeacherSecretKey)),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
@@ -92,6 +124,24 @@ namespace UMS.Api
                 };
             }).AddJwtBearer(Constants.AuthenticationSchemes.StudentRespresentative, x =>
             {
+                // this section is for authenticating signalR requests
+                x.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/refreshHub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
                 // TODO look into this
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = false;
@@ -111,7 +161,8 @@ namespace UMS.Api
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc(Constants.AuthenticationSchemes.Student, new OpenApiInfo { Title = "UMS User Api", Version = "v1" });
-                x.SwaggerDoc(Constants.AuthenticationSchemes.StudentRespresentative, new OpenApiInfo { Title = "UMS Admin Api", Version = "v1" });
+                x.SwaggerDoc(Constants.AuthenticationSchemes.StudentRespresentative, new OpenApiInfo { Title = "UMS Student Respresentative Api", Version = "v1" });
+                x.SwaggerDoc(Constants.AuthenticationSchemes.Teacher, new OpenApiInfo { Title = "UMS Teacher Api", Version = "v1" });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 x.IncludeXmlComments(xmlPath);
@@ -128,7 +179,7 @@ namespace UMS.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "UMS.Api", Version = "v1" });
             });
 
-            //services.AddDistributedRedisCache(options => { options.Configuration = _appSettings.RedisConnectionString; });
+            services.AddDistributedRedisCache(options => { options.Configuration = _appSettings.RedisConnectionString; });
             ConfigureDependencies(services);
         }
 
@@ -156,14 +207,15 @@ namespace UMS.Api
             app.UseWebSockets();
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapHub<RefreshHub>("/refreshhub");
+                endpoints.MapHub<RefreshHub>("/refreshhub");
                 endpoints.MapControllers();
             });
             app.UseSwagger();
             app.UseSwaggerUI(endpoints =>
             {
                 endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.Student}/swagger.json", "UMS User API");
-                endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.StudentRespresentative}/swagger.json", "UMS Admin API");
+                endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.StudentRespresentative}/swagger.json", "UMS Student Respresentative API");
+                endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.Teacher}/swagger.json", ":UMS Teacher API");
                 endpoints.RoutePrefix = string.Empty;
             });
 
@@ -212,17 +264,6 @@ namespace UMS.Api
             builder.UseSqlServer(connectionString);
             using var context = new Context(builder.Options);
             context.Database.Migrate();
-            var firstAdminExists = context.Admins.Any();
-            if (!firstAdminExists)
-            {
-                context.Admins.Add(new Admin
-                {
-                    Username = "admin",
-                    HashedPassword = new CustomPasswordHasher().HashPassword("Hmpetleva1337."),
-                    Status = UserStatus.Approved
-                });
-                context.SaveChanges();
-            }
         }
 
         private void CreateFileSystemDirectories()

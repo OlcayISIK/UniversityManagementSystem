@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="StudentRepresentative\" />
+    <Folder Include="Student\" />
+    <Folder Include="Teacher\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UMS.Client.Core\UMS.Client.Core.csproj" />
+  </ItemGroup>
+
+</Project>
