@@ -7,14 +7,14 @@ using UMS.Dto.Authentication;
 
 namespace Mesero.Business.Interface
 {
-    public interface IAuthentictionOperations
+    public interface IAuthenticationOperations
     {
         #region Teacher
 
         Task<Result<TokenDto>> TeacherAuthenticateViaPassword(LoginDto loginDto);
-        Task<Result<TokenDto>> TeacherAuthenticateViaToken(string refreshToken);
+        //Task<Result<TokenDto>> TeacherAuthenticateViaToken(string refreshToken);
+        Task<Result<long>> TeacherSignUp(SignUpDto dto);
         Task<Result<bool>> TeacherLogout(string refreshToken);
-        Task<Result<TokenDto>> TeacherLoginToUserCompany(long userId);
         Task<Result<bool>> TeacherForgotPassword(string emailAddress);
         Task<Result<bool>> TeacherResetPassword(ResetPasswordDto dto);
 
@@ -23,7 +23,7 @@ namespace Mesero.Business.Interface
         #region Student
 
         Task<Result<TokenDto>> StudentAuthenticateViaPassword(LoginDto loginDto);
-        Task<Result<TokenDto>> StudentAuthenticateViaToken(string refreshToken);
+        //Task<Result<TokenDto>> StudentAuthenticateViaToken(string refreshToken);
         Task<Result<bool>> StudentLogout(string refreshToken);
         Task<Result<long>> StudentSignUp(SignUpDto dto);
         Task<Result<bool>> StudentForgotPassword(string emailAddress);
@@ -34,7 +34,7 @@ namespace Mesero.Business.Interface
         #region StudentRespresentative
 
         Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaPassword(LoginDto loginDto);
-        Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaToken(string refreshToken);
+        //Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaToken(string refreshToken);
         Task<Result<bool>> StudentRespresentativeLogout(string refreshToken);
         Task<Result<long>> StudentRespresentativeSignUp(SignUpDto dto);
         Task<Result<bool>> StudentRespresentativeForgotPassword(string emailAddress);

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace UMS.Core.Enums
 {
-    public enum UserType
+    public enum RedisTokenType
     {
-        Teacher = 0,
-        Student = 1,
+        RefreshToken = 0,
+        PasswordResetToken = 1
     }
 }

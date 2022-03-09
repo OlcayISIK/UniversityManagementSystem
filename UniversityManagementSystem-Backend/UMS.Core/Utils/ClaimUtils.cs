@@ -63,6 +63,19 @@ namespace UMS.Core.Utils
                 new Claim(UniversityId, universityId.ToString())
             };
         }
+        public static Claim[] CreateStudentClaims(long userId, string username, UserType userType, long universityId)
+        {
+            return new[]
+            {
+                //new Claim(ClaimTypes.Sid,((int)userType).ToString()),
+                //new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                //new Claim(ClaimTypes.Name, username)
+                new Claim(Username, username),
+                new Claim(UserId, userId.ToString()),
+                new Claim(UserType, ((int)userType).ToString()),
+                new Claim(UniversityId, universityId.ToString())
+            };
+        }
 
         public static IEnumerable<Claim> CreateClaims(long userId)
         {

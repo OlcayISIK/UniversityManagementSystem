@@ -35,5 +35,26 @@ namespace UMS.Business.Helpers
                 RefreshToken = refreshToken
             };
         }
+        public static TokenDto CreateStudentToken(long userId, string username, UserType userType, long universityId, TokenOptions tokenOptions)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(tokenOptions.TeacherSecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(ClaimUtils.CreateStudentClaims(userId, username, userType, universityId)),
+                Expires = DateTime.UtcNow.AddMinutes(tokenOptions.AccessTokenLifetime),
+                IssuedAt = DateTime.UtcNow,
+                NotBefore = DateTime.UtcNow,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var accessToken = tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
+            var refreshToken = Guid.NewGuid().ToString();
+            return new TokenDto
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            };
+        }
+
     }
 }

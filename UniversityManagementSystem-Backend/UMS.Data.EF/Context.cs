@@ -45,6 +45,7 @@ namespace UMS.Data.EF
         public virtual DbSet<StudentGrade> StudentGrades { get; set; }
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
         public virtual DbSet<Admin> Admins { get; set; }
+        public virtual DbSet<Student> Students { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

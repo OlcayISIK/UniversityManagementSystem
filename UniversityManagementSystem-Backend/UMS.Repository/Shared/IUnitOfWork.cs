@@ -14,5 +14,7 @@ namespace UMS.Repository.Shared
         Task<int> Commit();
 
         ITeacherRepository Teachers { get; }
+        IRedisTransactionsRepository RedisTransactions { get; }
+        IStudentRepository Students { get; }
     }
 }

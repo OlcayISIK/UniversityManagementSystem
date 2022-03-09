@@ -1,6 +1,7 @@
 ﻿using Mesero.Business.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using UMS.Core;
 using UMS.Dto;
 using UMS.Dto.Authentication;

@@ -7,9 +7,9 @@ using UMS.Core.Enums;
 
 namespace UMS.Data.Entities.UniversityBoundEntities
 {
-    public class CourseInstructor : UniversityBoundEntity
+    public class Student : UniversityBoundEntity
     {
-        public long TeacherId { get; set; }
+        public long StudentId { get; set; }
         public string Username { get; set; }
         public string HashedPassword { get; set; }
         public string Name { get; set; }
@@ -17,10 +17,9 @@ namespace UMS.Data.Entities.UniversityBoundEntities
         public string Email { get; set; }
         public UserType UserType { get; set; }
         public int CourseId { get; set; }
-        public int PersonId { get; set; }
+        public int CourseInstructorId { get; set; }
         public UserStatus Status { get; set; }
 
-        public virtual Course Course { get; set; }
-        public virtual Person Person { get; set; }
+        public virtual ICollection<Course> Course { get; set; }
     }
 }

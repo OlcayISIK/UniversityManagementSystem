@@ -12,11 +12,15 @@ namespace UMS.Repository.Shared
     {
         private readonly Context _context;
         public ITeacherRepository Teachers { get; set; }
+        public IRedisTransactionsRepository RedisTransactions { get; set; }
+        public IStudentRepository Students { get; set; }
 
-        public UnitOfWork(Context context, ITeacherRepository teachers)
+        public UnitOfWork(Context context, ITeacherRepository teachers,IRedisTransactionsRepository redisTransactions, IStudentRepository students)
         {
             _context = context;
             Teachers = teachers;
+            RedisTransactions = redisTransactions;
+            Students = students;
         }
         public void Dispose()
         {
