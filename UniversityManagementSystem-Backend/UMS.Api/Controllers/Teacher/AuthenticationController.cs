@@ -13,10 +13,10 @@ namespace UMS.Api.Controllers.Teacher
     [ApiExplorerSettings(GroupName = Constants.AuthenticationSchemes.Teacher)]
     public class AuthenticationController : Controller
     {
-        private readonly IAuthentictionOperations _authOperations;
+        private readonly IAuthenticationOperations _authOperations;
 
         /// <inheritdoc />
-        public AuthenticationController(IAuthentictionOperations authOperations)
+        public AuthenticationController(IAuthenticationOperations authOperations)
         {
             _authOperations = authOperations;
         }
@@ -33,11 +33,11 @@ namespace UMS.Api.Controllers.Teacher
         /// <summary>
         /// Authenticate via refresh token
         /// </summary>
-        [HttpPost("token")]
-        public async Task<Result<TokenDto>> AuthenticateViaToken([FromBody] TokenDto token)
-        {
-            return await _authOperations.TeacherAuthenticateViaToken(token.RefreshToken);
-        }
+        //[HttpPost("token")]
+        //public async Task<Result<TokenDto>> AuthenticateViaToken([FromBody] TokenDto token)
+        //{
+        //    return await _authOperations.TeacherAuthenticateViaToken(token.RefreshToken);
+        //}
 
         /// <summary>
         /// Logout

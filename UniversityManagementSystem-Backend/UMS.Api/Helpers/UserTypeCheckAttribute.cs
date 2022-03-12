@@ -38,7 +38,7 @@ namespace UMS.Api.Helpers
             else
             {
                 var claims = ClaimUtils.GetClaims(httpContextAccessor.HttpContext.User.Claims);
-                if (claims.UserType == UserType.Manager)
+                if (claims.UserType == UserType.Admin)
                     return;
                 var found = false;
                 foreach (var userType in _userTypes)
