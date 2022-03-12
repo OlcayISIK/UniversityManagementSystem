@@ -9,12 +9,12 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
-using UMS.Client.Business.Interface;
+using UMS.Client.Business.Interface.Shared;
 using UMS.Client.Core;
 using UMS.Client.Core.Enums;
 using UMS.Client.Dtos.Shared;
 
-namespace UMS.Client.Business
+namespace UMS.Client.Business.Shared
 {
     public class HttpService : IHttpService
     {

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UMS.Client.Core\UMS.Client.Core.csproj" />
+    <ProjectReference Include="..\UMS.Client.Dtos\UMS.Client.Dtos.csproj" />
   </ItemGroup>
 
 </Project>

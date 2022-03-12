@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UMS.Client.Business.Interface
+namespace UMS.Client.Business.Interface.Shared
 {
     public interface IHttpService
     {

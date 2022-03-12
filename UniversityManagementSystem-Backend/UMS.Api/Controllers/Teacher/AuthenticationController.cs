@@ -65,5 +65,14 @@ namespace UMS.Api.Controllers.Teacher
         {
             return await _authOperations.TeacherResetPassword(dto);
         }
+
+        /// <summary>
+        /// Endpoint for teacher signup
+        /// </summary>
+        [HttpPost("Signup")]
+        public async Task<Result<long>> Signup([FromBody] SignUpDto dto)
+        {
+            return await _authOperations.TeacherSignUp(dto);
+        }
     }
 }

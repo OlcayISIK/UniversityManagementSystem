@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UMS.Client.Core.Enums;
 
-namespace UMS.Client.Business.Interface
+namespace UMS.Client.Business.Interface.Shared
 {
     public interface ILocalStorageService
     {
@@ -16,5 +16,8 @@ namespace UMS.Client.Business.Interface
         Task SetRefreshToken(string value);
 
         Task<ApplicationType> GetApplicationType();
+        Task<DateTime> GetRefreshTokenTime();
+        Task SetApplicationType(ApplicationType value);
+        Task RemoveTokens();
     }
 }
