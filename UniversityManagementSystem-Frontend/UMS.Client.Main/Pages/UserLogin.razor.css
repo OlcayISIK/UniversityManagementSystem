@@ -1,0 +1,64 @@
+﻿.wrapper {
+    margin: auto;
+    margin-top: 200px;
+    max-width: 620px;
+}
+
+.inner-wrapper {
+}
+
+.input-container {
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.icon {
+    padding: 10px;
+    background-color: #1f51f5;
+    color: white;
+    min-width: 50px;
+    text-align: center;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin-right: 3px;
+}
+
+::deep .input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: navajowhite;
+    color: black;
+}
+
+
+    ::deep .input-field:focus {
+        border: 1px solid #5dbf74;
+        background-color: navajowhite;
+    }
+
+.customBorder {
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+::deep .validation-message {
+    text-align: left;
+    word-wrap: break-word;
+    width: 200px;
+    margin-left: 10px;
+}
+
+.card {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 0 15px 10px #333333;
+    -moz-box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 0 15px 10px #333333;
+    -webkit-box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034), 0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06), 0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086), 0 0 15px 10px #333333;
+    background-color: transparent;
+}
+
+.card-header {
+    background-color: #1f51f5;
+    color: white;
+}

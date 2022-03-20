@@ -1,0 +1,80 @@
+﻿@page "/user/login"
+@layout LoginLayout
+@using MudBlazor;
+@using UMS.Client.Core.Enums
+@using UMS.Client.Dtos.Shared
+@using UMS.Client.Business.Interface
+
+@inject ILocalStorageService LocalStorageService
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+
+<div class="wrapper col-xl-8">
+    <div class="card customBorder">
+        <div>
+            <h2 class="card-header text-center">User Login</h2>
+        </div>
+        <div class="card-body">
+            <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="form-group input-container">
+                      <!--<i class="fa fa-user icon"></i>-->
+                    <InputText placeholder="Username" @bind-Value="model.Username" class="input-field"/>
+                    <ValidationMessage For="@(() => model.Username)" />
+                </div>
+                <div class="form-group input-container">
+                   <!-- <i class="fa fa-key icon"></i>-->
+                    <InputText placeholder="Password" @bind-Value="model.Password" type="password" class="input-field" />
+                    <ValidationMessage For="@(() => model.Password)" />
+                </div>
+                <br />
+                <button disabled="@loading" class="btn btn-danger">
+                    @if (loading)
+                    {
+                        <span class="spinner-border spinner-border-sm mr-1"></span>
+                    }
+                    <i style="margin-right:5px;" class="fas fa-sign-in-alt"></i>Login
+                </button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    private LoginDto model = new LoginDto();
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+        Console.WriteLine(model.Username + " - "+ model.Password);
+        loading = true;
+        try
+        {
+           /* var response = await AccountService.UserLogin(model);
+            if (response.Success)
+            {
+                NavigationManager.NavigateTo("user");
+            }
+            else
+            {
+                if (response.ErrorCode == ErrorCode.InvalidUsernameOrPassword)
+                {
+                    Snackbar.Add("Invalid Username Or Password", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                }
+                loading = false;
+                StateHasChanged();
+            }*/
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Snackbar.Add("Error", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}

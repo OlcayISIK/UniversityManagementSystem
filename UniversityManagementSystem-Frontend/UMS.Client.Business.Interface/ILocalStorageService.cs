@@ -16,5 +16,7 @@ namespace UMS.Client.Business.Interface
         Task SetRefreshToken(string value);
 
         Task<ApplicationType> GetApplicationType();
+        Task RemoveTokens();
+
     }
 }

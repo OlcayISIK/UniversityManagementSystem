@@ -65,5 +65,12 @@ namespace UMS.Client.Business
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", RefreshTokenKey, value);
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", RefreshTokenTime, DateTime.Now.ToUniversalTime());
         }
+
+        public async Task RemoveTokens()
+        {
+            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", AccessTokenKey);
+            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", RefreshTokenKey);
+        }
+
     }
 }
