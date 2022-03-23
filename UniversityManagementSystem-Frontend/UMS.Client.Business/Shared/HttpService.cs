@@ -137,7 +137,7 @@ namespace UMS.Client.Business.Shared
             var authPassUrl = await GetAuthWithPasswordRoute();
             var authTokenUrl = await GetAuthWithTokenRoute();
             // || uri.Contains("userApproval") || uri.Contains("customerpasswordreset") || uri.Contains("userpasswordreset")
-            return !(uri.EndsWith(authPassUrl) || uri.EndsWith(authTokenUrl) || uri.Contains("customer/Auth/Approve") || uri.Contains("customer/Auth/ResetPassword") || uri.Contains("user/Auth/ResetPassword"));
+            return !(uri.EndsWith(authPassUrl) || uri.EndsWith(authTokenUrl));
         }
 
         private async Task AddJwtHeader(HttpRequestMessage request)
@@ -166,8 +166,8 @@ namespace UMS.Client.Business.Shared
             //    return EndpointSettings.ServerRoutes.Student.Authentication.AuthenticateWithPassword;
             //else if (appType == ApplicationType.StudentRepresentativePanel)
             //    return EndpointSettings.ServerRoutes.StudentRepresentative.Authentication.AuthenticateWithPassword;
-            //else if (appType == ApplicationType.TeacherPanel)
-            //    return EndpointSettings.ServerRoutes.Teacher.Authentication.AuthenticateWithPassword;
+            if (appType == ApplicationType.TeacherPanel)
+                return EndpointSettings.ServerRoutes.Teacher.Authentication.AuthenticateWithPassword;
             return null;
         }
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UMS.Dto;
 using UMS.Dto.Authentication;
 
-namespace Mesero.Business.Interface
+namespace UMS.Business.Abstract.Shared
 {
     public interface IAuthenticationOperations
     {

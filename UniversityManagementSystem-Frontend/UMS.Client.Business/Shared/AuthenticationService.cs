@@ -27,7 +27,7 @@ namespace UMS.Client.Business.Shared
         public async Task Initialize()
         {
             var url = _navigationManager.Uri.ToLower();
-            if (url.Contains("userapproval") || url.Contains("userpasswordreset") || url.Contains("admin/login"))
+            if (url.Contains("admin/login"))
             {
                 return;
             }
@@ -150,5 +150,6 @@ namespace UMS.Client.Business.Shared
         }
 
         #endregion
+
     }
 }

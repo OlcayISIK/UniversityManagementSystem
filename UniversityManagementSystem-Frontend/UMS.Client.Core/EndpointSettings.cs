@@ -12,7 +12,7 @@ namespace UMS.Client.Core
         {
             public static class Teacher
             {
-                private const string EndpointPrefix = "api/admin";
+                private const string EndpointPrefix = "api/teacher";
 
                 public static class Authentication
                 {

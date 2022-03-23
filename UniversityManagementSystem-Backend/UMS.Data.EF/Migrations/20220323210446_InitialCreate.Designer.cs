@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UMS.Data.EF;
 
 namespace UMS.Data.EF.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220323210446_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,7 +304,10 @@ namespace UMS.Data.EF.Migrations
                     b.Property<int>("Credits")
                         .HasColumnType("int");
 
-                    b.Property<long>("DepartmentId")
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("DepartmentId1")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
@@ -317,8 +322,8 @@ namespace UMS.Data.EF.Migrations
                     b.Property<long>("OnsiteCourseId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("StudentCourseId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("StudentCourseId")
+                        .HasColumnType("int");
 
                     b.Property<long>("StudentGradeId")
                         .HasColumnType("bigint");
@@ -333,7 +338,7 @@ namespace UMS.Data.EF.Migrations
 
                     b.HasIndex("CourseInstructorId");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("DepartmentId1");
 
                     b.HasIndex("OnlineCourseId")
                         .IsUnique();
@@ -387,9 +392,6 @@ namespace UMS.Data.EF.Migrations
                     b.Property<long>("UniversityId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UniversitySocialClubId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("UserType")
                         .HasColumnType("int");
 
@@ -397,9 +399,6 @@ namespace UMS.Data.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UniversitySocialClubId")
-                        .IsUnique();
 
                     b.ToTable("CourseInstructors");
                 });
@@ -502,12 +501,6 @@ namespace UMS.Data.EF.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("AdvisorId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ClubLeaderId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -523,7 +516,7 @@ namespace UMS.Data.EF.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("StudentId")
+                    b.Property<long>("StudentId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UniversityId")
@@ -572,9 +565,8 @@ namespace UMS.Data.EF.Migrations
 
                     b.HasOne("UMS.Data.Entities.Department", "Department")
                         .WithMany("Courses")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId1")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("UMS.Data.Entities.OnlineCourse", "OnlineCourse")
                         .WithOne("Course")
@@ -593,17 +585,6 @@ namespace UMS.Data.EF.Migrations
                     b.Navigation("OnlineCourse");
 
                     b.Navigation("OnsiteCourse");
-                });
-
-            modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.CourseInstructor", b =>
-                {
-                    b.HasOne("UMS.Data.Entities.UniversityBoundEntities.UniversitySocialClub", "UniversitySocialClub")
-                        .WithOne("CourseInstructor")
-                        .HasForeignKey("UMS.Data.Entities.UniversityBoundEntities.CourseInstructor", "UniversitySocialClubId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("UniversitySocialClub");
                 });
 
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.StudentCourse", b =>
@@ -630,7 +611,8 @@ namespace UMS.Data.EF.Migrations
                     b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Student", "Student")
                         .WithMany("UniversitySocialClubs")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Student");
                 });
@@ -667,11 +649,6 @@ namespace UMS.Data.EF.Migrations
                     b.Navigation("StudentCourses");
 
                     b.Navigation("UniversitySocialClubs");
-                });
-
-            modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.UniversitySocialClub", b =>
-                {
-                    b.Navigation("CourseInstructor");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,15 +1,15 @@
-﻿using Mesero.Business.Interface;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using UMS.Core;
 using UMS.Dto;
 using UMS.Dto.Authentication;
+using UMS.Business.Abstract.Shared;
 
 namespace UMS.Api.Controllers.Teacher
 {
     [ApiController]
-    [Route("api/user/[controller]")]
+    [Route("api/teacher/[controller]")]
     [ApiExplorerSettings(GroupName = Constants.AuthenticationSchemes.Teacher)]
     public class AuthenticationController : Controller
     {

@@ -13,6 +13,12 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>()
-    .AddScoped<IHttpService, HttpService>();
+    .AddScoped<IHttpService, HttpService>()
+    .AddScoped<IAuthenticationService, AuthenticationService>();
+
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5005") });
+
+var authenticationService = builder.Build().Services.GetRequiredService<IAuthenticationService>();
+await authenticationService.Initialize();
 
 await builder.Build().RunAsync();

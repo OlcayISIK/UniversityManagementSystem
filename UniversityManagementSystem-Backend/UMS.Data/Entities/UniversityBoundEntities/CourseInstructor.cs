@@ -9,18 +9,19 @@ namespace UMS.Data.Entities.UniversityBoundEntities
 {
     public class CourseInstructor : UniversityBoundEntity
     {
-        public long TeacherId { get; set; }
+        public long CourseId { get; set; }
+        public long UniversitySocialClubId { get; set; }
         public string Username { get; set; }
         public string HashedPassword { get; set; }
+        public DateTime? HireDate { get; set; }
+        public DateTime? EnrollmentDate { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }
         public UserType UserType { get; set; }
-        public int CourseId { get; set; }
-        public int PersonId { get; set; }
         public UserStatus Status { get; set; }
 
-        public virtual Course Course { get; set; }
-        public virtual Person Person { get; set; }
+        public virtual ICollection<Course> Courses { get; set; }
+        public UniversitySocialClub UniversitySocialClub { get; set; }
     }
 }

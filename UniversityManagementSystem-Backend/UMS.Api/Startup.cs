@@ -215,7 +215,7 @@ namespace UMS.Api
             {
                 endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.Student}/swagger.json", "UMS User API");
                 endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.StudentRespresentative}/swagger.json", "UMS Student Respresentative API");
-                endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.Teacher}/swagger.json", ":UMS Teacher API");
+                endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.Teacher}/swagger.json", "UMS Teacher API");
                 endpoints.RoutePrefix = string.Empty;
             });
 

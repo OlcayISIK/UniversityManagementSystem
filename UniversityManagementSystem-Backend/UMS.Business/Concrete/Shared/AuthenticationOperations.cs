@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mesero.Business.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using UMS.Business.Abstract.Shared;
 using UMS.Business.Helpers;
 using UMS.Core;
 using UMS.Core.Enums;
@@ -17,7 +17,7 @@ using UMS.Dto;
 using UMS.Dto.Authentication;
 using UMS.Repository.Shared;
 
-namespace UMS.Business.Concrete
+namespace UMS.Business.Concrete.Shared
 {
     public class AuthenticationOperations : IAuthenticationOperations
     {

@@ -4,6 +4,8 @@ namespace UMS.Client.Business.Interface.Shared
 {
     public interface IAuthenticationService
     {
+        Task Initialize();
+
         #region Teacher
 
         Task<Result<TokenDto>> TeacherAuthenticateViaPassword(LoginDto loginDto);

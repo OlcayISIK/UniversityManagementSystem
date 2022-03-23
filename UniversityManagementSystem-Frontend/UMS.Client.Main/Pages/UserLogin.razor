@@ -1,12 +1,13 @@
-﻿@page "/user/login"
+﻿@page "/user/teacherlogin"
 @layout LoginLayout
 @using MudBlazor;
 @using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Shared
-@using UMS.Client.Business.Interface
+@using UMS.Client.Business.Interface.Shared
 
 @inject ILocalStorageService LocalStorageService
 @inject NavigationManager NavigationManager
+@inject IAuthenticationService AuthenticationService
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 
@@ -54,10 +55,11 @@
         loading = true;
         try
         {
-           /* var response = await AccountService.UserLogin(model);
+            await LocalStorageService.SetApplicationType(ApplicationType.TeacherPanel);
+            var response = await AuthenticationService.TeacherAuthenticateViaPassword(model);
             if (response.Success)
             {
-                NavigationManager.NavigateTo("user");
+                NavigationManager.NavigateTo("/");
             }
             else
             {
@@ -67,12 +69,12 @@
                 }
                 loading = false;
                 StateHasChanged();
-            }*/
+            }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Snackbar.Add("Error", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+            Snackbar.Add("Error" + ex.Message, Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
             loading = false;
             StateHasChanged();
         }

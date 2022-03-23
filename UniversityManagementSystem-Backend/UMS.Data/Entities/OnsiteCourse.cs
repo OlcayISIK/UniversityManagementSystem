@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UMS.Data.Entities.UniversityBoundEntities;
 
 namespace UMS.Data.Entities
 {
-    public partial class OnsiteCourse
+    public partial class OnsiteCourse : UniversityBoundEntity
     {
         public int CourseId { get; set; }
         public string Location { get; set; }
