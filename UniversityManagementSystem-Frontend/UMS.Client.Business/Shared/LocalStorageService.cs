@@ -5,10 +5,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UMS.Client.Business.Interface;
+using UMS.Client.Business.Interface.Shared;
 using UMS.Client.Core.Enums;
 
-namespace UMS.Client.Business
+namespace UMS.Client.Business.Shared
 {
     public class LocalStorageService : ILocalStorageService
     {
@@ -66,11 +66,20 @@ namespace UMS.Client.Business
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", RefreshTokenTime, DateTime.Now.ToUniversalTime());
         }
 
+        public async Task<DateTime> GetRefreshTokenTime()
+        {
+            return await _jsRuntime.InvokeAsync<DateTime>("localStorage.getItem", RefreshTokenTime);
+        }
+
+        public async Task SetApplicationType(ApplicationType value)
+        {
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", ApplicationType, value);
+        }
+
         public async Task RemoveTokens()
         {
             await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", AccessTokenKey);
             await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", RefreshTokenKey);
         }
-
     }
 }

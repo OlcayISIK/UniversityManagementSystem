@@ -10,5 +10,7 @@ namespace UMS.Core.Enums
     {
         Teacher = 0,
         Student = 1,
+        StudentRepresentative = 3,
+        Admin = 4
     }
 }

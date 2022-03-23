@@ -17,6 +17,16 @@ namespace UMS.Client.Core
                 public static class Authentication
                 {
                     private const string ControllerPrefix = "/Authentication";
+
+                    public const string AuthenticateWithPassword = EndpointPrefix + ControllerPrefix + "/pass";
+
+                    public const string Logout = EndpointPrefix + ControllerPrefix + "/logout";
+
+                    public const string ForgotPassword = EndpointPrefix + ControllerPrefix + "/ForgotPassword";
+
+                    public const string ResetPassword = EndpointPrefix + ControllerPrefix + "/ResetPassword";
+
+                    public const string Signup = EndpointPrefix + ControllerPrefix + "/Signup";
                 }
             }
         }

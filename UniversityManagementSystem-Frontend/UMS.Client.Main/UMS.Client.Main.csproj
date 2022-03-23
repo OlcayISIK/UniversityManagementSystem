@@ -26,6 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UMS.Client.Business.Interface\UMS.Client.Business.Interface.csproj" />
+    <ProjectReference Include="..\UMS.Client.Business\UMS.Client.Business.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 

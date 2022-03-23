@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="StudentRepresentative\" />
     <Folder Include="Student\" />
-    <Folder Include="Teacher\" />
   </ItemGroup>
 
   <ItemGroup>

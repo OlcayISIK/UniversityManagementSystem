@@ -13,10 +13,10 @@ namespace UMS.Api.Controllers.Teacher
     [ApiExplorerSettings(GroupName = Constants.AuthenticationSchemes.Teacher)]
     public class AuthenticationController : Controller
     {
-        private readonly IAuthentictionOperations _authOperations;
+        private readonly IAuthenticationOperations _authOperations;
 
         /// <inheritdoc />
-        public AuthenticationController(IAuthentictionOperations authOperations)
+        public AuthenticationController(IAuthenticationOperations authOperations)
         {
             _authOperations = authOperations;
         }
@@ -33,11 +33,11 @@ namespace UMS.Api.Controllers.Teacher
         /// <summary>
         /// Authenticate via refresh token
         /// </summary>
-        [HttpPost("token")]
-        public async Task<Result<TokenDto>> AuthenticateViaToken([FromBody] TokenDto token)
-        {
-            return await _authOperations.TeacherAuthenticateViaToken(token.RefreshToken);
-        }
+        //[HttpPost("token")]
+        //public async Task<Result<TokenDto>> AuthenticateViaToken([FromBody] TokenDto token)
+        //{
+        //    return await _authOperations.TeacherAuthenticateViaToken(token.RefreshToken);
+        //}
 
         /// <summary>
         /// Logout
@@ -64,6 +64,15 @@ namespace UMS.Api.Controllers.Teacher
         public async Task<Result<bool>> ResetPassword([FromBody] ResetPasswordDto dto)
         {
             return await _authOperations.TeacherResetPassword(dto);
+        }
+
+        /// <summary>
+        /// Endpoint for teacher signup
+        /// </summary>
+        [HttpPost("Signup")]
+        public async Task<Result<long>> Signup([FromBody] SignUpDto dto)
+        {
+            return await _authOperations.TeacherSignUp(dto);
         }
     }
 }
