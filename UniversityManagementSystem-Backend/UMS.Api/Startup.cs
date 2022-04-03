@@ -24,6 +24,8 @@ using UMS.Data.EF;
 using UMS.Data.Entities;
 using UMS.Core.Enums;
 using UMS.Business.Helpers;
+using UMS.Api.Hubs;
+using Microsoft.AspNetCore.ResponseCompression;
 
 namespace UMS.Api
 {
@@ -53,6 +55,11 @@ namespace UMS.Api
             services.AddHttpContextAccessor();
             services.AddCors();
             services.AddSignalR();
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "application/octet-stream" });
+            });
             // handle authentication
             services.AddAuthentication(x =>
             {
@@ -186,6 +193,7 @@ namespace UMS.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -207,6 +215,7 @@ namespace UMS.Api
             app.UseWebSockets();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapHub<RefreshHub>("/refreshhub");
                 endpoints.MapControllers();
             });

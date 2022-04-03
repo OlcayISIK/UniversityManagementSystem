@@ -59,9 +59,18 @@ namespace UMS.Client.Business.Shared
         }
 
         #region Student
-        public Task<Result<TokenDto>> StudentAuthenticateViaPassword(LoginDto loginDto)
+        public async Task<Result<TokenDto>> StudentAuthenticateViaPassword(LoginDto loginDto)
         {
-            throw new NotImplementedException();
+            var response = await _httpService.SendRequest<Result<TokenDto>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Student.Authentication.AuthenticateWithPassword, loginDto);
+            if (response.Data == null)
+            {
+                return response;
+            }
+            await _localStorageService.SetAccessToken(response.Data.AccessToken);
+            await _localStorageService.SetRefreshToken(response.Data.RefreshToken);
+            await _localStorageService.SetApplicationType(ApplicationType.TeacherPanel);
+            IsLoggedInNonAsync = true;
+            return response;
         }
 
         public Task<Result<bool>> StudentForgotPassword(string emailAddress)

@@ -61,6 +61,40 @@ namespace UMS.Data.EF.Migrations
                     b.ToTable("Admins");
                 });
 
+            modelBuilder.Entity("UMS.Data.Entities.ChatMessage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("FromUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ToUserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromUserId");
+
+                    b.HasIndex("ToUserId");
+
+                    b.ToTable("ChatMessages");
+                });
+
             modelBuilder.Entity("UMS.Data.Entities.Department", b =>
                 {
                     b.Property<long>("Id")
@@ -250,10 +284,7 @@ namespace UMS.Data.EF.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("CourseId1")
+                    b.Property<long>("CourseId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
@@ -268,10 +299,7 @@ namespace UMS.Data.EF.Migrations
                     b.Property<DateTime>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<long?>("StudentId1")
+                    b.Property<long>("StudentId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UniversityId")
@@ -279,9 +307,9 @@ namespace UMS.Data.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId1");
+                    b.HasIndex("CourseId");
 
-                    b.HasIndex("StudentId1");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("StudentGrades");
                 });
@@ -387,7 +415,7 @@ namespace UMS.Data.EF.Migrations
                     b.Property<long>("UniversityId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UniversitySocialClubId")
+                    b.Property<long?>("UniversitySocialClubId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("UserType")
@@ -399,7 +427,8 @@ namespace UMS.Data.EF.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("UniversitySocialClubId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UniversitySocialClubId] IS NOT NULL");
 
                     b.ToTable("CourseInstructors");
                 });
@@ -447,7 +476,7 @@ namespace UMS.Data.EF.Migrations
                     b.Property<long>("UniversityId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UniversitySocialClubId")
+                    b.Property<long?>("UniversitySocialClubId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("UserType")
@@ -495,6 +524,33 @@ namespace UMS.Data.EF.Migrations
                     b.ToTable("StudentCourses");
                 });
 
+            modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.University", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Universities");
+                });
+
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.UniversitySocialClub", b =>
                 {
                     b.Property<long>("Id")
@@ -536,6 +592,25 @@ namespace UMS.Data.EF.Migrations
                     b.ToTable("UniversitySocialClubs");
                 });
 
+            modelBuilder.Entity("UMS.Data.Entities.ChatMessage", b =>
+                {
+                    b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Student", "FromUser")
+                        .WithMany()
+                        .HasForeignKey("FromUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Student", "ToUser")
+                        .WithMany()
+                        .HasForeignKey("ToUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
             modelBuilder.Entity("UMS.Data.Entities.OfficeAssignment", b =>
                 {
                     b.HasOne("UMS.Data.Entities.UniversityBoundEntities.CourseInstructor", "CourseInstructor")
@@ -550,13 +625,15 @@ namespace UMS.Data.EF.Migrations
                 {
                     b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Course", "Course")
                         .WithMany("StudentGrades")
-                        .HasForeignKey("CourseId1")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Student", "Student")
                         .WithMany()
-                        .HasForeignKey("StudentId1")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Course");
 
@@ -600,8 +677,7 @@ namespace UMS.Data.EF.Migrations
                     b.HasOne("UMS.Data.Entities.UniversityBoundEntities.UniversitySocialClub", "UniversitySocialClub")
                         .WithOne("CourseInstructor")
                         .HasForeignKey("UMS.Data.Entities.UniversityBoundEntities.CourseInstructor", "UniversitySocialClubId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("UniversitySocialClub");
                 });

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UMS.Business.Abstract.Student;
+using UMS.Business.Abstract.StudentTransactions;
 using UMS.Core;
 using UMS.Dto;
 

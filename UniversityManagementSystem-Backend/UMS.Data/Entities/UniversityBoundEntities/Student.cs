@@ -10,7 +10,7 @@ namespace UMS.Data.Entities.UniversityBoundEntities
     public class Student : UniversityBoundEntity
     {
         public long StudentCourseId { get; set; }
-        public long UniversitySocialClubId { get; set; }
+        public long? UniversitySocialClubId { get; set; }
         public string Username { get; set; }
         public string HashedPassword { get; set; }
         public DateTime? EnrollmentDate { get; set; }

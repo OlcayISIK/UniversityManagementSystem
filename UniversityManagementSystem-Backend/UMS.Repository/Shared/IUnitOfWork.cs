@@ -15,7 +15,9 @@ namespace UMS.Repository.Shared
 
         ITeacherRepository Teachers { get; }
         IRedisTransactionsRepository RedisTransactions { get; }
+        IRedisTokenRepository RedisTokens { get; }
         IStudentRepository Students { get; }
         IUniversitySocialClubRepository UniversitySocialClubs { get; }
+        IChatMessageRepository ChatMessages { get; }
     }
 }

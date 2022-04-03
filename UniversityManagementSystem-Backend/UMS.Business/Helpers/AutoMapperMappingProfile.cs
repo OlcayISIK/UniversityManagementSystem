@@ -3,7 +3,9 @@ using AutoMapper;
 using UMS.Core.Enums;
 using UMS.Data;
 using UMS.Data.Entities;
+using UMS.Data.Entities.UniversityBoundEntities;
 using UMS.Dto;
+using UMS.Dto.Student;
 
 namespace UMS.Business.Helpers
 {
@@ -29,8 +31,32 @@ namespace UMS.Business.Helpers
                     return MapLanguageBoundString(src, dst, Language.Turkish, language);
                 }));
 
-            //CreateMap<Course, CourseDto>();
-            //CreateMap<CourseDto, Course>();
+            CreateMap<Student, StudentDto>();
+            CreateMap<StudentDto, Student>();
+
+            CreateMap<StudentCourse, StudentCourseDto>();
+            CreateMap<StudentCourseDto, StudentCourse>();
+
+            CreateMap<Course, CourseDto>();
+            CreateMap<CourseDto, Course>();
+
+            CreateMap<Department, DepartmentDto>();
+            CreateMap<DepartmentDto, Department>();
+
+            CreateMap<OnlineCourse, OnlineCourseDto>();
+            CreateMap<OnlineCourseDto, OnlineCourse>();
+
+            CreateMap<OnsiteCourse, OnsiteCourseDto>();
+            CreateMap<OnsiteCourseDto, OnsiteCourse>();
+
+            CreateMap<StudentGrade, StudentGradeDto>();
+            CreateMap<StudentGradeDto, StudentGrade>();
+
+            CreateMap<UniversitySocialClub, UniversitySocialClubDto>();
+            CreateMap<UniversitySocialClubDto, UniversitySocialClub>();
+
+            CreateMap<ChatMessage, ChatMessageDto>();
+            CreateMap<ChatMessageDto, ChatMessage>();
         }
 
         private static string MapLanguageBoundString(string source, MultiString destination, Language destinationLanguage, Language sourceLanguage)

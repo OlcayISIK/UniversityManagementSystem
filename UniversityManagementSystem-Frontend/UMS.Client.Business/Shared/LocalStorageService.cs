@@ -19,8 +19,8 @@ namespace UMS.Client.Business.Shared
         // These are for claim subjects
         private const string Username = "name";
         private const string UserId = "uid";
-        private const string CompanyId = "cid";
         private const string UserType = "rid";
+        private const string Email = "eMail";
 
         private const string RefreshTokenTime = "refreshTokenTime";
 
@@ -80,6 +80,18 @@ namespace UMS.Client.Business.Shared
         {
             await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", AccessTokenKey);
             await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", RefreshTokenKey);
+        }
+        public async Task<string> GetUserId()
+        {
+            return await _jsRuntime.InvokeAsync<string>("localStorage.getItem", UserId);
+        }
+        public async Task SetUsername(string value)
+        {
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", Username, value);
+        }
+        public async Task<string> GetUsername()
+        {
+            return await _jsRuntime.InvokeAsync<string>("localStorage.getItem", Username);
         }
     }
 }

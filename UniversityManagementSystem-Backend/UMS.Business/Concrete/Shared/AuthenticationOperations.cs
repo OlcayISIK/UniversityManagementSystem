@@ -48,10 +48,17 @@ namespace UMS.Business.Concrete.Shared
             return Result<TokenDto>.CreateSuccessResult(token);
         }
 
-        //public Task<Result<TokenDto>> StudentAuthenticateViaToken(string refreshToken)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public async Task<Result<TokenDto>> StudentAuthenticateViaToken(string refreshToken)
+        {
+            var token = await _unitOfWork.RedisTokens.Get(refreshToken);
+            if (token == null || token.ConsumerType != ApiConsumerType.Student || token.TokenType != RedisTokenType.RefreshToken)
+                return Result<TokenDto>.CreateErrorResult(ErrorCode.InvalidRefreshToken);
+            await _unitOfWork.RedisTokens.Remove(refreshToken);
+            var user = await _unitOfWork.Students.Get(token.UserId).FirstOrDefaultAsync();
+            var newToken = TokenGenerator.CreateStudentToken(user.Id, user.Username, user.UserType, user.UniversityId, _appSettings.TokenOptions);
+            await _unitOfWork.RedisTokens.Set(new RedisToken { TokenValue = newToken.RefreshToken, UserId = token.UserId, ConsumerType = ApiConsumerType.Student, TokenType = RedisTokenType.RefreshToken, Username = user.Username }, _appSettings.TokenOptions.RefreshTokenLifetime);
+            return Result<TokenDto>.CreateSuccessResult(newToken);
+        }
 
         public async Task<Result<bool>> StudentForgotPassword(string emailAddress)
         {
