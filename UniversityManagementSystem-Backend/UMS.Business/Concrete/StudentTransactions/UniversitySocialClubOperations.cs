@@ -7,7 +7,7 @@ using UMS.Business.Helpers;
 using UMS.Dto;
 using UMS.Repository.Shared;
 
-namespace UMS.Business.Abstract.Student
+namespace UMS.Business.Abstract.StudentTransactions
 {
     public class UniversitySocialClubOperations : IUniversitySocialClubOperations
     {

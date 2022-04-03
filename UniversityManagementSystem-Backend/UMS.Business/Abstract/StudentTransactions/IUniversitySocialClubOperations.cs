@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UMS.Dto;
 
-namespace UMS.Business.Abstract.Student
+namespace UMS.Business.Abstract.StudentTransactions
 {
     public interface IUniversitySocialClubOperations
     {

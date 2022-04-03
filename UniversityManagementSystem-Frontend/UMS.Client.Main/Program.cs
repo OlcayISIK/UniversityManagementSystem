@@ -4,8 +4,8 @@ using UMS.Client.Business.Interface.Shared;
 using UMS.Client.Business.Shared;
 using UMS.Client.Main;
 using MudBlazor.Services;
-
-
+using UMS.Client.Business.StudentService;
+using UMS.Client.Business.Interface.StudentService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddMudServices();
@@ -14,7 +14,10 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>()
     .AddScoped<IHttpService, HttpService>()
-    .AddScoped<IAuthenticationService, AuthenticationService>();
+    .AddScoped<IAuthenticationService, AuthenticationService>()
+    .AddScoped<IStudentService, StudentService>()
+    .AddScoped<IChatService, ChatService>();
+
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5005") });
 

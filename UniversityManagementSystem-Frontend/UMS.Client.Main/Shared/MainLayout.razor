@@ -1,5 +1,13 @@
 ﻿@inherits LayoutComponentBase
 @using MudBlazor;
+@using Microsoft.AspNetCore.SignalR.Client;
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Dtos.Shared
+@using UMS.Dto;
+@inject IJSRuntime _jsRuntime
+@inject NavigationManager NavigationManager;
+@inject ILocalStorageService LocalStorageService
+@inject ISnackbar Snackbar
 <MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
@@ -18,3 +26,39 @@
         </article>
     </main>
 </div>
+@code {
+    bool _drawerOpen = false;
+    private long CurrentUserId { get; set; }
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+    private HubConnection hubConnection;
+    public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder().WithUrl("http://localhost:5005/chathub").Build();
+        await hubConnection.StartAsync();
+        hubConnection.On<ChatMessage>("ReceiveChatNotification", (message) =>
+        {
+            if (CurrentUserId == message.ToUserId)
+            {
+                //_jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
+                Snackbar.Add(message.Message, Severity.Info, config =>
+                {
+                        config.VisibleStateDuration = 10000;
+                        config.HideTransitionDuration = 500;
+                        config.ShowTransitionDuration = 500;
+                        config.Action = "Chat?";
+                        config.ActionColor = Color.Info;
+                        config.Onclick = snackbar =>
+                    {
+                        NavigationManager.NavigateTo($"chat/{message.FromUserId}");
+                        return Task.CompletedTask;
+                    };
+                    });
+            }
+        });
+        CurrentUserId = long.Parse(await LocalStorageService.GetUserId());
+    }
+}

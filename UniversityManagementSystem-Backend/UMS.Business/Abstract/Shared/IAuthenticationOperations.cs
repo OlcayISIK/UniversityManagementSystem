@@ -23,7 +23,7 @@ namespace UMS.Business.Abstract.Shared
         #region Student
 
         Task<Result<TokenDto>> StudentAuthenticateViaPassword(LoginDto loginDto);
-        //Task<Result<TokenDto>> StudentAuthenticateViaToken(string refreshToken);
+        Task<Result<TokenDto>> StudentAuthenticateViaToken(string refreshToken);
         Task<Result<bool>> StudentLogout(string refreshToken);
         Task<Result<long>> StudentSignUp(SignUpDto dto);
         Task<Result<bool>> StudentForgotPassword(string emailAddress);

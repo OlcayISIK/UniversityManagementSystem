@@ -55,8 +55,8 @@
         loading = true;
         try
         {
-            await LocalStorageService.SetApplicationType(ApplicationType.TeacherPanel);
-            var response = await AuthenticationService.TeacherAuthenticateViaPassword(model);
+            await LocalStorageService.SetApplicationType(ApplicationType.StudentPanel);
+            var response = await AuthenticationService.StudentAuthenticateViaPassword(model);
             if (response.Success)
             {
                 NavigationManager.NavigateTo("/");

@@ -47,6 +47,8 @@ namespace UMS.Data.EF
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<University> Universities { get; set; }
+        public virtual DbSet<ChatMessage> ChatMessages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -63,6 +65,7 @@ namespace UMS.Data.EF
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            //modelBuilder.Entity<Student>().Property(e => e.Id).ValueGeneratedNever();
             base.OnModelCreating(modelBuilder);
         }
     }

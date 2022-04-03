@@ -168,18 +168,20 @@ namespace UMS.Client.Business.Shared
             //    return EndpointSettings.ServerRoutes.StudentRepresentative.Authentication.AuthenticateWithPassword;
             if (appType == ApplicationType.TeacherPanel)
                 return EndpointSettings.ServerRoutes.Teacher.Authentication.AuthenticateWithPassword;
+            else if (appType == ApplicationType.StudentPanel)
+                return EndpointSettings.ServerRoutes.Student.Authentication.AuthenticateWithPassword;
             return null;
         }
 
         private async Task<string> GetAuthWithTokenRoute()
         {
             var appType = await _localStorageService.GetApplicationType();
-            //if (appType == ApplicationType.StudentPanel)
-            //    return Settings.ServerRoutes.User.Authentication.AuthenticateWithToken;
+            if (appType == ApplicationType.StudentPanel)
+                return EndpointSettings.ServerRoutes.Student.Authentication.AuthenticateWithToken;
             //else if (appType == ApplicationType.StudentRepresentativePanel)
-            //    return Settings.ServerRoutes.StudentRepresentative.Authentication.AuthenticateWithToken;
-            //else if (appType == ApplicationType.TeacherPanel)
-            //    return Settings.ServerRoutes.Teacher.Authentication.AuthenticateWithToken;
+            //    return EndpointSettings.ServerRoutes.StudentRepresentative.Authentication.AuthenticateWithToken;
+            else if (appType == ApplicationType.TeacherPanel)
+                return EndpointSettings.ServerRoutes.Teacher.Authentication.AuthenticateWithToken;
             return null;
         }
 

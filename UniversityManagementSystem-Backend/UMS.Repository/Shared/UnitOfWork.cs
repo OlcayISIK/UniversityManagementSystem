@@ -15,14 +15,19 @@ namespace UMS.Repository.Shared
         public IRedisTransactionsRepository RedisTransactions { get; set; }
         public IStudentRepository Students { get; set; }
         public IUniversitySocialClubRepository UniversitySocialClubs { get; set; }
+        public IRedisTokenRepository RedisTokens { get; set; }
+        public IChatMessageRepository ChatMessages { get; set; }
 
-        public UnitOfWork(Context context, ITeacherRepository teachers,IRedisTransactionsRepository redisTransactions, IStudentRepository students, IUniversitySocialClubRepository universitySocialClubs)
+
+        public UnitOfWork(Context context, ITeacherRepository teachers,IRedisTransactionsRepository redisTransactions, IStudentRepository students, IUniversitySocialClubRepository universitySocialClubs, IRedisTokenRepository redisTokens, IChatMessageRepository chatMessages)
         {
             _context = context;
             Teachers = teachers;
             RedisTransactions = redisTransactions;
             Students = students;
             UniversitySocialClubs = universitySocialClubs;
+            RedisTokens = redisTokens;
+            ChatMessages = chatMessages;
         }
         public void Dispose()
         {
