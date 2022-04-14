@@ -25,8 +25,7 @@
 .img {
     width: 100%;
     height: 100%;
-    background-image: url("../Login.jpg");
-    background-repeat: ;
+    background-image: url("../../Login.jpg");
 }
 
 .login {
@@ -48,14 +47,14 @@
     color: #F1F1F2;
     position: relative;
     width: 30%;
-    text-align:center.
+    text-align:center;
 }
 
 
 .form {
     margin: 40px;
-    position:absolute;
-    top:30%;
+    position: absolute;
+    top: 20%;
 }
 
 input[type=text], input[type=password], select {

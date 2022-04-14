@@ -1,4 +1,4 @@
-﻿@page "/user/Register"
+﻿@page "/user/StudentRegister"
 @layout LoginLayout
 @using MudBlazor;
 @using UMS.Client.Core.Enums
@@ -20,6 +20,7 @@
     </div>
     <div class="right">
       <div class="form">
+          <center>
                   <div class="login-box">
                       <form>
                         <div class="user-box">
@@ -29,15 +30,31 @@
                         <div class="user-box">
                           <input type="password" name="" required="">
                           <label>Password</label>
+                        </div>  
+                        <div class="user-box">
+                          <input type="password" name="" required="">
+                          <label>Password Again</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name="" required="">
+                          <label>Name</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name="" required="">
+                          <label>Surname</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name="" required="">
+                          <label>E-mail</label>
                         </div>
                             <a href="#">
                               <span></span>
                               <span></span>
                               <span></span>
                               <span></span>
-                              Register
+                              Sing-in
                             </a>
-                             <a href="/user/Login">
+                             <a href="/user/StudentLogin">
                               <span></span>
                               <span></span>
                               <span></span>
@@ -46,9 +63,8 @@
                             </a>
                       </form>
                     </div>
-               
+               </center>
       </div>
-                   
     </div>
   </div>
 </div>

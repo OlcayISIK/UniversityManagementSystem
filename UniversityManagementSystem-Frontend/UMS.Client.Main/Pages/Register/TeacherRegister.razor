@@ -1,4 +1,4 @@
-﻿@page "/user/Login"
+﻿@page "/user/TeacherRegister"
 @layout LoginLayout
 @using MudBlazor;
 @using UMS.Client.Core.Enums
@@ -20,36 +20,51 @@
     </div>
     <div class="right">
       <div class="form">
-        
+          <center>
                   <div class="login-box">
                       <form>
-                        <div class="user-box">
+                       <div class="user-box">
                           <input type="text" name="" required="">
                           <label>Username</label>
                         </div>
                         <div class="user-box">
                           <input type="password" name="" required="">
                           <label>Password</label>
+                        </div>  
+                        <div class="user-box">
+                          <input type="password" name="" required="">
+                          <label>Password Again</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name="" required="">
+                          <label>Name</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name="" required="">
+                          <label>Surname</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name="" required="">
+                          <label>E-mail</label>
                         </div>
                             <a href="#">
                               <span></span>
                               <span></span>
                               <span></span>
                               <span></span>
-                              Login
+                              Sing-in
                             </a>
-                             <a href="/user/Register">
+                             <a href="/user/TeacherLogin">
                               <span></span>
                               <span></span>
                               <span></span>
                               <span></span>
-                              Sign-in
+                              Back
                             </a>
                       </form>
                     </div>
-               
+               </center>
       </div>
-                   
     </div>
   </div>
 </div>
@@ -66,8 +81,8 @@
         loading = true;
         try
         {
-            await LocalStorageService.SetApplicationType(ApplicationType.TeacherPanel);
-            var response = await AuthenticationService.TeacherAuthenticateViaPassword(model);
+            await LocalStorageService.SetApplicationType(ApplicationType.StudentPanel);
+            var response = await AuthenticationService.StudentAuthenticateViaPassword(model);
             if (response.Success)
             {
                 NavigationManager.NavigateTo("/");
