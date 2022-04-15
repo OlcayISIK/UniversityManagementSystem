@@ -78,9 +78,13 @@ namespace UMS.Client.Business.Shared
             throw new NotImplementedException();
         }
 
-        public Task<Result<bool>> StudentLogout(string refreshToken)
+        public async Task<Result<bool>> StudentLogout(string refreshToken)
         {
-            throw new NotImplementedException();
+            var response = await _httpService.SendRequest<Result<bool>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Student.Authentication.Logout, refreshToken);
+            IsLoggedInNonAsync = false;
+            await _localStorageService.RemoveTokens();
+            _navigationManager.NavigateTo("user/StudentLogin");
+            return response;
         }
 
         public Task<Result<bool>> StudentResetPassword(ResetPasswordDto dto)

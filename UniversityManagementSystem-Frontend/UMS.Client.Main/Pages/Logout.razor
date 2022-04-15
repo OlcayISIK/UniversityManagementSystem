@@ -4,6 +4,7 @@
 @using UMS.Client.Core.Enums
 @using MudBlazor;
 @inject NavigationManager NavigationManager
+@inject IAuthenticationService AuthenticationService
 @inject ILocalStorageService LocalStorageService
 @inject IJSRuntime jsRunTime
 @inject HttpClient httpClient
@@ -13,8 +14,25 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Console.Write("girdi");
-        await LocalStorageService.RemoveTokens();
-        NavigationManager.NavigateTo("/user/StudentLogin");
+        if (await LocalStorageService.GetRefreshToken() == null)
+        { 
+            NavigationManager.NavigateTo("/user/StudentLogin");
+        }
+        else
+        {
+             var type =  await LocalStorageService.GetApplicationType();
+            switch(type)
+            {
+                case ApplicationType.StudentPanel:
+                        await AuthenticationService.StudentLogout(await LocalStorageService.GetRefreshToken());
+                    break;
+                case ApplicationType.StudentRepresentativePanel:
+                        await AuthenticationService.StudentRespresentativeLogout(await LocalStorageService.GetRefreshToken());
+                    break;
+                case ApplicationType.TeacherPanel:
+                        await AuthenticationService.TeacherLogout(await LocalStorageService.GetRefreshToken());
+                    break;
+            }
+        }
     }
 }
