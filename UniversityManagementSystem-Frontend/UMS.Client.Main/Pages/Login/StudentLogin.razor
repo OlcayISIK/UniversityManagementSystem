@@ -60,19 +60,14 @@
 
     private LoginDto model = new LoginDto();
     private bool loading;
-      private void navigationRegister()
-    {
-      NavigationManager.NavigateTo("/user/Register");
-    }
 
     private async void OnValidSubmit()
     {
-        Console.WriteLine(model.Username + " - "+ model.Password);
         loading = true;
         try
         {
-            await LocalStorageService.SetApplicationType(ApplicationType.TeacherPanel);
-            var response = await AuthenticationService.TeacherAuthenticateViaPassword(model);
+            var response = await AuthenticationService.StudentAuthenticateViaPassword(model);
+            Console.Write(response);
             if (response.Success)
             {
                 NavigationManager.NavigateTo("/");
@@ -86,7 +81,6 @@
                 loading = false;
                 StateHasChanged();
             }
-
         }
         catch (Exception ex)
         {

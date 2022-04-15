@@ -3,6 +3,7 @@
 @using MudBlazor;
 @using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Shared
+@using UMS.Client.Dtos.Student
 @using UMS.Client.Business.Interface.Shared
 
 @inject ILocalStorageService LocalStorageService
@@ -24,11 +25,11 @@
                   <div class="login-box">
                       <form>
                         <div class="user-box">
-                          <input type="text" name="" required="">
+                          <input type="text" name="" @bind="model.Username" required="">
                           <label>Username</label>
                         </div>
                         <div class="user-box">
-                          <input type="password" name="" required="">
+                          <input type="password" name=""  required="">
                           <label>Password</label>
                         </div>  
                         <div class="user-box">
@@ -36,15 +37,15 @@
                           <label>Password Again</label>
                         </div>
                          <div class="user-box">
-                          <input type="text" name="" required="">
+                          <input type="text" name=""  @bind="model.Name" required="">
                           <label>Name</label>
                         </div>
                          <div class="user-box">
-                          <input type="text" name="" required="">
+                          <input type="text" name=""  @bind="model.Surname" required="">
                           <label>Surname</label>
                         </div>
                          <div class="user-box">
-                          <input type="text" name="" required="">
+                          <input type="text" name=""  @bind="model.Email" required="">
                           <label>E-mail</label>
                         </div>
                             <a href="#">
@@ -72,17 +73,15 @@
 
 @code {
 
-    private LoginDto model = new LoginDto();
+    private StudentDto model = new StudentDto();
     private bool loading;
 
     private async void OnValidSubmit()
     {
-        Console.WriteLine(model.Username + " - "+ model.Password);
         loading = true;
         try
         {
-            await LocalStorageService.SetApplicationType(ApplicationType.StudentPanel);
-            var response = await AuthenticationService.StudentAuthenticateViaPassword(model);
+          /*  var response = await AuthenticationService.StudentAuthenticateViaPassword(model);
             if (response.Success)
             {
                 NavigationManager.NavigateTo("/");
@@ -95,7 +94,7 @@
                 }
                 loading = false;
                 StateHasChanged();
-            }
+            }*/
         }
         catch (Exception ex)
         {

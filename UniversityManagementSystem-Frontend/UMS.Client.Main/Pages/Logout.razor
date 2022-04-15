@@ -1,0 +1,20 @@
+﻿@page "/account/logout"
+@layout LoginLayout
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Core.Enums
+@using MudBlazor;
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorageService
+@inject IJSRuntime jsRunTime
+@inject HttpClient httpClient
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.Write("girdi");
+        await LocalStorageService.RemoveTokens();
+        NavigationManager.NavigateTo("/user/StudentLogin");
+    }
+}

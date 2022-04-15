@@ -43,22 +43,30 @@
         {
             if (CurrentUserId == message.ToUserId)
             {
-                //_jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
-                Snackbar.Add(message.Message, Severity.Info, config =>
+            //_jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
+            Snackbar.Add(message.Message, Severity.Info, config =>
                 {
-                        config.VisibleStateDuration = 10000;
-                        config.HideTransitionDuration = 500;
-                        config.ShowTransitionDuration = 500;
-                        config.Action = "Chat?";
-                        config.ActionColor = Color.Info;
-                        config.Onclick = snackbar =>
-                    {
-                        NavigationManager.NavigateTo($"chat/{message.FromUserId}");
-                        return Task.CompletedTask;
-                    };
-                    });
+                    config.VisibleStateDuration = 10000;
+                    config.HideTransitionDuration = 500;
+                    config.ShowTransitionDuration = 500;
+                    config.Action = "Chat?";
+                    config.ActionColor = Color.Info;
+                    config.Onclick = snackbar =>
+            {
+                NavigationManager.NavigateTo($"chat/{message.FromUserId}");
+                return Task.CompletedTask;
+            };
+                });
             }
         });
-        //CurrentUserId = long.Parse(await LocalStorageService.GetUserId());
+
+        try
+        {
+            CurrentUserId = long.Parse(await LocalStorageService.GetUserId());
+        }
+        catch
+        {
+            NavigationManager.NavigateTo("/account/logout");
+        }
     }
 }

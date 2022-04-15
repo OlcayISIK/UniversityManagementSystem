@@ -68,7 +68,7 @@ namespace UMS.Client.Business.Shared
             }
             await _localStorageService.SetAccessToken(response.Data.AccessToken);
             await _localStorageService.SetRefreshToken(response.Data.RefreshToken);
-            await _localStorageService.SetApplicationType(ApplicationType.TeacherPanel);
+            await _localStorageService.SetApplicationType(ApplicationType.StudentPanel);
             IsLoggedInNonAsync = true;
             return response;
         }

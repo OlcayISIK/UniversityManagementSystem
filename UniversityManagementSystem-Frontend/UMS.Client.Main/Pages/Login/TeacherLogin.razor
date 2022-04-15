@@ -63,11 +63,9 @@
 
     private async void OnValidSubmit()
     {
-        Console.WriteLine(model.Username + " - "+ model.Password);
         loading = true;
         try
         {
-            await LocalStorageService.SetApplicationType(ApplicationType.TeacherPanel);
             var response = await AuthenticationService.TeacherAuthenticateViaPassword(model);
             if (response.Success)
             {
@@ -82,7 +80,6 @@
                 loading = false;
                 StateHasChanged();
             }
-
         }
         catch (Exception ex)
         {
