@@ -19,6 +19,14 @@
       <div class="eula"></div>
     </div>
     <div class="right">
+    <center>
+         <div class="h1" style="margin-top:20%;  
+                                font-family: Georgia, sans-serif;
+                                font-size: 6em;
+                                letter-spacing: -2px;">
+            Student Login
+        </div>
+    </center>
       <div class="form">
                   <div class="login-box">
                          <center>
@@ -32,7 +40,7 @@
                                   <input type="password" @bind="model.Password"  name="" required="">
                                   <label>Password</label>
                                 </div>
-                                    <a @onclick="OnValidSubmit">
+                                    <a style="cursor: pointer;" @onclick="OnValidSubmit">
                                       <span></span>
                                       <span></span>
                                       <span></span>
@@ -66,6 +74,7 @@
         loading = true;
         try
         {
+            await LocalStorageService.SetApplicationType(ApplicationType.StudentPanel);
             var response = await AuthenticationService.StudentAuthenticateViaPassword(model);
             Console.Write(response);
             if (response.Success)

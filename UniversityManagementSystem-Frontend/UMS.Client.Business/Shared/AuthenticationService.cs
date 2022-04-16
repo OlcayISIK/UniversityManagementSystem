@@ -92,9 +92,9 @@ namespace UMS.Client.Business.Shared
             throw new NotImplementedException();
         }
 
-        public Task<Result<long>> StudentSignUp(SignUpDto dto)
+        public  async Task<Result<long>> StudentSignUp(SignUpDto dto)
         {
-            throw new NotImplementedException();
+            return  await _httpService.SendRequest<Result<long>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Student.Authentication.Signup, dto);
         }
         #endregion
 

@@ -19,6 +19,14 @@
       <div class="eula"></div>
     </div>
     <div class="right">
+    <center>
+         <div class="h1" style="margin-top:20%;  
+                                font-family: Georgia, sans-serif;
+                                font-size: 6em;
+                                letter-spacing: -2px;">
+            Teacher Login
+        </div>
+    </center>
       <div class="form">
                   <div class="login-box"> 
                          <center>
@@ -66,6 +74,7 @@
         loading = true;
         try
         {
+            await LocalStorageService.SetApplicationType(ApplicationType.TeacherPanel);
             var response = await AuthenticationService.TeacherAuthenticateViaPassword(model);
             if (response.Success)
             {
