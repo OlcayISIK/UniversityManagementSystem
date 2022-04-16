@@ -68,7 +68,7 @@ namespace UMS.Client.Business.Shared
             }
             await _localStorageService.SetAccessToken(response.Data.AccessToken);
             await _localStorageService.SetRefreshToken(response.Data.RefreshToken);
-            await _localStorageService.SetApplicationType(ApplicationType.TeacherPanel);
+            await _localStorageService.SetApplicationType(ApplicationType.StudentPanel);
             IsLoggedInNonAsync = true;
             return response;
         }
@@ -78,9 +78,13 @@ namespace UMS.Client.Business.Shared
             throw new NotImplementedException();
         }
 
-        public Task<Result<bool>> StudentLogout(string refreshToken)
+        public async Task<Result<bool>> StudentLogout(string refreshToken)
         {
-            throw new NotImplementedException();
+            var response = await _httpService.SendRequest<Result<bool>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Student.Authentication.Logout, refreshToken);
+            IsLoggedInNonAsync = false;
+            await _localStorageService.RemoveTokens();
+            _navigationManager.NavigateTo("user/StudentLogin");
+            return response;
         }
 
         public Task<Result<bool>> StudentResetPassword(ResetPasswordDto dto)
@@ -88,9 +92,9 @@ namespace UMS.Client.Business.Shared
             throw new NotImplementedException();
         }
 
-        public Task<Result<long>> StudentSignUp(SignUpDto dto)
+        public  async Task<Result<long>> StudentSignUp(SignUpDto dto)
         {
-            throw new NotImplementedException();
+            return  await _httpService.SendRequest<Result<long>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Student.Authentication.Signup, dto);
         }
         #endregion
 

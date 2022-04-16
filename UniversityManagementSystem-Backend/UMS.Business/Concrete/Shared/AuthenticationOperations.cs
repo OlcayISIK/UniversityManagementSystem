@@ -104,7 +104,7 @@ namespace UMS.Business.Concrete.Shared
         {
             if (!Validate.Username(dto.Email) || !Validate.Password(dto.Password))
                 return Result<long>.CreateErrorResult(ErrorCode.InvalidUsernameOrPassword);
-            var existingMail = await _unitOfWork.Students.Where(x => x.Email == dto.Email).FirstOrDefaultAsync();
+            var existingMail = await _unitOfWork.Students.Where(x => x.Email == dto.Email || x.Username == dto.Username).FirstOrDefaultAsync();
             if (existingMail != null)
                 return Result<long>.CreateErrorResult(ErrorCode.ObjectAlreadyExists);
             var now = DateTime.UtcNow;
@@ -112,6 +112,8 @@ namespace UMS.Business.Concrete.Shared
             // create user
             var entity = _unitOfWork.Students.Add(new Student
             {
+                EnrollmentDate = DateTime.Now,
+                Username = dto.Username,
                 CreatedAt = now,
                 Email = dto.Email,
                 LastModifiedAt = now,
@@ -232,9 +234,9 @@ namespace UMS.Business.Concrete.Shared
 
         public async Task<Result<long>> TeacherSignUp(SignUpDto dto)
         {
-            if (!Validate.Username(dto.Email) || !Validate.Password(dto.Password))
+            if (!Validate.Username(dto.Username) || !Validate.Password(dto.Password))
                 return Result<long>.CreateErrorResult(ErrorCode.InvalidUsernameOrPassword);
-            var existingMail = await _unitOfWork.Teachers.Where(x => x.Email == dto.Email).FirstOrDefaultAsync();
+            var existingMail = await _unitOfWork.Teachers.Where(x => x.Email == dto.Email || x.Username == dto.Username).FirstOrDefaultAsync();
             if (existingMail != null)
                 return Result<long>.CreateErrorResult(ErrorCode.ObjectAlreadyExists);
             var now = DateTime.UtcNow;
@@ -242,6 +244,8 @@ namespace UMS.Business.Concrete.Shared
             // create user
             var entity = _unitOfWork.Teachers.Add(new CourseInstructor
             {
+                Username = dto.Username,
+                EnrollmentDate = now,
                 CreatedAt = now,
                 Email = dto.Email,
                 LastModifiedAt = now,

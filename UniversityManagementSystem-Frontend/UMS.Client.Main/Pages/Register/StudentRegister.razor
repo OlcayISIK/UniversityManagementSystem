@@ -1,0 +1,130 @@
+﻿@page "/user/StudentRegister"
+@layout LoginLayout
+@using MudBlazor;
+@using UMS.Client.Core.Enums
+@using UMS.Client.Dtos.Shared
+@using UMS.Client.Dtos.Student
+@using UMS.Client.Business.Interface.Shared
+
+@inject ILocalStorageService LocalStorageService
+@inject NavigationManager NavigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<div class="page">
+  <div class="container">
+    <div class="left" >
+        <div class="img"></div>
+      <div class="login"></div>
+      <div class="eula"></div>
+    </div>
+    <div class="right">
+        <div class="h1" style="margin-top:20%;  
+                                font-family: Georgia, sans-serif;
+                                font-size: 6em;
+                                letter-spacing: -2px;">
+            Student Register
+        </div>
+      <div class="form">
+          <center>
+                  <div class="login-box">
+                      <form>
+                        <div class="user-box">
+                          <input type="text" name="" @bind="model.Username" required="">
+                          <label>Username</label>
+                        </div>
+                        <div class="user-box">
+                          <input type="password" name=""  @bind="model.Password" required="">
+                          <label>Password</label>
+                        </div>  
+                        <div class="user-box">
+                          <input type="password" name="" @bind="rePass" required="">
+                          <label>Password Again</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name=""  @bind="model.Name" required="">
+                          <label>Name</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name=""  @bind="model.Surname" required="">
+                          <label>Surname</label>
+                        </div>
+                         <div class="user-box">
+                          <input type="text" name=""  @bind="model.Email" required="">
+                          <label>E-mail</label>
+                        </div>
+                            <a style="cursor: pointer;" @onclick="OnValidSubmit">
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                              Sing-in
+                            </a>
+                             <a href="/user/StudentLogin">
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                              <span></span>
+                              Back
+                            </a>
+                      </form>
+                    </div>
+               </center>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@code {
+
+    private SignUpDto model = new SignUpDto();
+    private string rePass = "";
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            if(rePass == model.Password)
+            {
+                var response = await AuthenticationService.StudentSignUp(model);
+                if (response.Success)
+                {
+
+                    Snackbar.Add("Register Succes", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
+                    NavigationManager.NavigateTo("/user/StudentLogin");
+                }
+                else
+                {
+                    if (response.ErrorCode == ErrorCode.InvalidUsernameOrPassword)
+                    {
+                        Snackbar.Add("Invalid Username Or Password", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                    }
+                    if (response.ErrorCode == ErrorCode.ObjectAlreadyExists)
+                    {
+                        Snackbar.Add("Username Or Email Used", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                    }
+                    loading = false;
+                    StateHasChanged();
+                }
+            }
+            else
+            {
+                Snackbar.Add("Passwords not Match", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                rePass = "";
+                model = new SignUpDto();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Snackbar.Add("Error" + ex.Message, Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}
