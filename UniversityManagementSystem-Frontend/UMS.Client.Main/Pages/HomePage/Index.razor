@@ -22,11 +22,11 @@
         max-width: 800px;
         margin-left: auto;
         margin-right: auto;
-        background-color: transparent !important;
+        background: rgba(3, 172, 240, 0.5);
         color: white;
         border: 3px solid white;
         border-radius: 25px;
-        margin-top: 50px;
+        margin-top: 40%;
     }
 
     .update-notes-card-content {
@@ -58,7 +58,6 @@
         padding: 5%;
         padding-top: 7%;
         height: 100vh;
-        width: 100%;
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -69,11 +68,6 @@
             <div class="container pr">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="banner-static">
-                        <div class="banner-text">
-                            <div class="banner-cell">
-                                <h1>University Management System<span class="typer" id="some-id" data-delay="200" data-delim=":" data-words="Friends:Family:Officemates" data-colors="red"></span><span class="cursor" data-cursorDisplay="_" data-owner="some-id"></span></h1>
-                                <h2>Everything About the University</h2>
-                                <p>Being a Student is a Privilege</p>
                                 <div class="update-notes-div">
                                     <MudCard Elevation=4 Class="update-notes-card">
                                         <MudCardHeader Class="update-notes-card-header">
@@ -97,8 +91,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 @code {
     public ApplicationType app;
     protected override async Task OnInitializedAsync()
