@@ -1,0 +1,118 @@
+﻿@page "/"
+@layout MainLayout
+@attribute [Authorize]
+@using Microsoft.AspNetCore.Authorization
+@using MudBlazor
+@using UMS.Client.Business.Helpers
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Core.Enums
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorageService
+@inject IDialogService DialogService
+@inject IJSRuntime jsRunTime
+@inject HttpClient httpClient
+@inject ISnackbar Snackbar
+
+<style>
+    .update-notes-card-header {
+        /*border-bottom: 3px solid white;*/
+    }
+
+    .update-notes-card {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: transparent !important;
+        color: white;
+        border: 3px solid white;
+        border-radius: 25px;
+        margin-top: 50px;
+    }
+
+    .update-notes-card-content {
+        padding: 12px;
+        overflow-y: scroll;
+        max-height: 300px;
+    }
+
+    .update-text {
+        float: left;
+        width: 90%;
+    }
+
+    .info-btn {
+        float: right;
+        width: 10%;
+    }
+
+    .card-caption {
+        text-align: center;
+        font-size: 32px;
+    }
+
+    .content-grid {
+        border-top: 1px solid white;
+    }
+    .mud-main-content-user {
+        background-image: url(../Images/background/main.jpg);
+        padding: 5%;
+        padding-top: 7%;
+        height: 100vh;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+
+        <div id="banner" class="banner full-screen-mode parallax">
+            <div class="container pr">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="banner-static">
+                        <div class="banner-text">
+                            <div class="banner-cell">
+                                <h1>University Management System<span class="typer" id="some-id" data-delay="200" data-delim=":" data-words="Friends:Family:Officemates" data-colors="red"></span><span class="cursor" data-cursorDisplay="_" data-owner="some-id"></span></h1>
+                                <h2>Everything About the University</h2>
+                                <p>Being a Student is a Privilege</p>
+                                <div class="update-notes-div">
+                                    <MudCard Elevation=4 Class="update-notes-card">
+                                        <MudCardHeader Class="update-notes-card-header">
+                                            <CardHeaderContent>
+                                                <MudText Typo="Typo.h6" Class="card-caption">Updates</MudText>
+                                            </CardHeaderContent>
+                                        </MudCardHeader>
+                                        <MudCardContent Class="update-notes-card-content scrollable">
+                                            <MudGrid Class="content-grid mt-1">
+                                                <MudItem Class="update-text mt-1">
+                                                    <MudText>20/03/22 - v1.0.0 : Chat Page, Now you can chat on the system. <a @onclick="() => SeeNoteDetails(1)"><i>See More Details</i></a></MudText>
+                                                </MudItem>
+                                                <MudItem Class="info-btn">
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Info" OnClick="() => SeeNoteDetails(1)"></MudIconButton>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudCardContent>
+                                    </MudCard>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+@code {
+    public ApplicationType app;
+    protected override async Task OnInitializedAsync()
+    {
+        app = await LocalStorageService.GetApplicationType();
+    }
+
+    private async Task SeeNoteDetails(int id)
+    {
+        var result = await DialogService.Show<UpdateDetailsDialog>("1.0.0").Result;
+
+        if (!result.Cancelled)
+        {
+
+        }
+    }
+}
