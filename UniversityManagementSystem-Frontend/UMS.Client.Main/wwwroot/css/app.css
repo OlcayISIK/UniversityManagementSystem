@@ -215,3 +215,30 @@ img {
     left: 0px;
     bottom: 0;
 }
+
+.mud-main-content-user {
+    background-image: url(../Images/background/banner.jpg);
+    padding: 5%;
+    padding-top: 7%;
+    height: 100vh;
+    overflow: auto;
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.SettingsGrid {
+    width: fit-content;
+    margin-left: 85%;
+}
+
+@media only screen and (max-width: 800px) {
+    .mud-main-content {
+        padding-top: 15%;
+    }
+
+    .GeneralHeader {
+        padding-top: 1%;
+    }
+}

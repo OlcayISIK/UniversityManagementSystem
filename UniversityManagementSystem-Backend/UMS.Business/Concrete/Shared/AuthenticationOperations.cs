@@ -74,7 +74,7 @@ namespace UMS.Business.Concrete.Shared
             await _unitOfWork.RedisTransactions.Set(new RedisToken
             {
                 UserId = user.Id,
-                ConsumerType = ApiConsumerType.Teacher,
+                ConsumerType = ApiConsumerType.Student,
                 TokenType = RedisTokenType.PasswordResetToken,
                 TokenValue = token
             }, 2 * 60);

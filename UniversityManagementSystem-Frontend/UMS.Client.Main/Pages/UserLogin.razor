@@ -55,7 +55,6 @@
         loading = true;
         try
         {
-            await LocalStorageService.SetApplicationType(ApplicationType.StudentPanel);
             var response = await AuthenticationService.StudentAuthenticateViaPassword(model);
             if (response.Success)
             {

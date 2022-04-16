@@ -131,8 +131,8 @@
                 }
             }
             await LoadUserChat(long.Parse(ContactId));
+            StateHasChanged();
         });
-
         await hubConnection.StartAsync();
     }
 

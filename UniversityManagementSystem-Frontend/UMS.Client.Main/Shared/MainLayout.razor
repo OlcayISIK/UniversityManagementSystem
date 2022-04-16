@@ -2,32 +2,72 @@
 @using MudBlazor;
 @using Microsoft.AspNetCore.SignalR.Client;
 @using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Shared
 @using UMS.Dto;
 @inject IJSRuntime _jsRuntime
 @inject NavigationManager NavigationManager;
 @inject ILocalStorageService LocalStorageService
 @inject ISnackbar Snackbar
+@inject NavigationManager uriHelper
+@inject HttpClient httpClient
+@inject IHttpService HttpService
+@inject IDialogService DialogService
+
 <MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <MudLayout>
+            <MudAppBar Elevation="0" Color="MudBlazor.Color.Dark" Class="GeneralHeader">
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="MudBlazor.Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
+                <MudGrid Class="SettingsGrid">
+                    <MudItem>
+                        <MudMenu Direction="MudBlazor.Direction.Right" OffsetX="false" OffsetY="true">
+                            <ActivatorContent>
+                                <MudChip Icon="@Icons.Material.Filled.Person" Color="Color.Dark" Size="Size.Large">UserName</MudChip>
+                            </ActivatorContent>
+                            <ChildContent>
+                                <MudMenuItem Link="/user/UserInformations">User Informations</MudMenuItem>
+                                <MudMenuItem Link="/user/ChangePassword">Change Password</MudMenuItem>
+                                <MudMenuItem Link="/account/logout">Logout</MudMenuItem>
+                            </ChildContent>
+                        </MudMenu>
+                    </MudItem>
+                </MudGrid>
+            </MudAppBar>
+            <MudDrawer @bind-Open="@open" ClipMode="DrawerClipMode.Always" Breakpoint="MudBlazor.Breakpoint.Lg" Elevation="1" Variant="@DrawerVariant.Responsive" PreserveOpenState="false" Style="background-color:#001529;color:white; overflow-x:hidden">
+                <MudDrawerHeader>
+                    <MudText Typo="Typo.h6">Username</MudText>
+                </MudDrawerHeader>
+                <MudNavMenu>
+                    @*<MudNavLink Match="NavLinkMatch.All" Href="/user" Icon="@Icons.Filled.Menu" @onclick="@ToggleDrawer">@UserName</MudNavLink>*@
+                    <MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Filled.Home"> Home</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{CommonControl}")" Href="/chat" Icon="@Icons.Filled.ChatBubble"> Chat</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Href="/student/grade" Icon="@Icons.Filled.Grade"> Grades</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{CommonControl}")" Href="/library" Icon="@Icons.Filled.LibraryBooks"> Library</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{TeacherControl}")" Href="/students" Icon="@Icons.Filled.Person"> Students</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Href="/socialclubs" Icon="@Icons.Filled.EmojiPeople"> SocialClubs</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{CommonControl}")" Href="/events" Icon="@Icons.Filled.Event"> Events</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{TeacherControl}")" Href="/documents" Icon="@Icons.Filled.Settings">Manage Documents</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Href="/Settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>
+                </MudNavMenu>
+            </MudDrawer>
+            <MudMainContent Class="mud-main-content-user">
+                <MudContainer MaxWidth="MaxWidth.False">
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </MudLayout>
 @code {
     bool _drawerOpen = false;
+    bool open = true;
+    ApplicationType ApplicationTypeControl;
+    UserType UserControl;
+    string StudentRepresentativeControl = "none";
+    string TeacherControl = "none";
+    string StudentControl = "none";
+    string CommonControl = "none";
     private long CurrentUserId { get; set; }
     void DrawerToggle()
     {
@@ -37,28 +77,61 @@
     public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
     protected override async Task OnInitializedAsync()
     {
+        try
+        {
+            CurrentUserId = long.Parse(await LocalStorageService.GetUserId());
+            ApplicationTypeControl = await LocalStorageService.GetApplicationType();
+        }
+        catch
+        {
+            NavigationManager.NavigateTo("/account/logout");
+        }
+        switch (ApplicationTypeControl)
+        {
+            case ApplicationType.StudentPanel:
+                StudentControl = "Inline-block";
+                CommonControl = "Inline-block";
+                break;
+            case ApplicationType.StudentRepresentativePanel:
+                StudentRepresentativeControl = "Inline-block";
+                CommonControl = "Inline-block";
+                break;
+            case ApplicationType.TeacherPanel:
+                TeacherControl = "Inline-block";
+                break;
+            case ApplicationType.NotDefined:
+                NavigationManager.NavigateTo("/account/logout");
+                break;
+        }
+        if (ApplicationTypeControl == ApplicationType.StudentPanel)
+        {
+            
+        }
         hubConnection = new HubConnectionBuilder().WithUrl("http://localhost:5005/chathub").Build();
         await hubConnection.StartAsync();
         hubConnection.On<ChatMessage>("ReceiveChatNotification", (message) =>
         {
             if (CurrentUserId == message.ToUserId)
             {
-                //_jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
-                Snackbar.Add(message.Message, Severity.Info, config =>
+            //_jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
+            Snackbar.Add(message.Message, Severity.Info, config =>
                 {
-                        config.VisibleStateDuration = 10000;
-                        config.HideTransitionDuration = 500;
-                        config.ShowTransitionDuration = 500;
-                        config.Action = "Chat?";
-                        config.ActionColor = Color.Info;
-                        config.Onclick = snackbar =>
-                    {
-                        NavigationManager.NavigateTo($"chat/{message.FromUserId}");
-                        return Task.CompletedTask;
-                    };
-                    });
+                    config.VisibleStateDuration = 10000;
+                    config.HideTransitionDuration = 500;
+                    config.ShowTransitionDuration = 500;
+                    config.Action = "Chat?";
+                    config.ActionColor = Color.Info;
+                    config.Onclick = snackbar =>
+            {
+                NavigationManager.NavigateTo($"chat/{message.FromUserId}");
+                return Task.CompletedTask;
+            };
+                });
             }
         });
-        CurrentUserId = long.Parse(await LocalStorageService.GetUserId());
+    }
+    void ToggleDrawer()
+    {
+        open = !open;
     }
 }
