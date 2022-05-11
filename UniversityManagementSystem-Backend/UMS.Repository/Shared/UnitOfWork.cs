@@ -18,11 +18,12 @@ namespace UMS.Repository.Shared
         public IRedisTokenRepository RedisTokens { get; set; }
         public IChatMessageRepository ChatMessages { get; set; }
         public IUniversityRepository Universities { get; set; }
+        public IFileRepository Files { get; set; }
 
 
         public UnitOfWork(Context context, ITeacherRepository teachers,IRedisTransactionsRepository redisTransactions, 
             IStudentRepository students, IUniversitySocialClubRepository universitySocialClubs, IRedisTokenRepository redisTokens, 
-            IChatMessageRepository chatMessages, IUniversityRepository universities)
+            IChatMessageRepository chatMessages, IUniversityRepository universities, IFileRepository files)
         {
             _context = context;
             Teachers = teachers;
@@ -32,6 +33,7 @@ namespace UMS.Repository.Shared
             RedisTokens = redisTokens;
             ChatMessages = chatMessages;
             Universities = universities;
+            Files  = files;
         }
         public void Dispose()
         {

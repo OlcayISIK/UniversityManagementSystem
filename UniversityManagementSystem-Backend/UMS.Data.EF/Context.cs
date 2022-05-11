@@ -49,6 +49,7 @@ namespace UMS.Data.EF
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<University> Universities { get; set; }
         public virtual DbSet<ChatMessage> ChatMessages { get; set; }
+        public virtual DbSet<File> Files { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

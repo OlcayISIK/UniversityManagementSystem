@@ -20,5 +20,6 @@ namespace UMS.Repository.Shared
         IUniversitySocialClubRepository UniversitySocialClubs { get; }
         IChatMessageRepository ChatMessages { get; }
         IUniversityRepository Universities{ get; }
+        IFileRepository Files { get; }
     }
 }
