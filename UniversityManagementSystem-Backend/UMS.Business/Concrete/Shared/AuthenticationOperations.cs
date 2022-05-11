@@ -48,10 +48,17 @@ namespace UMS.Business.Concrete.Shared
             return Result<TokenDto>.CreateSuccessResult(token);
         }
 
-        //public Task<Result<TokenDto>> StudentAuthenticateViaToken(string refreshToken)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public async Task<Result<TokenDto>> StudentAuthenticateViaToken(string refreshToken)
+        {
+            var token = await _unitOfWork.RedisTokens.Get(refreshToken);
+            if (token == null || token.ConsumerType != ApiConsumerType.Student || token.TokenType != RedisTokenType.RefreshToken)
+                return Result<TokenDto>.CreateErrorResult(ErrorCode.InvalidRefreshToken);
+            await _unitOfWork.RedisTokens.Remove(refreshToken);
+            var user = await _unitOfWork.Students.Get(token.UserId).FirstOrDefaultAsync();
+            var newToken = TokenGenerator.CreateStudentToken(user.Id, user.Username, user.UserType, user.UniversityId, _appSettings.TokenOptions);
+            await _unitOfWork.RedisTokens.Set(new RedisToken { TokenValue = newToken.RefreshToken, UserId = token.UserId, ConsumerType = ApiConsumerType.Student, TokenType = RedisTokenType.RefreshToken, Username = user.Username }, _appSettings.TokenOptions.RefreshTokenLifetime);
+            return Result<TokenDto>.CreateSuccessResult(newToken);
+        }
 
         public async Task<Result<bool>> StudentForgotPassword(string emailAddress)
         {
@@ -97,7 +104,7 @@ namespace UMS.Business.Concrete.Shared
         {
             if (!Validate.Username(dto.Email) || !Validate.Password(dto.Password))
                 return Result<long>.CreateErrorResult(ErrorCode.InvalidUsernameOrPassword);
-            var existingMail = await _unitOfWork.Students.Where(x => x.Email == dto.Email).FirstOrDefaultAsync();
+            var existingMail = await _unitOfWork.Students.Where(x => x.Email == dto.Email || x.Username == dto.Username).FirstOrDefaultAsync();
             if (existingMail != null)
                 return Result<long>.CreateErrorResult(ErrorCode.ObjectAlreadyExists);
             var now = DateTime.UtcNow;
@@ -105,6 +112,8 @@ namespace UMS.Business.Concrete.Shared
             // create user
             var entity = _unitOfWork.Students.Add(new Student
             {
+                EnrollmentDate = DateTime.Now,
+                Username = dto.Username,
                 CreatedAt = now,
                 Email = dto.Email,
                 LastModifiedAt = now,
@@ -225,9 +234,9 @@ namespace UMS.Business.Concrete.Shared
 
         public async Task<Result<long>> TeacherSignUp(SignUpDto dto)
         {
-            if (!Validate.Username(dto.Email) || !Validate.Password(dto.Password))
+            if (!Validate.Username(dto.Username) || !Validate.Password(dto.Password))
                 return Result<long>.CreateErrorResult(ErrorCode.InvalidUsernameOrPassword);
-            var existingMail = await _unitOfWork.Teachers.Where(x => x.Email == dto.Email).FirstOrDefaultAsync();
+            var existingMail = await _unitOfWork.Teachers.Where(x => x.Email == dto.Email || x.Username == dto.Username).FirstOrDefaultAsync();
             if (existingMail != null)
                 return Result<long>.CreateErrorResult(ErrorCode.ObjectAlreadyExists);
             var now = DateTime.UtcNow;
@@ -235,6 +244,8 @@ namespace UMS.Business.Concrete.Shared
             // create user
             var entity = _unitOfWork.Teachers.Add(new CourseInstructor
             {
+                Username = dto.Username,
+                EnrollmentDate = now,
                 CreatedAt = now,
                 Email = dto.Email,
                 LastModifiedAt = now,

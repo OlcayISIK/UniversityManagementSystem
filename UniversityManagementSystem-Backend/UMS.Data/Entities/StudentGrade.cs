@@ -9,8 +9,8 @@ namespace UMS.Data.Entities
 {
     public partial class StudentGrade : UniversityBoundEntity
     {
-        public int CourseId { get; set; }
-        public int StudentId { get; set; }
+        public long CourseId { get; set; }
+        public long StudentId { get; set; }
         public long Grade { get; set; }
 
         public virtual Course Course { get; set; }

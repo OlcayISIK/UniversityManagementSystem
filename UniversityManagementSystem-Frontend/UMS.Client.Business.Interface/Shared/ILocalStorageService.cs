@@ -19,5 +19,9 @@ namespace UMS.Client.Business.Interface.Shared
         Task<DateTime> GetRefreshTokenTime();
         Task SetApplicationType(ApplicationType value);
         Task RemoveTokens();
+        Task<string> GetUserId();
+        Task SetUsername(string value);
+        Task<string> GetUsername();
+
     }
 }

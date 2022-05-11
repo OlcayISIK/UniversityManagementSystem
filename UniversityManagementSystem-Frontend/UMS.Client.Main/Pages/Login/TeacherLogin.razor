@@ -1,0 +1,101 @@
+﻿@page "/user/TeacherLogin"
+@layout LoginLayout
+@using MudBlazor;
+@using UMS.Client.Core.Enums
+@using UMS.Client.Dtos.Shared
+@using UMS.Client.Business.Interface.Shared
+
+@inject ILocalStorageService LocalStorageService
+@inject NavigationManager NavigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+
+<div class="page">
+  <div class="container">
+    <div class="left" >
+        <div class="img"></div>
+      <div class="login"></div>
+      <div class="eula"></div>
+    </div>
+    <div class="right">
+    <center>
+         <div class="h1" style="margin-top:20%;  
+                                font-family: Georgia, sans-serif;
+                                font-size: 6em;
+                                letter-spacing: -2px;">
+            Teacher Login
+        </div>
+    </center>
+      <div class="form">
+                  <div class="login-box"> 
+                         <center>
+                              <form>
+                                <div class="user-box">
+                 
+                                  <input type="text" name="" @bind="model.Username" required="">
+                                  <label>Username</label>
+                                </div>
+                                <div class="user-box">
+                                  <input type="password" @bind="model.Password"  name="" required="">
+                                  <label>Password</label>
+                                </div>
+                                    <a @onclick="OnValidSubmit">
+                                      <span></span>
+                                      <span></span>
+                                      <span></span>
+                                      <span></span>
+                                      Login
+                                    </a>
+                                     <a href="/user/TeacherRegister">
+                                      <span></span>
+                                      <span></span>
+                                      <span></span>
+                                      <span></span>
+                                      Sign-in
+                                    </a>
+                              </form>
+                               <p> Are You <MudLink Href="user/StudentLogin">Student</MudLink> ?</p>
+                           </center> 
+      </div>
+      </div>
+      </div>
+  </div>
+</div>
+
+
+@code {
+
+    private LoginDto model = new LoginDto();
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+        loading = true;
+        try
+        {
+            await LocalStorageService.SetApplicationType(ApplicationType.TeacherPanel);
+            var response = await AuthenticationService.TeacherAuthenticateViaPassword(model);
+            if (response.Success)
+            {
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                if (response.ErrorCode == ErrorCode.InvalidUsernameOrPassword)
+                {
+                    Snackbar.Add("Invalid Username Or Password", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                }
+                loading = false;
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Snackbar.Add("Error" + ex.Message, Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+            loading = false;
+            StateHasChanged();
+        }
+    }
+}

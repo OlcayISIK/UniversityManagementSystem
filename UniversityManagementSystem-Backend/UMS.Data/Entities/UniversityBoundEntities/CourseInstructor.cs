@@ -10,7 +10,7 @@ namespace UMS.Data.Entities.UniversityBoundEntities
     public class CourseInstructor : UniversityBoundEntity
     {
         public long CourseId { get; set; }
-        public long UniversitySocialClubId { get; set; }
+        public long? UniversitySocialClubId { get; set; }
         public string Username { get; set; }
         public string HashedPassword { get; set; }
         public DateTime? HireDate { get; set; }
