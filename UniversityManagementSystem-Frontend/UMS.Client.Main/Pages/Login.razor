@@ -20,18 +20,18 @@
     </div>
     <div class="right">
       <div class="form">
-        
                   <div class="login-box">
                       <form>
                         <div class="user-box">
-                          <input type="text" name="" required="">
+                 
+                          <input type="text" name="" @bind="model.Username" required="">
                           <label>Username</label>
                         </div>
                         <div class="user-box">
-                          <input type="password" name="" required="">
+                          <input type="password" @bind="model.Password"  name="" required="">
                           <label>Password</label>
                         </div>
-                            <a href="#">
+                            <a @onclick="OnValidSubmit">
                               <span></span>
                               <span></span>
                               <span></span>
@@ -70,6 +70,8 @@
             var response = await AuthenticationService.TeacherAuthenticateViaPassword(model);
             if (response.Success)
             {
+
+
                 NavigationManager.NavigateTo("/");
             }
             else
@@ -81,6 +83,7 @@
                 loading = false;
                 StateHasChanged();
             }
+
         }
         catch (Exception ex)
         {
