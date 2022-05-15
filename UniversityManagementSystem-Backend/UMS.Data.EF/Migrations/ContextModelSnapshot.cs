@@ -435,6 +435,53 @@ namespace UMS.Data.EF.Migrations
                     b.ToTable("CourseInstructors");
                 });
 
+            modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.Event", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LocationHeader")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Participants")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quota")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UniversityId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UniversitySocialClubId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UniversitySocialClubId");
+
+                    b.ToTable("Events");
+                });
+
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.File", b =>
                 {
                     b.Property<long>("Id")
@@ -607,6 +654,9 @@ namespace UMS.Data.EF.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("EventId")
+                        .HasColumnType("bigint");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -719,6 +769,17 @@ namespace UMS.Data.EF.Migrations
                     b.Navigation("UniversitySocialClub");
                 });
 
+            modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.Event", b =>
+                {
+                    b.HasOne("UMS.Data.Entities.UniversityBoundEntities.UniversitySocialClub", "UniversitySocialClub")
+                        .WithMany("Events")
+                        .HasForeignKey("UniversitySocialClubId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UniversitySocialClub");
+                });
+
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.StudentCourse", b =>
                 {
                     b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Course", "Course")
@@ -785,6 +846,8 @@ namespace UMS.Data.EF.Migrations
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.UniversitySocialClub", b =>
                 {
                     b.Navigation("CourseInstructor");
+
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

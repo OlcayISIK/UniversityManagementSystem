@@ -1,0 +1,114 @@
+﻿@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Core.Enums
+@using MudBlazor
+@using Microsoft.AspNetCore.Components
+@using UMS.Client.Dtos.Student
+@inject IEventService EventService
+@inject ISnackbar Snackbar
+
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style="max-height: calc(100vh - 10em); overflow-y: scroll;" Class="scrollable">
+            <EditForm Model="@EventObject" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                    <MudTextField @bind-Value="@EventObject.Name"
+                                  Label=Name
+                                  Variant="Variant.Outlined"
+                                  Margin="MudBlazor.Margin.Dense"
+                                  For="@(() => EventObject.Name)" />
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                    <MudTextField @bind-Value="@EventObject.Description"
+                                  Label=Description
+                                  Variant="Variant.Outlined"
+                                  Margin="MudBlazor.Margin.Dense"
+                                  For="@(() => EventObject.Description)" />
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                    <MudTextField @bind-Value="@EventObject.Location"
+                                  Label=Location
+                                  Variant="Variant.Outlined"
+                                  Margin="MudBlazor.Margin.Dense"
+                                  For="@(() => EventObject.Location)" />
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                    <MudTextField @bind-Value="@EventObject.LocationHeader"
+                                  Label=LocationHeader
+                                  Variant="Variant.Outlined"
+                                  Margin="MudBlazor.Margin.Dense"
+                                  For="@(() => EventObject.LocationHeader)" />
+                </MudItem>
+                <MudGrid Style="margin-top: 10px; margin-bottom: 10px;">
+                    <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                        <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="MudBlazor.Color.Error" Class="dialog-button">Cancel</MudButton>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" Class="dialog-button">
+                            @if (loading)
+                            {
+                                <span class="spinner-border spinner-border-sm mr-1"></span>
+                            }
+                            @CreateSubmitButtontext()
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>
+    @code {
+        [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+        [Parameter]
+        public EventDto EventObject { get; set; }
+        [Parameter]
+        public OperationType operationType { get; set; }
+        void Cancel() => MudDialog.Cancel();
+        private bool loading;
+        private async void OnValidSubmit()
+        {
+            if (operationType == OperationType.Add)
+            {
+                loading = true;
+                try
+                {
+                    await EventService.PublishEventForSocialClub(EventObject);
+                    var message = $"{EventObject.Name} {"Published Succesfully"}";
+                    Snackbar.Add(message, Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
+                    loading = false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                }
+            }
+            else if (operationType == OperationType.Update)
+            {
+                loading = true;
+                try
+                {
+                    await EventService.Update(EventObject);
+                    var message = $"{EventObject.Name} {"Event Updated Succesfully"}";
+                    Snackbar.Add(message, Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
+                    loading = false;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                }
+            }
+            else
+            {
+                Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+            }
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        string CreateSubmitButtontext()
+        {
+            return operationType == OperationType.Add ? "Publish" : "Confirm";
+        }
+
+    }

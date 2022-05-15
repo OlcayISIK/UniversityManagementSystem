@@ -50,6 +50,7 @@ namespace UMS.Data.EF
         public virtual DbSet<University> Universities { get; set; }
         public virtual DbSet<ChatMessage> ChatMessages { get; set; }
         public virtual DbSet<File> Files { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

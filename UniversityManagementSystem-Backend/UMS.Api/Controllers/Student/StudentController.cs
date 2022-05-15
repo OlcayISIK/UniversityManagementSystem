@@ -38,5 +38,13 @@ namespace UMS.Api.Controllers.Student
         {
             return await _studentOperations.Get(userId);
         }
+        /// <summary>
+        /// Update a spesific Student.
+        /// </summary>
+        [HttpPut("update")]
+        public async Task<Result<bool>> Update(StudentDto studentDto)
+        {
+            return await _studentOperations.Update(studentDto);
+        }
     }
 }

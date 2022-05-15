@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UMS.Data.Entities;
 using UMS.Dto;
 
-namespace UMS.Api.Hubs
+namespace UMS.Business.Hubs
 {
     public class ChatHub : Hub
     {

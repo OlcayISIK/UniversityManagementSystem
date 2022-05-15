@@ -1,0 +1,152 @@
+﻿@page "/socialclubs"
+@layout MainLayout
+@using MudBlazor
+@using Microsoft.Extensions.Configuration
+@using UMS.Client.Business.Helpers
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Core.Enums
+@using UMS.Client.Dtos.Shared
+@using Microsoft.AspNetCore.Authorization
+@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Dtos
+@using UMS.Client.Dtos.Student
+@using UMS.Client.Main.CustomComponents.DialogComponents
+@using UMS.Client.Main.Pages.Events.Components
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+@inject IHttpService HttpService
+@inject ILocalStorageService LocalStorageService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IUniversitySocialClubService UniversitySocialClubService
+@inject IConfiguration Configuration
+@inject IPageAuthenticationService PageAuthenticationService
+@if (ClubList == null)
+{
+    <Spinner />
+}
+else
+{
+    <div class="card mt-2 Grid-Card" style="max-width: 75rem; margin-left: auto; margin-right: auto;">
+        <div class="card-header">
+            <MudButton Variant="Variant.Outlined" Class="grid-addbtn">Publish New Event</MudButton>
+        </div>
+        <MudTable Items="@ClubList.Data" Dense="true" Hover="true" Filter="new Func<UniversitySocialClubDto, bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
+            <ToolBarContent>
+                <MudText Class="Table-Grid-Header" Typo="Typo.h6">University Social Clubs List</MudText>
+                <MudSpacer/>
+                <input type="text" name="search" placeholder="Search" @bind-value="searchString" @bind-value:event="oninput">
+            </ToolBarContent>
+            <ColGroup>
+                <col style="width: 40%;"/>
+                <col style="width: 50%;"/>
+                <col style="width: 10%;"/>
+            </ColGroup>
+            <HeaderContent>
+                <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<UniversitySocialClubDto, object>(x => x.Name)">Name</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<UniversitySocialClubDto, object>(x => x.Description)">Description</MudTableSortLabel></MudTh>
+                <MudTh><label Class="Table-Grid-Header">Participants Number</label></MudTh>
+                <MudTh><label Class="Table-Grid-Header">Action</label></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Description">@context.Description</MudTd>
+                <MudTd DataLabel="Participants">12</MudTd>
+                <MudTd>
+                    <MudTooltip Text="Show Details Of Club">
+                        <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
+                    </MudTooltip>
+                    <MudTooltip Text="Join This Club">
+                        <MudIconButton Icon="fa-solid fa-file-signature" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinEvent(context.Id))"></MudIconButton>
+                    </MudTooltip>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager Style="color: white; font-weight: 700;" RowsPerPageString="RowsPerPage" PageSizeOptions="new int[] {5, 10, 20}"/>
+            </PagerContent>
+        </MudTable>
+    </div>
+}
+
+
+@code {
+    private Result<IEnumerable<UniversitySocialClubDto>> ClubList;
+    UserType UserControl;
+    private UniversitySocialClubDto selectedClub = new UniversitySocialClubDto();
+    bool UserAuthControl;
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserControl = await LocalStorageService.GetCurrentUserType();
+        UserAuthControl = PageAuthenticationService.ControlAuthentication(Pages.SocialClubs, UserControl);
+
+        if (UserAuthControl)
+        {
+            try
+            {
+                ClubList = await UniversitySocialClubService.GetAll();
+                if (ClubList == null)
+                    return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                NavigationManager.NavigateTo("/user");
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/user");
+        }
+    }
+
+    private string GetImage(string id)
+    {
+        string url = Configuration["imageUrl"];
+        return url + id;
+    }
+
+    private bool FilterFunc(UniversitySocialClubDto universitySocialClubDto)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (universitySocialClubDto.Name == null)
+            return false;
+        else if (universitySocialClubDto.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (universitySocialClubDto.Description == null)
+            return false;
+        else if (universitySocialClubDto.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+    void CancelSearch()
+    {
+        searchString = null;
+    }
+    async Task GetInformationModal(UniversitySocialClubDto universitySocialClubDto)
+    {
+        MudBlazor.DialogOptions option = new MudBlazor.DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
+        selectedClub = new UniversitySocialClubDto()
+        {
+            Name = universitySocialClubDto.Name,
+            Id = universitySocialClubDto.Id,
+            Description = universitySocialClubDto.Description,
+        };
+        var parameters = new DialogParameters { ["ClubDetail"] = selectedClub };
+        var dialog = DialogService.Show<GetInformationsModal>("Social Club Details", parameters, option);
+        var result = await dialog.Result;
+
+    }
+
+    public void JoinEvent(long id)
+    {
+        var result = UniversitySocialClubService.Join(id);
+        if(result.Result.Data == true)
+            Snackbar.Add("You have joined the club", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
+        else
+            Snackbar.Add("You can not join this group at the moment", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+    }
+}

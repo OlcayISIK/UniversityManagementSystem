@@ -1,0 +1,41 @@
+﻿@using MudBlazor
+<MudDialog>
+    <DialogContent>
+        <MudText>@_contentText</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudContainer>
+            <MudGrid class="mt-1 mb-1">
+                <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                    <MudButton OnClick="Cancel" Variant="Variant.Filled">@(CancelText == null ? "Cancel" : CancelText)</MudButton>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                    <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@_buttonText</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string ContentText { get; set; }
+
+    [Parameter] public string ButtonText { get; set; }
+
+    [Parameter] public MudBlazor.Color Color { get; set; }
+
+    [Parameter] public string CancelText { get; set; }
+
+    string _contentText;
+    string _buttonText;
+
+    protected override void OnInitialized()
+    {
+        _contentText = ContentText;
+        _buttonText = ButtonText;
+    }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+}

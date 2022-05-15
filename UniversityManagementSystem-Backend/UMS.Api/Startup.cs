@@ -24,7 +24,7 @@ using UMS.Data.EF;
 using UMS.Data.Entities;
 using UMS.Core.Enums;
 using UMS.Business.Helpers;
-using UMS.Api.Hubs;
+using UMS.Business.Hubs;
 using Microsoft.AspNetCore.ResponseCompression;
 
 namespace UMS.Api
@@ -129,7 +129,7 @@ namespace UMS.Api
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
-            }).AddJwtBearer(Constants.AuthenticationSchemes.StudentRespresentative, x =>
+            }).AddJwtBearer(Constants.AuthenticationSchemes.Admin, x =>
             {
                 // this section is for authenticating signalR requests
                 x.Events = new JwtBearerEvents
@@ -168,7 +168,7 @@ namespace UMS.Api
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc(Constants.AuthenticationSchemes.Student, new OpenApiInfo { Title = "UMS User Api", Version = "v1" });
-                x.SwaggerDoc(Constants.AuthenticationSchemes.StudentRespresentative, new OpenApiInfo { Title = "UMS Student Respresentative Api", Version = "v1" });
+                x.SwaggerDoc(Constants.AuthenticationSchemes.Admin, new OpenApiInfo { Title = "UMS Student Respresentative Api", Version = "v1" });
                 x.SwaggerDoc(Constants.AuthenticationSchemes.Teacher, new OpenApiInfo { Title = "UMS Teacher Api", Version = "v1" });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -216,6 +216,8 @@ namespace UMS.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<EventHub>("/eventHub");
+                endpoints.MapHub<EventHub>("/publishEventHub");
                 endpoints.MapHub<RefreshHub>("/refreshhub");
                 endpoints.MapControllers();
             });
@@ -223,7 +225,7 @@ namespace UMS.Api
             app.UseSwaggerUI(endpoints =>
             {
                 endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.Student}/swagger.json", "UMS User API");
-                endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.StudentRespresentative}/swagger.json", "UMS Student Respresentative API");
+                endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.Admin}/swagger.json", "UMS Student Respresentative API");
                 endpoints.SwaggerEndpoint($"/swagger/{Constants.AuthenticationSchemes.Teacher}/swagger.json", "UMS Teacher API");
                 endpoints.RoutePrefix = string.Empty;
             });

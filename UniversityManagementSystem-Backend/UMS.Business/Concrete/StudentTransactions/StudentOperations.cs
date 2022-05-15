@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UMS.Business.Abstract.StudentTransactions;
 using UMS.Business.Helpers;
+using UMS.Core.Enums;
 using UMS.Core.InternalDtos;
 using UMS.Dto;
 using UMS.Dto.Student;
@@ -35,6 +36,17 @@ namespace UMS.Business.Concrete.StudentTransactions
             var query = _unitOfWork.Students.Get(id);
             var data = await _mapper.ProjectTo<StudentDto>(query).FirstOrDefaultAsync();
             return Result<StudentDto>.CreateSuccessResult(data);
+        }
+        public async Task<Result<bool>> Update(StudentDto studentDto)
+        {
+            var existingData = await _unitOfWork.Students.GetAsTracking(studentDto.Id).FirstOrDefaultAsync();
+            if (existingData == null)
+                return Result<bool>.CreateErrorResult(ErrorCode.ObjectNotFound);
+            //if (studentDto.Image != null)
+            //    studentDto.ImageId = await FileStorageHelper.AddOrUpdateImage(studentDto.Image, existingData.ImageId);
+            _mapper.Map(studentDto, existingData,Language.English, _unitOfWork.Now);
+            await _unitOfWork.Commit();
+            return Result<bool>.CreateSuccessResult(true);
         }
     }
 }

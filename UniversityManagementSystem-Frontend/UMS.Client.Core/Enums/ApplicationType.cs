@@ -11,6 +11,6 @@ namespace UMS.Client.Core.Enums
         NotDefined = 0,
         StudentPanel = 1,
         TeacherPanel = 2,
-        StudentRepresentativePanel =3
+        Admin =3
     }
 }

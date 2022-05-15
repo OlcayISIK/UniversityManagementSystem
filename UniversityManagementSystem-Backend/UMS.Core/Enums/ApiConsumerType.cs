@@ -19,13 +19,8 @@ namespace UMS.Core.Enums
         Student = 1,
 
         /// <summary>
-        /// Student Representative of the university, consumers of the StudentRepresentative API's 
-        /// </summary>
-        StudentRepresentative = 2,
-
-        /// <summary>
         /// Administrators of the system
         /// </summary>
-        Admin = 3
+        Admin = 2
     }
 }

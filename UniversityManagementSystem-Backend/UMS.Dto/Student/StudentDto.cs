@@ -10,6 +10,7 @@ namespace UMS.Dto.Student
     public class StudentDto
     {
         public long Id { get; set; }
+        public long UniversityId { get; set; }
         public long StudentCourseId { get; set; }
         public long? UniversitySocialClubId { get; set; }
         public string Username { get; set; }

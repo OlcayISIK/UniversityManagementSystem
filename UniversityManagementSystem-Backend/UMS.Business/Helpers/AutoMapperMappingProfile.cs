@@ -6,6 +6,7 @@ using UMS.Data.Entities;
 using UMS.Data.Entities.UniversityBoundEntities;
 using UMS.Dto;
 using UMS.Dto.Student;
+using UMS.Dto.Teacher;
 
 namespace UMS.Business.Helpers
 {
@@ -57,6 +58,15 @@ namespace UMS.Business.Helpers
 
             CreateMap<ChatMessage, ChatMessageDto>();
             CreateMap<ChatMessageDto, ChatMessage>();
+
+            CreateMap<CourseInstructor, CourseInstructorDto>();
+            CreateMap<CourseInstructorDto, CourseInstructor>();
+
+            CreateMap<University, UniversityDto>();
+            CreateMap<UniversityDto, University>();
+
+            CreateMap<Event, EventDto>();
+            CreateMap<EventDto, Event>();
         }
 
         private static string MapLanguageBoundString(string source, MultiString destination, Language destinationLanguage, Language sourceLanguage)

@@ -33,12 +33,12 @@ namespace UMS.Business.Abstract.Shared
 
         #region StudentRespresentative
 
-        Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaPassword(LoginDto loginDto);
-        //Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaToken(string refreshToken);
-        Task<Result<bool>> StudentRespresentativeLogout(string refreshToken);
-        Task<Result<long>> StudentRespresentativeSignUp(SignUpDto dto);
-        Task<Result<bool>> StudentRespresentativeForgotPassword(string emailAddress);
-        Task<Result<bool>> StudentRespresentativeResetPassword(ResetPasswordDto dto);
+        //Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaPassword(LoginDto loginDto);
+        ////Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaToken(string refreshToken);
+        //Task<Result<bool>> StudentRespresentativeLogout(string refreshToken);
+        //Task<Result<long>> StudentRespresentativeSignUp(SignUpDto dto);
+        //Task<Result<bool>> StudentRespresentativeForgotPassword(string emailAddress);
+        //Task<Result<bool>> StudentRespresentativeResetPassword(ResetPasswordDto dto);
 
         #endregion
 

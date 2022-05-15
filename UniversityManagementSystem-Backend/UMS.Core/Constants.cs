@@ -11,8 +11,8 @@ namespace UMS.Core
         public static class AuthenticationSchemes
         {
             public const string Student = "Student";
-            public const string StudentRespresentative = "StudentRespresentative";
             public const string Teacher = "Teacher";
+            public const string Admin = "Admin";
         }
     }
 }

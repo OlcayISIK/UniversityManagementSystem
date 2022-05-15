@@ -130,35 +130,35 @@ namespace UMS.Business.Concrete.Shared
 
         #region StudentRespresentative
 
-        public Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaPassword(LoginDto loginDto)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaPassword(LoginDto loginDto)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaToken(string refreshToken)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<Result<TokenDto>> StudentRespresentativeAuthenticateViaToken(string refreshToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<Result<bool>> StudentRespresentativeForgotPassword(string emailAddress)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<Result<bool>> StudentRespresentativeForgotPassword(string emailAddress)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<Result<bool>> StudentRespresentativeLogout(string refreshToken)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<Result<bool>> StudentRespresentativeLogout(string refreshToken)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<Result<bool>> StudentRespresentativeResetPassword(ResetPasswordDto dto)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<Result<bool>> StudentRespresentativeResetPassword(ResetPasswordDto dto)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public Task<Result<long>> StudentRespresentativeSignUp(SignUpDto dto)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<Result<long>> StudentRespresentativeSignUp(SignUpDto dto)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         #endregion
 

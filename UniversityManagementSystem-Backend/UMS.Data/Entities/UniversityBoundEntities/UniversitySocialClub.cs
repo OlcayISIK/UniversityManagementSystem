@@ -13,9 +13,11 @@ namespace UMS.Data.Entities.UniversityBoundEntities
         public long ClubLeaderId { get; set; }
         [ForeignKey("CourseInstructorId")]
         public long AdvisorId { get; set; }
+        public long EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Student Student { get; set; }
+        public IEnumerable<Event> Events { get; set; }
         public CourseInstructor CourseInstructor { get; set; }
     }
 }

@@ -9,18 +9,10 @@ namespace UMS.Client.Core.Enums
     public enum Pages
     {
         Home,
-        ItemTree,
-        ItemTags,
-        TableDefinitions,
-        Tables,
-        Kitchen,
-        Orders,
-        Reservations,
-        Stations,
-        Promotions,
-        Settings,
-        Users,
-        SuggestedItems,
-        ItemPackage
+        Chat,
+        Events,
+        StudentSettings,
+        TeacherSettings,
+        SocialClubs
     }
 }

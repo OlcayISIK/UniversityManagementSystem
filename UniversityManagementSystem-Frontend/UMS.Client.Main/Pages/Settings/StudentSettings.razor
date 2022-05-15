@@ -1,0 +1,56 @@
+﻿@page "/student/Settings"
+@using Microsoft.AspNetCore.Authorization
+@using UMS.Client.Business.Helpers
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Core.Enums
+@using MudBlazor
+@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Business.Interface.Teacher
+@using UMS.Client.Business.StudentService
+@using UMS.Client.Dtos.Student
+@using UMS.Client.Dtos.Teacher
+@using UMS.Client.Main.Pages.HomePage
+@using UMS.Client.Main.Pages.Settings.Components
+@layout MainLayout
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+@inject LayoutState LayoutState
+@inject IHttpService HttpService
+@inject ISnackbar Snackbar
+@inject IAuthenticationService AuthenticationService
+@inject ILocalStorageService LocalStorageService
+@inject IStudentService StudentService
+@inject ITeacherService TeacherService
+<style>
+    .mud-input {
+        color: black;
+    }
+
+    .mud-input-control {
+        color: black;
+    }
+
+    .btn-wrapper {
+        text-align: center;
+        width: 125px;
+        margin: 20px auto 0 auto;
+    }
+
+    .validation-errors {
+        margin-left: 10px;
+        list-style: disc;
+    }
+</style>
+<SettingsForm currUser="@studentDto"/>
+
+@code {
+    public ApplicationType app;
+    public long id;
+    StudentDto studentDto = new StudentDto();
+    protected override async Task OnInitializedAsync()
+    {
+        app = await LocalStorageService.GetApplicationType();
+        id = long.Parse(await LocalStorageService.GetUserId());
+        studentDto = (await StudentService.Get(id)).Data;
+    }
+}

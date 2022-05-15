@@ -21,5 +21,6 @@ namespace UMS.Repository.Shared
         IChatMessageRepository ChatMessages { get; }
         IUniversityRepository Universities{ get; }
         IFileRepository Files { get; }
+        IEventRepository Events { get; }
     }
 }

@@ -1,0 +1,220 @@
+﻿@page "/Events"
+@layout MainLayout
+@using MudBlazor
+@using Microsoft.Extensions.Configuration
+@using UMS.Client.Business.Helpers
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Core.Enums
+@using UMS.Client.Dtos.Shared
+@using Microsoft.AspNetCore.Authorization
+@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Dtos.Student
+@using UMS.Client.Main.CustomComponents.DialogComponents
+@using UMS.Client.Main.Pages.Events.Components
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+@inject IHttpService HttpService
+@inject ILocalStorageService LocalStorageService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IEventService EventService
+@inject IConfiguration Configuration
+@inject IPageAuthenticationService PageAuthenticationService
+@if (EventList == null)
+{
+    <Spinner />
+}
+else
+{
+    <div class="card mt-2 Grid-Card" style="max-width: 75rem; margin-left: auto; margin-right: auto;">
+        <div class="card-header">
+            <MudButton Variant="Variant.Outlined" OnClick="PublishEvent" Class="grid-addbtn">Publish New Event</MudButton>
+        </div>
+        <MudTable Items="@EventList.Data" Dense="true" Hover="true" Filter="new Func<EventDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
+            <ToolBarContent>
+                <MudText Class="Table-Grid-Header" Typo="Typo.h6">Events List</MudText>
+                <MudSpacer />
+                <input type="text" name="search" placeholder="Search" @bind-value="searchString" @bind-value:event="oninput">
+            </ToolBarContent>
+            <ColGroup>
+                <col style="width: 40%;" />
+                <col style="width: 50%;" />
+                <col style="width: 10%;" />
+            </ColGroup>
+            <HeaderContent>
+                <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<EventDto, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<EventDto, object>(x=>x.Description)">Description</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<EventDto, object>(x=>x.LocationHeader)">Location</MudTableSortLabel></MudTh>
+                <MudTh><label Class="Table-Grid-Header">Participants</label></MudTh>
+                <MudTh><label Class="Table-Grid-Header">Action</label></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Description">@context.Description</MudTd>
+                <MudTd DataLabel="LocationHeader">@context.LocationHeader</MudTd>
+                <MudTd DataLabel="Participants">@context.Quota / @context.Participants</MudTd>
+                <MudTd>
+                    <MudTooltip Text="Edit Event">
+                        <MudIconButton Icon="fas fa-edit" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" Class="Table-Edit-Button" OnClick="@(() => EventEditModal(context))"></MudIconButton>
+                    </MudTooltip>
+                    <MudTooltip Text="Delete Event">
+                        <MudIconButton Icon="fas fa-trash" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" Class="Table-Delete-Button" OnClick="@(() => ShowDeleteModal(context))"></MudIconButton>
+                    </MudTooltip>
+                    <MudTooltip Text="Show Details Of Event">
+                        <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
+                    </MudTooltip>
+                    <MudTooltip Text="Join This Event">
+                        <MudIconButton Icon="fa-solid fa-file-signature" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinEvent(context.Id))"></MudIconButton>
+                    </MudTooltip>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager Style="color:white;font-weight:700;" RowsPerPageString="RowsPerPage" PageSizeOptions="new int[]{5, 10, 20}" />
+            </PagerContent>
+        </MudTable>
+    </div>
+}
+
+
+@code {
+    private Result<IEnumerable<EventDto>> EventList;
+    UserType UserControl;
+    private EventDto selectedEvent = new EventDto();
+    bool UserAuthControl;
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserControl = await LocalStorageService.GetCurrentUserType();
+        UserAuthControl = PageAuthenticationService.ControlAuthentication(Pages.Events, UserControl);
+
+        if (UserAuthControl)
+        {
+            try
+            {
+                EventList = await EventService.GetAll();
+                if (EventList == null)
+                    return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                NavigationManager.NavigateTo("/user");
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/user");
+        }
+    }
+
+    private string GetImage(string id)
+    {
+        string url = Configuration["imageUrl"];
+        return url + id;
+    }
+
+    private bool FilterFunc(EventDto eventDto)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (eventDto.Name == null)
+            return false;
+        else if (eventDto.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (eventDto.Description == null)
+            return false;
+        else if (eventDto.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+    void CancelSearch()
+    {
+        searchString = null;
+    }
+
+
+    private async Task ShowDeleteModal(EventDto eventDto)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", "Delete Event" +  eventDto.Name);
+        parameters.Add("ButtonText", "Delete");
+        parameters.Add("Color", MudBlazor.Color.Error);
+
+        var options = new MudBlazor.DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall, FullWidth = true };
+
+        var dialog = DialogService.Show<ConfirmDialog>("Delete Event", parameters, options);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            await EventService.Delete(eventDto.Id);
+            EventList = await EventService.GetAll();
+            var message = $"{eventDto.Name} Event Deleted Sucessfully";
+            Snackbar.Add(message, Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
+        }
+    }
+
+    private async Task EventEditModal(EventDto eventDto)
+    {
+        selectedEvent = new EventDto()
+        {
+            Name = eventDto.Name,
+            Id = eventDto.Id,
+            Description = eventDto.Description,
+            Location = eventDto.Location,
+            LocationHeader = eventDto.LocationHeader,
+            Participants = eventDto.Participants,
+            Quota = eventDto.Quota,
+            UniversityId = eventDto.UniversityId,
+            UniversitySocialClubId = eventDto.UniversityId
+        };
+        var parameters = new DialogParameters { ["EventObject"] = selectedEvent, ["operationType"] = OperationType.Update };
+        var options = new MudBlazor.DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        var dialog = DialogService.Show<EventModal>("Edit Event", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+            EventList = await EventService.GetAll();
+    }
+
+    private async Task PublishEvent()
+    {
+        EventDto eventDto = new EventDto();
+        var parameters = new DialogParameters { ["EventObject"] = eventDto, ["operationType"] = OperationType.Add};
+        var options = new MudBlazor.DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        var dialog = DialogService.Show<EventModal>("Add Event", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+            EventList = await EventService.GetAll();
+    }
+    async Task GetInformationModal(EventDto eventDto)
+    {
+        MudBlazor.DialogOptions option = new MudBlazor.DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
+        selectedEvent = new EventDto()
+        {
+            Name = eventDto.Name,
+            Id = eventDto.Id,
+            Description = eventDto.Description,
+            Location = eventDto.Location,
+            LocationHeader = eventDto.LocationHeader,
+            Participants = eventDto.Participants,
+            Quota = eventDto.Quota,
+            UniversityId = eventDto.UniversityId,
+            UniversitySocialClubId = eventDto.UniversityId
+        };
+        var parameters = new DialogParameters { ["EventDetail"] = selectedEvent };
+        var dialog = DialogService.Show<GetInformationsModal>("Event Details", parameters, option);
+        var result = await dialog.Result;
+
+    }
+
+    public void JoinEvent(long id)
+    {
+        var result = EventService.Join(id);
+        if(result.Result.Data == true)
+            Snackbar.Add("You have joined the event", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
+        else
+            Snackbar.Add("Number of Participant is full", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+    }
+}

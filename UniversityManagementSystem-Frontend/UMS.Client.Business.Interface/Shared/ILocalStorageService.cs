@@ -10,6 +10,7 @@ namespace UMS.Client.Business.Interface.Shared
     public interface ILocalStorageService
     {
         Task<string> GetAccessToken();
+        Task<UserType> GetCurrentUserType();
         Task SetAccessToken(string value);
 
         Task<string> GetRefreshToken();

@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="StudentRepresentative\" />
-    <Folder Include="Teacher\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\UMS.Client.Core\UMS.Client.Core.csproj" />
   </ItemGroup>
 

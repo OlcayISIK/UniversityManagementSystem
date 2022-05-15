@@ -16,10 +16,13 @@ builder.Services.AddScoped<ILocalStorageService, LocalStorageService>()
     .AddScoped<IHttpService, HttpService>()
     .AddScoped<IAuthenticationService, AuthenticationService>()
     .AddScoped<IStudentService, StudentService>()
-    .AddScoped<IChatService, ChatService>();
+    .AddScoped<IChatService, ChatService>()
+    .AddScoped<IEventService, EventService>()
+    .AddScoped<IPageAuthenticationService, PageAuthenticationService>()
+    .AddScoped<IUniversitySocialClubService, UniversitySocialClubService>(); 
 
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5005") });
+ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5005") });
 
 var authenticationService = builder.Build().Services.GetRequiredService<IAuthenticationService>();
 await authenticationService.Initialize();

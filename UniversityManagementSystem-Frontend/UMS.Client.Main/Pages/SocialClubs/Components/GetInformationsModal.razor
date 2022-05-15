@@ -1,0 +1,44 @@
+﻿@using UMS.Client.Business.Interface.StudentService
+@using MudBlazor
+@using UMS.Client.Dtos
+@using UMS.Client.Dtos.Student
+@inject IEventService EventService
+
+
+<MudDialog>
+    <DialogContent>
+        @if (ClubDetail == null)
+        {
+            <Spinner/>
+        }
+        else
+        {
+            <table class="table table-hover table-sm" style="margin-top: 1%">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 40%"><span style="color:white">Name</span></th>
+                        <th scope="col" style="width: 40%"><span style="color:white">Description</span></th>
+                        <th scope="col" style="width: 20%"><span style="color:white">Participants</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color:white">@ClubDetail.Name</td>
+                        <td style="color:white">@ClubDetail.Description</td>
+                        <td style="color:white">@ClubDetail.Students.ToList().Count()</td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="MudBlazor.Color.Error" OnClick="Cancel">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter]
+    public UniversitySocialClubDto ClubDetail { get; set; }
+    void Cancel() => MudDialog.Cancel();
+
+}

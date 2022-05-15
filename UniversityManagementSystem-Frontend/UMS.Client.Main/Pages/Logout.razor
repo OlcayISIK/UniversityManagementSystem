@@ -26,9 +26,9 @@
                 case ApplicationType.StudentPanel:
                         await AuthenticationService.StudentLogout(await LocalStorageService.GetRefreshToken());
                     break;
-                case ApplicationType.StudentRepresentativePanel:
-                        await AuthenticationService.StudentRespresentativeLogout(await LocalStorageService.GetRefreshToken());
-                    break;
+                //case ApplicationType.Admin:
+                //        await AuthenticationService.StudentRespresentativeLogout(await LocalStorageService.GetRefreshToken());
+                //    break;
                 case ApplicationType.TeacherPanel:
                         await AuthenticationService.TeacherLogout(await LocalStorageService.GetRefreshToken());
                     break;

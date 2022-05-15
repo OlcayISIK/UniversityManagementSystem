@@ -93,5 +93,10 @@ namespace UMS.Client.Business.Shared
         {
             return await _jsRuntime.InvokeAsync<string>("localStorage.getItem", Username);
         }
+        public async Task<UserType> GetCurrentUserType()
+        {
+            string UserTypeString = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", UserType);
+            return (UserType)Enum.Parse(typeof(UserType), UserTypeString);
+        }
     }
 }

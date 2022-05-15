@@ -1,0 +1,33 @@
+﻿@using UMS.Client.Dtos.Student
+@using UMS.Client.Dtos.Teacher
+
+
+
+<div class="form-group" id="@nameof(currUser.Username)">
+    <label>Username</label>
+    <InputText @bind-Value="currUser.Username" class="form-control" />
+    <ValidationMessage For="@(() => currUser.Username)" />
+</div>
+
+<div class="form-group">
+    <label>Email</label>
+    <InputText @bind-Value="currUser.Email" class="form-control" type="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" />
+    <ValidationMessage For="@(() => currUser.Email)" />
+</div>
+
+
+
+
+
+@code {
+    [Parameter]
+    public CourseInstructorDto currUser { get; set; }
+
+    public bool OrderTimeOutCheckbox = false;
+    public bool ManualDeliveryCheckbox = false;
+    protected override void OnInitialized()
+    {
+
+    }
+
+}

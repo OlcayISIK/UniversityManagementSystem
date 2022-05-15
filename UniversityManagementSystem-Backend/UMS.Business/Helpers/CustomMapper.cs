@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using UMS.Core.Enums;
+using UMS.Data;
 using UMS.Data.Entities;
 
 namespace UMS.Business.Helpers
@@ -50,9 +51,10 @@ namespace UMS.Business.Helpers
         /// <param name="source">Source (DTO) object to be mapped</param>
         /// <param name="destination">Destination (Entity) object, which has other translations already filled.</param>
         /// <param name="language">The language currently being mapped.</param>
-        public void Map<TSource, TDestination>(TSource source, TDestination destination, Language language)
+        public void Map<TSource, TDestination>(TSource source, TDestination destination, Language language, DateTime now) where TDestination : Entity
         {
             _mapper.Map(source, destination, opts => opts.Items[nameof(Language)] = language);
+            destination.LastModifiedAt = now;
         }
     }
 }
