@@ -102,14 +102,13 @@ namespace UMS.Business.Concrete.Shared
 
         public async Task<Result<long>> StudentSignUp(SignUpDto dto)
         {
-            if (!Validate.Username(dto.Email) || !Validate.Password(dto.Password))
+            if (!Validate.Username(dto.Username) || !Validate.Email(dto.Email) || !Validate.Password(dto.Password))
                 return Result<long>.CreateErrorResult(ErrorCode.InvalidUsernameOrPassword);
             var existingMail = await _unitOfWork.Students.Where(x => x.Email == dto.Email || x.Username == dto.Username).FirstOrDefaultAsync();
             if (existingMail != null)
                 return Result<long>.CreateErrorResult(ErrorCode.ObjectAlreadyExists);
             var now = DateTime.UtcNow;
 
-            // create user
             var entity = _unitOfWork.Students.Add(new Student
             {
                 EnrollmentDate = DateTime.Now,

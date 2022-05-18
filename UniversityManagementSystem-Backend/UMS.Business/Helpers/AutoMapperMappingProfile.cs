@@ -57,6 +57,9 @@ namespace UMS.Business.Helpers
 
             CreateMap<ChatMessage, ChatMessageDto>();
             CreateMap<ChatMessageDto, ChatMessage>();
+
+            CreateMap<University, UniversityDto>();
+            CreateMap<UniversityDto, University>();
         }
 
         private static string MapLanguageBoundString(string source, MultiString destination, Language destinationLanguage, Language sourceLanguage)

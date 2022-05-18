@@ -3,14 +3,17 @@
 @using MudBlazor;
 @using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Shared
+@using UMS.Client.Dtos.Student
 @using UMS.Client.Business.Interface.Shared
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
 
 @inject ILocalStorageService LocalStorageService
 @inject NavigationManager NavigationManager
 @inject IAuthenticationService AuthenticationService
+@inject IUniversityService UniversityService
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
-
 <div class="page">
   <div class="container">
     <div class="left" >
@@ -28,31 +31,34 @@
       <div class="form">
           <center>
                   <div class="login-box">
-                      <form>
-                        <div class="user-box">
-                          <input type="text" name="" @bind="model.Username" required="">
-                          <label>Username</label>
-                        </div>
-                        <div class="user-box">
-                          <input type="password" name=""  @bind="model.Password" required="">
-                          <label>Password</label>
-                        </div>  
-                        <div class="user-box">
-                          <input type="password" name="" @bind="rePass" required="">
-                          <label>Password Again</label>
-                        </div>
-                         <div class="user-box">
-                          <input type="text" name=""  @bind="model.Name" required="">
-                          <label>Name</label>
-                        </div>
-                         <div class="user-box">
-                          <input type="text" name=""  @bind="model.Surname" required="">
-                          <label>Surname</label>
-                        </div>
-                         <div class="user-box">
-                          <input type="text" name=""  @bind="model.Email" required="">
-                          <label>E-mail</label>
-                        </div>
+                       <MudForm @ref="form" @bind-IsValid="@success">
+                            <MudTextField T="string" Label="Username" @bind-Value="model.Username" Required="true" RequiredError="User name is required!"/>
+
+                            
+                            <MudTextField T="string" Label="Password"  @bind-Value="model.Password"  HelperText="Choose a strong password" @ref="pwField1"
+                                          InputType="InputType.Password"
+                                          Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+                                          RequiredError="Password is required!"/>
+
+                            <MudTextField T="string"
+                                          Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
+                                          Validation="@(new Func<string, string>(PasswordMatch))"/>
+
+                            <MudTextField T="string" Label="Email" Required="true" @bind-Value="model.Email"  RequiredError="Email is required!"
+                                          Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
+
+                                          
+                            <MudTextField T="string" Label="Name" Required="true" @bind-Value="model.Name" RequiredError="Name is required!"/>
+                            
+                            <MudTextField T="string" Label="Surname" Required="true"  @bind-Value="model.Surname" RequiredError="Surname is required!"/>
+                            <MudSelect T="string" Label="Choose University" Variant="Variant.Filled" @bind-Value="model.UniversityName" AnchorOrigin="Origin.BottomCenter"
+                                Required="true" RequiredError="School is required!" >
+                                    @foreach(var universty in universityDto.ToList())
+                                    {
+                                        <MudSelectItem Value="@(universty.Name)" />
+                                    }
+                                </MudSelect>
+
                             <a style="cursor: pointer;" @onclick="OnValidSubmit">
                               <span></span>
                               <span></span>
@@ -60,14 +66,14 @@
                               <span></span>
                               Sing-in
                             </a>
-                             <a href="/user/TeacherLogin">
+                             <a href="/user/StudentLogin">
                               <span></span>
                               <span></span>
                               <span></span>
                               <span></span>
                               Back
                             </a>
-                      </form>
+                    </MudForm>   
                     </div>
                </center>
       </div>
@@ -79,24 +85,43 @@
 @code {
 
     private SignUpDto model = new SignUpDto();
-    private string rePass = "";
     private bool loading;
+
+    bool success;
+    string[] errors = { };
+    MudTextField<string> pwField1;
+    MudForm form;
+    IEnumerable<UniversityDto> universityDto;
+
+    protected override async Task OnInitializedAsync()
+    {
+       universityDto = (await UniversityService.GetAll()).Data;
+    }
 
     private async void OnValidSubmit()
     {
-        loading = true;
         try
         {
-            if(rePass == model.Password)
+            if(success)
             {
+      
+            Console.WriteLine(model.Username);
+            Console.WriteLine(model.Password);
+            Console.WriteLine(model.Email);
+            Console.WriteLine(model.Name);
+            Console.WriteLine(model.Surname);
                 var response = await AuthenticationService.TeacherSignUp(model);
                 if (response.Success)
                 {
+            Console.WriteLine("2");
+                  
                     Snackbar.Add("Register Succes", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
                     NavigationManager.NavigateTo("/user/TeacherLogin");
                 }
                 else
                 {
+            Console.WriteLine("3");
+
                     if (response.ErrorCode == ErrorCode.InvalidUsernameOrPassword)
                     {
                         Snackbar.Add("Invalid Username Or Password", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
@@ -110,19 +135,43 @@
                 }
             }
             else
-            {
-                Snackbar.Add("Passwords not Match", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
-                rePass = "";
                 model = new SignUpDto();
-            }
 
         }
         catch (Exception ex)
         {
+            Console.WriteLine("4");
+
             Console.WriteLine(ex.Message);
             Snackbar.Add("Error" + ex.Message, Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
             loading = false;
             StateHasChanged();
         }
+    }
+
+  
+
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least of length 8";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one capital letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string PasswordMatch(string arg)
+    {
+        if (pwField1.Value != arg)
+            return "Passwords don't match";
+        return null;
     }
 }

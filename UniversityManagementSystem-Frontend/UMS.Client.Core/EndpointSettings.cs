@@ -64,6 +64,16 @@ namespace UMS.Client.Core
                     public const string Add = EndpointPrefix + ControllerPrefix + "/AddMessage"; 
                 }
             }
+        
+            public static class Shared
+            {
+                private const string EndpointPrefix = "api";
+                public static class University
+                { 
+                    private const string ControllerPrefix = "/University";
+                    public const string GetAll = EndpointPrefix + ControllerPrefix + "/getAll";
+                }
+            }
         }
     }
 }

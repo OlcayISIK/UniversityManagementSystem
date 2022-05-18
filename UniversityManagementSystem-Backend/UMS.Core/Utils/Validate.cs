@@ -11,7 +11,11 @@ namespace UMS.Core.Utils
         // username should not contain whitespaces or uppercase letters
         public static bool Username(string username)
         {
-            return username == username.ToLowerInvariant().Trim();
+            return username == username.Trim();
+        }
+        public static bool Email(string email)
+        {
+            return email == email.Trim();
         }
 
         // password should not contain whitespaces

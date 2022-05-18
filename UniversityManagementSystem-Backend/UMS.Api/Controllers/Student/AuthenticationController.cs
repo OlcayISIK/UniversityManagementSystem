@@ -14,7 +14,7 @@ namespace UMS.Api.Controllers.Student
     {
         private readonly IAuthenticationOperations _authOperations;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public AuthenticationController(IAuthenticationOperations authOperations)
         {
             _authOperations = authOperations;
