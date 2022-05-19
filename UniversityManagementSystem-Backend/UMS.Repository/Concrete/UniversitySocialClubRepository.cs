@@ -16,6 +16,15 @@ namespace UMS.Repository.Concrete
         public UniversitySocialClubRepository(Context context) : base(context)
         {
         }
+        public IQueryable<UniversitySocialClub> GetParticipantsOfSocialClub()
+        {
+            //return Context.Set<UniversitySocialClub>().Where(c => c.Id == cat_id).SelectMany(c => Articles);
+            IQueryable <UniversitySocialClub> query = Context.UniversitySocialClubs
+                .Include(club => club.StudentsUniversitySocialClubs)
+                .ThenInclude(student => student.Student);
+            return query;
+        }
+       
 
     }
 }

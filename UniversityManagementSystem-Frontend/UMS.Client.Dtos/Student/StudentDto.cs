@@ -24,5 +24,7 @@ namespace UMS.Client.Dtos.Student
         public UserType UserType { get; set; }
         public UserStatus Status { get; set; }
         public bool IsStudentRepresentative { get; set; }
+        public virtual ICollection<StudentCourseDto> StudentCourses { get; set; }
+        public virtual ICollection<StudentsUniversitySocialClubDto> StudentsUniversitySocialClubs { get; set; }
     }
 }

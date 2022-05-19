@@ -66,7 +66,10 @@ namespace UMS.Business.Helpers
             CreateMap<UniversityDto, University>();
 
             CreateMap<Event, EventDto>();
-            CreateMap<EventDto, Event>();
+            CreateMap<EventDto, Event>(); 
+
+            CreateMap<StudentsUniversitySocialClub, StudentsUniversitySocialClubDto>();
+            CreateMap<StudentsUniversitySocialClubDto, StudentsUniversitySocialClub>();
         }
 
         private static string MapLanguageBoundString(string source, MultiString destination, Language destinationLanguage, Language sourceLanguage)

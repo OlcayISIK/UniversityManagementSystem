@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UMS.Business.Abstract.StudentTransactions;
 using UMS.Core;
 using UMS.Dto;
+using UMS.Dto.Student;
 
 namespace UMS.Api.Controllers.Student
 {
@@ -26,6 +27,11 @@ namespace UMS.Api.Controllers.Student
         public Result<IEnumerable<UniversitySocialClubDto>> GetAll()
         {
             return _socialClubOperations.GetAll();
+        }
+        [HttpPost("join")]
+        public async Task<Result<bool>> Join(StudentsUniversitySocialClubDto studentsUniversitySocialClubDto)
+        {
+            return await _socialClubOperations.Join(studentsUniversitySocialClubDto);
         }
     }
 }

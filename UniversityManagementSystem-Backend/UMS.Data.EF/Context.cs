@@ -51,6 +51,7 @@ namespace UMS.Data.EF
         public virtual DbSet<ChatMessage> ChatMessages { get; set; }
         public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<StudentsUniversitySocialClub> StudentsUniversitySocialClubs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -67,6 +68,16 @@ namespace UMS.Data.EF
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+            modelBuilder.Entity<StudentsUniversitySocialClub>()
+                .HasKey(suc => new { suc.StudentId, suc.UniversitySocialClubId });
+            modelBuilder.Entity<StudentsUniversitySocialClub>()
+                .HasOne(suc => suc.Student)
+                .WithMany(stu => stu.StudentsUniversitySocialClubs)
+                .HasForeignKey(suc => suc.StudentId);
+            modelBuilder.Entity<StudentsUniversitySocialClub>()
+                .HasOne(suc => suc.UniversitySocialClub)
+                .WithMany(usc => usc.StudentsUniversitySocialClubs)
+                .HasForeignKey(suc => suc.UniversitySocialClubId);
             //modelBuilder.Entity<Student>().Property(e => e.Id).ValueGeneratedNever();
             base.OnModelCreating(modelBuilder);
         }

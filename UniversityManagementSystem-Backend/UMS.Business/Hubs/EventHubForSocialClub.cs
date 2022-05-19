@@ -28,11 +28,11 @@ namespace UMS.Business.Hubs
         {
             var claims = ClaimUtils.GetClaims(Context.User.Claims);
             var student = await _unitOfWork.Students.Get(claims.UserId).FirstOrDefaultAsync();
-            var connection = activeCompanies.Where(x => x.SocialClubId == student.UniversitySocialClubId).FirstOrDefault();
+            var connection = activeCompanies.Where(x => x.SocialClubId == student.StudentCourseId).FirstOrDefault();
 
             if (connection == null)
             {
-                var userConnection = new UniversityConnection { SocialClubId = student.UniversitySocialClubId, EventsActive = false };
+                var userConnection = new UniversityConnection { SocialClubId = student.StudentCourseId, EventsActive = false };
                 userConnection.ActiveConnectionIds.Add(Context.ConnectionId);
                 activeCompanies.Add(userConnection);
             }
@@ -49,7 +49,7 @@ namespace UMS.Business.Hubs
         {
             var claims = ClaimUtils.GetClaims(Context.User.Claims);
             var student = await _unitOfWork.Students.Get(claims.UserId).FirstOrDefaultAsync();
-            var connection = activeCompanies.Where(x => x.SocialClubId == student.UniversitySocialClubId).FirstOrDefault();
+            var connection = activeCompanies.Where(x => x.SocialClubId == student.StudentCourseId).FirstOrDefault();
             if (connection != null)
             {
                 connection.EventsActive = toggle;
@@ -61,7 +61,7 @@ namespace UMS.Business.Hubs
         {
             var claims = ClaimUtils.GetClaims(Context.User.Claims);
             var student =  _unitOfWork.Students.Get(claims.UserId).FirstOrDefault();
-            var connection = activeCompanies.Where(x => x.SocialClubId == student.UniversitySocialClubId).FirstOrDefault();
+            var connection = activeCompanies.Where(x => x.SocialClubId == student.StudentCourseId).FirstOrDefault();
             if (connection != null)
             {
                 connection.ActiveConnectionIds.Remove(Context.ConnectionId);

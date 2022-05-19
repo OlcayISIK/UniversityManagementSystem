@@ -23,6 +23,6 @@ namespace UMS.Dto.Student
         public UserStatus Status { get; set; }
         public bool IsStudentRepresentative { get; set; }
         public virtual ICollection<StudentCourseDto> StudentCourses { get; set; }
-        public virtual ICollection<UniversitySocialClubDto> UniversitySocialClubs { get; set; }
+        public virtual ICollection<StudentsUniversitySocialClubDto> StudentsUniversitySocialClubs { get; set; }
     }
 }

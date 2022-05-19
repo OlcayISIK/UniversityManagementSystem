@@ -10,5 +10,6 @@ namespace UMS.Repository.Abstract
 {
     public interface IUniversitySocialClubRepository : IRepository<UniversitySocialClub>
     {
+        IQueryable<UniversitySocialClub> GetParticipantsOfSocialClub();
     }
 }

@@ -10,7 +10,6 @@ namespace UMS.Data.Entities.UniversityBoundEntities
     public class Student : UniversityBoundEntity
     {
         public long StudentCourseId { get; set; }
-        public long? UniversitySocialClubId { get; set; }
         public string Username { get; set; }
         public string HashedPassword { get; set; }
         public DateTime? EnrollmentDate { get; set; }
@@ -21,7 +20,7 @@ namespace UMS.Data.Entities.UniversityBoundEntities
         public UserStatus Status { get; set; }
         public bool IsStudentRepresentative { get; set; }
         public virtual ICollection<StudentCourse> StudentCourses { get; set; }
-        public virtual ICollection<UniversitySocialClub> UniversitySocialClubs { get; set; }
+        public virtual ICollection<StudentsUniversitySocialClub> StudentsUniversitySocialClubs { get; set; }
 
 
     }

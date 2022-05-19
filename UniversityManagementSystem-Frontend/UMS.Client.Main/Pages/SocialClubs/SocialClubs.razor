@@ -51,13 +51,13 @@ else
             <RowTemplate>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd DataLabel="Description">@context.Description</MudTd>
-                <MudTd DataLabel="Participants">12</MudTd>
+                <MudTd DataLabel="Participants">@context.StudentsUniversitySocialClubs.ToList().Count()</MudTd>
                 <MudTd>
                     <MudTooltip Text="Show Details Of Club">
                         <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
                     </MudTooltip>
                     <MudTooltip Text="Join This Club">
-                        <MudIconButton Icon="fa-solid fa-file-signature" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinEvent(context.Id))"></MudIconButton>
+                        <MudIconButton Icon="fa-solid fa-file-signature" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinSocialClub(context.Id))"></MudIconButton>
                     </MudTooltip>
                 </MudTd>
             </RowTemplate>
@@ -74,11 +74,13 @@ else
     UserType UserControl;
     private UniversitySocialClubDto selectedClub = new UniversitySocialClubDto();
     bool UserAuthControl;
+    long UserId;
     private string searchString = "";
 
     protected override async Task OnInitializedAsync()
     {
         UserControl = await LocalStorageService.GetCurrentUserType();
+        UserId = long.Parse(await LocalStorageService.GetUserId());
         UserAuthControl = PageAuthenticationService.ControlAuthentication(Pages.SocialClubs, UserControl);
 
         if (UserAuthControl)
@@ -100,12 +102,6 @@ else
         {
             NavigationManager.NavigateTo("/user");
         }
-    }
-
-    private string GetImage(string id)
-    {
-        string url = Configuration["imageUrl"];
-        return url + id;
     }
 
     private bool FilterFunc(UniversitySocialClubDto universitySocialClubDto)
@@ -141,9 +137,14 @@ else
 
     }
 
-    public void JoinEvent(long id)
+    public void JoinSocialClub(long id)
     {
-        var result = UniversitySocialClubService.Join(id);
+        var studentUniversitySocialClubDto = new StudentsUniversitySocialClubDto()
+        {
+            StudentId = UserId,
+            UniversitySocialClubId = id
+        };
+        var result = UniversitySocialClubService.Join(studentUniversitySocialClubDto);
         if(result.Result.Data == true)
             Snackbar.Add("You have joined the club", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
         else

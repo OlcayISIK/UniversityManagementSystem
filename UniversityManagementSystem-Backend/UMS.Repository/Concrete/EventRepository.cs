@@ -10,7 +10,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Concrete
 {
-    internal class EventRepository : Repository<Event>, IEventRepository
+    public class EventRepository : Repository<Event>, IEventRepository
     {
     public EventRepository(Context context) : base(context)
     {

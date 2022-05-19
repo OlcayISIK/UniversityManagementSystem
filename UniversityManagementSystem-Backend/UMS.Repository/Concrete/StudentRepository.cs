@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UMS.Data.EF;
 using UMS.Data.Entities.UniversityBoundEntities;
 using UMS.Repository.Abstract;
@@ -14,6 +15,14 @@ namespace UMS.Repository.Concrete
     {
         public StudentRepository(Context context) : base(context)
         {
+        }
+        public IQueryable<Student> GetStudentSocialClubs()
+        {
+            //return Context.Set<UniversitySocialClub>().Where(c => c.Id == cat_id).SelectMany(c => Articles);
+            IQueryable<Student> query = Context.Students
+                .Include(club => club.StudentsUniversitySocialClubs)
+                .ThenInclude(universityClub => universityClub.UniversitySocialClub);
+            return query;
         }
 
     }

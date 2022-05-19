@@ -34,9 +34,9 @@ namespace UMS.Client.Business.Shared
             return response;
         }
 
-        public async Task<Result<bool>> Join(long id)
+        public async Task<Result<bool>> Join(StudentsUniversitySocialClubDto studentsUniversitySocialClubDto)
         {
-            var response = await _httpService.SendRequest<Result<bool>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Student.SocialClub.Join + $"/{id}");
+            var response = await _httpService.SendRequest<Result<bool>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Student.SocialClub.Join, studentsUniversitySocialClubDto);
             return response;
         }
     }

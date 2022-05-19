@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UMS.Data.EF;
 
 namespace UMS.Data.EF.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220515133903_FixStudentSocialClubTable")]
+    partial class FixStudentSocialClubTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -554,6 +556,9 @@ namespace UMS.Data.EF.Migrations
                     b.Property<long>("StudentCourseId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("StudentsUniversitySocialClubId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
@@ -674,6 +679,9 @@ namespace UMS.Data.EF.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("StudentsUniversitySocialClubId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("UniversityId")
                         .HasColumnType("bigint");
