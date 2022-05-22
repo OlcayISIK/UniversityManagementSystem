@@ -19,6 +19,7 @@ builder.Services.AddScoped<ILocalStorageService, LocalStorageService>()
     .AddScoped<IChatService, ChatService>()
     .AddScoped<IEventService, EventService>()
     .AddScoped<IPageAuthenticationService, PageAuthenticationService>()
+    .AddScoped<IPageAuthenticationService, PageAuthenticationService>()
     .AddScoped<IUniversitySocialClubService, UniversitySocialClubService>(); 
 
 

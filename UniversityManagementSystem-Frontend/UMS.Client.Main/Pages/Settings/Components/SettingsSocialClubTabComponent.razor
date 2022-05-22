@@ -1,0 +1,41 @@
+﻿@using UMS.Client.Dtos.Student
+@using UMS.Client.Dtos.Teacher
+@using UMS.Client.Business.Interface.StudentService
+@using Microsoft.AspNetCore.Components
+@using MudBlazor
+@using System.Globalization
+@using UMS.Client.Dtos
+@inject IStudentService StudentService
+@inject IUniversitySocialClubService UniversitySocialClubService
+
+
+<div class="form-group row mt-5">
+    <MudSelect T="long?" Placeholder="Select Social Club" @bind-Value="currUser.UniversitySocialClubId" @onchange="BindStudentRepresentative" HelperText="Social CLubs" AdornmentIcon="@Icons.Material.Filled.EmojiPeople" CloseIcon="@Icons.Material.Filled.EmojiPeople" AdornmentColor="Color.Tertiary">
+        @foreach (var socialClub in SocialClubDto)
+        {
+            <MudSelectItem T="long?" Value="socialClub.Id">@socialClub.Name</MudSelectItem>
+        }
+    </MudSelect>
+</div>
+
+@code {
+    [Parameter]
+    public StudentDto currUser { get; set; }
+    public IEnumerable<UniversitySocialClubDto> SocialClubDto = new List<UniversitySocialClubDto>();
+
+    public bool OrderTimeOutCheckbox = false;
+    public bool ManualDeliveryCheckbox = false;
+    protected override async Task OnInitializedAsync()
+    {
+        SocialClubDto = (await UniversitySocialClubService.GetAll()).Data;
+
+    }
+    void BindStudentRepresentative(ChangeEventArgs e)
+    {
+        if (currUser.UniversitySocialClubId != null)
+        {
+            currUser.IsStudentRepresentative = true;
+        }
+    }
+
+}
