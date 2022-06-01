@@ -8,6 +8,8 @@ namespace UMS.Client.Core.Enums
 {
     public enum SocketMessageType
     {
-        NewEventReleased = 0
+        NewEventReleased = 0,
+        NewEventReceivedEveryone = 1,
+        NewEventSentForUniversity = 2,
     }
 }

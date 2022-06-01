@@ -11,16 +11,16 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Concrete
 {
-    public class StudentRepository : Repository<Student>, IStudentRepository
+    public class CourseRepository : Repository<Course>, ICourseRepository
     {
-        public StudentRepository(Context context) : base(context)
+        public CourseRepository(Context context) : base(context)
         {
         }
-        public IQueryable<Student> GetStudentSocialClubs()
+        public IQueryable<Course> GetStudentCourses(long id)
         {
-            IQueryable<Student> query = Context.Students
-                .Include(student => student.StudentsUniversitySocialClubs)
-                .ThenInclude(universityClub => universityClub.UniversitySocialClub);
+            IQueryable<Course> query = Context.Courses
+                .Include(student => student.StudentCourses.Where(o => o.StudentId == id))
+                .ThenInclude(studentcourse => studentcourse.Student);
             return query;
         }
 

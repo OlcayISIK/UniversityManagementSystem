@@ -10,8 +10,8 @@ namespace UMS.Client.Main.Helpers
 {
     public class SocketHelper
     {
-        public static HubConnection hubConnection;
-        public static bool connected => hubConnection.State == HubConnectionState.Connected;
+        public static HubConnection newhubConnection;
+        public static bool connected => newhubConnection.State == HubConnectionState.Connected;
 
         //If you want to change them make it Timespan. This is for the countdown
         public static int[] RetryIntervals = new int[] { 0, 2, 10, 30 };
@@ -20,7 +20,7 @@ namespace UMS.Client.Main.Helpers
                                                   SocketMessageType socketMessage,
                                                   string snackBarText)
         {
-            hubConnection.On(socketMessage.ToString(), async () =>
+            newhubConnection.On(socketMessage.ToString(), async () =>
             {
                 snackBar.Add($"{snackBarText}", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
             });
@@ -28,9 +28,9 @@ namespace UMS.Client.Main.Helpers
 
         public static void DisposeSocket()
         {
-            if (hubConnection != null)
+            if (newhubConnection != null)
             {
-                hubConnection.Remove(SocketMessageType.NewEventReleased.ToString());
+                newhubConnection.Remove(SocketMessageType.NewEventReleased.ToString());
             }
         }
     }

@@ -1,6 +1,9 @@
 ﻿@using MudBlazor
+@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Business.StudentService
 @using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Student
+@inject IStudentService StudentService
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color:transparent;  margin: auto;max-width:60rem; ">
     <MudTabs Class="card mt-2" Elevation="4" AlwaysShowScrollButtons="false" @ref="tabs" Rounded="true" Centered="true" Color="MudBlazor.Color.Dark" Style="margin-left:-2rem; margin-right:-2rem;  background-color:transparent !important">
         <MudTabPanel @onclick="() => SetTab(General)" @ref="General" Text="General" />
@@ -49,6 +52,7 @@
 
     private async void OnValidSubmit()
     {
+        await StudentService.Update(currUser);
     }
     private void SetTab(MudTabPanel tab)
     {

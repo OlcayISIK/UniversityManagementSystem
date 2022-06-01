@@ -1,0 +1,125 @@
+﻿@page "/Courses"
+@layout MainLayout
+@using MudBlazor
+@using Microsoft.Extensions.Configuration
+@using UMS.Client.Business.Helpers
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Core.Enums
+@using UMS.Client.Dtos
+@using UMS.Client.Dtos.Shared
+@using Microsoft.AspNetCore.Authorization
+@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Dtos.Student
+@using UMS.Client.Main.CustomComponents.DialogComponents
+@using UMS.Client.Main.Pages.Events.Components
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+@inject IHttpService HttpService
+@inject ILocalStorageService LocalStorageService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IEventService EventService
+@inject IConfiguration Configuration
+@inject IPageAuthenticationService PageAuthenticationService
+@inject IStudentService StudentService
+@if (CourseList == null)
+{
+    <Spinner />
+}
+else
+{
+    <div class="card mt-2 Grid-Card" style="max-width: 75rem; margin-left: auto; margin-right: auto;">
+        <div class="card-header">
+        </div>
+        <MudTable Items="@CourseList.Data" Dense="true" Hover="true" Filter="new Func<CourseDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
+            <ToolBarContent>
+                <MudText Class="Table-Grid-Header" Typo="Typo.h6">Course List</MudText>
+                <MudSpacer />
+                <input type="text" name="search" placeholder="Search" @bind-value="searchString" @bind-value:event="oninput">
+            </ToolBarContent>
+            <ColGroup>
+                <col style="width: 50%;" />
+                <col style="width: 50%;" />
+            </ColGroup>
+            <HeaderContent>
+                <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<CourseDto, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
+                <MudTh><label Class="Table-Grid-Header">Action</label></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd>
+                    <MudTooltip Text="Show Details Of Course">
+                        <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
+                    </MudTooltip>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager Style="color:white;font-weight:700;" RowsPerPageString="RowsPerPage" PageSizeOptions="new int[]{5, 10, 20}" />
+            </PagerContent>
+        </MudTable>
+    </div>
+}
+
+
+@code {
+    private Result<IEnumerable<CourseDto>> CourseList;
+    UserType UserControl;
+    long UserId;
+    private CourseDto selectedCourse = new CourseDto();
+    bool UserAuthControl;
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserControl = await LocalStorageService.GetCurrentUserType();
+        UserId = long.Parse(await LocalStorageService.GetUserId());
+        UserAuthControl = PageAuthenticationService.ControlAuthentication(Pages.Courses, UserControl);
+
+        if (UserAuthControl)
+        {
+            try
+            {
+                CourseList = await StudentService.GetStudentCourses(UserId);
+                if (CourseList == null)
+                    return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                NavigationManager.NavigateTo("/user");
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/user");
+        }
+    }
+
+    private bool FilterFunc(CourseDto courseDto)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (courseDto.Name == null)
+            return false;
+
+        return false;
+    }
+    void CancelSearch()
+    {
+        searchString = null;
+    }
+
+    async Task GetInformationModal(CourseDto courseDto)
+    {
+        MudBlazor.DialogOptions option = new MudBlazor.DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
+        selectedCourse = new CourseDto()
+        {
+            Name = courseDto.Name,
+        };
+        var parameters = new DialogParameters { ["CourseDetail"] = selectedCourse };
+        var dialog = DialogService.Show<GetInformationsModal>("Course Details", parameters, option);
+        var result = await dialog.Result;
+
+    }
+}

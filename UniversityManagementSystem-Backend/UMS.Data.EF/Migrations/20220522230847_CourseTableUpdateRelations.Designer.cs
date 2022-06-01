@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UMS.Data.EF;
 
 namespace UMS.Data.EF.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220522230847_CourseTableUpdateRelations")]
+    partial class CourseTableUpdateRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,7 +325,7 @@ namespace UMS.Data.EF.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("CourseInstructorId")
+                    b.Property<long?>("CourseInstructorId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
@@ -738,11 +740,10 @@ namespace UMS.Data.EF.Migrations
 
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.Course", b =>
                 {
-                    b.HasOne("UMS.Data.Entities.UniversityBoundEntities.CourseInstructor", "CourseInstructor")
+                    b.HasOne("UMS.Data.Entities.UniversityBoundEntities.CourseInstructor", null)
                         .WithMany("Courses")
                         .HasForeignKey("CourseInstructorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("UMS.Data.Entities.Department", "Department")
                         .WithMany("Courses")
@@ -759,8 +760,6 @@ namespace UMS.Data.EF.Migrations
                         .WithOne("Course")
                         .HasForeignKey("UMS.Data.Entities.UniversityBoundEntities.Course", "OnsiteCourseId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CourseInstructor");
 
                     b.Navigation("Department");
 

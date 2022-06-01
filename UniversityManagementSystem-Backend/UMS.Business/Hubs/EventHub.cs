@@ -9,12 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UMS.Core;
 using UMS.Core.Utils;
+using static UMS.Core.Constants;
 
 namespace UMS.Business.Hubs
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     // This route is defined from Startup.cs
-    // [Route("api/user/[controller]")]
     public class EventHub : Hub<IEventHub>
     {
         public static readonly List<UniversityConnection> activeCompanies = new List<UniversityConnection>();

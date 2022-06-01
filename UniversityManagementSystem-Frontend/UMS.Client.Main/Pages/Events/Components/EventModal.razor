@@ -2,6 +2,7 @@
 @using UMS.Client.Core.Enums
 @using MudBlazor
 @using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.SignalR.Client
 @using UMS.Client.Dtos.Student
 @inject IEventService EventService
 @inject ISnackbar Snackbar
@@ -45,12 +46,26 @@
                         <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="MudBlazor.Color.Error" Class="dialog-button">Cancel</MudButton>
                     </MudItem>
                     <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
-                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" Class="dialog-button">
+                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForClub" Class="dialog-button">
                             @if (loading)
                             {
                                 <span class="spinner-border spinner-border-sm mr-1"></span>
                             }
-                            @CreateSubmitButtontext()
+                            @CreatePublishClubButtontext()
+                        </MudButton>
+                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForEveryone" Class="dialog-button">
+                            @if (loading)
+                            {
+                                <span class="spinner-border spinner-border-sm mr-1"></span>
+                            }
+                            @CreatePublishEveryoneButtontext()
+                        </MudButton>
+                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForUniversity" Class="dialog-button">
+                            @if (loading)
+                            {
+                                <span class="spinner-border spinner-border-sm mr-1"></span>
+                            }
+                            @CreatePublishUniversityButtontext()
                         </MudButton>
                     </MudItem>
                 </MudGrid>
@@ -64,6 +79,8 @@
         public EventDto EventObject { get; set; }
         [Parameter]
         public OperationType operationType { get; set; }
+        private HubConnection hubConnection;
+        public string publishType;
         void Cancel() => MudDialog.Cancel();
         private bool loading;
         private async void OnValidSubmit()
@@ -73,7 +90,23 @@
                 loading = true;
                 try
                 {
-                    await EventService.PublishEventForSocialClub(EventObject);
+                    if (publishType == "Everyone")
+                    {
+                        hubConnection = new HubConnectionBuilder()
+                            .WithUrl("http://localhost:5005/publishEventHub")
+                            .Build();
+                        await hubConnection.SendAsync("SendMessageToEveryone", "New Event Published");
+                    }
+                    else if (publishType == "SocialClub")
+                    {
+                        await EventService.PublishEventForSocialClub(EventObject);
+                    }
+                    else if(publishType == "University")
+                    {
+                        await EventService.PublishEventForUniversity(EventObject);
+                    }
+
+           
                     var message = $"{EventObject.Name} {"Published Succesfully"}";
                     Snackbar.Add(message, Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
                     loading = false;
@@ -106,9 +139,30 @@
             }
             MudDialog.Close(DialogResult.Ok(true));
         }
-        string CreateSubmitButtontext()
+        string CreatePublishClubButtontext()
         {
-            return operationType == OperationType.Add ? "Publish" : "Confirm";
+            return operationType == OperationType.Add ? "Social Club" : "Confirm";
+        }
+        string CreatePublishEveryoneButtontext()
+        {
+            return operationType == OperationType.Add ? "Everyone" : "Confirm";
+        }
+        string CreatePublishUniversityButtontext()
+        {
+            return operationType == OperationType.Add ? "University" : "Confirm";
+        }
+
+        public void CreateEventForClub()
+        {
+            publishType = "SocialClub";
+        }
+        public void CreateEventForEveryone()
+        {
+            publishType = "Everyone";
+        }
+        public void CreateEventForUniversity()
+        {
+            publishType = "University";
         }
 
     }

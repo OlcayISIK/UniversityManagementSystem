@@ -13,6 +13,9 @@ namespace UMS.Client.Core.Enums
         Events,
         StudentSettings,
         TeacherSettings,
-        SocialClubs
+        SocialClubs,
+        StudentGrades,
+        Courses,
+        TeacherCourses
     }
 }

@@ -14,12 +14,13 @@ namespace UMS.Data.Entities.UniversityBoundEntities
             StudentCourses = new HashSet<StudentCourse>();
             StudentGrades = new HashSet<StudentGrade>();
         }
-
+        public string Name { get; set; }
         public long StudentCourseId { get; set; }
-        public long StudentGradeId { get; set; }
+        public long? StudentGradeId { get; set; }
+        public long CourseInstructorId { get; set; }
         public long DepartmentId { get; set; }
-        public long OnlineCourseId { get; set; }
-        public long OnsiteCourseId { get; set; }
+        public long? OnlineCourseId { get; set; }
+        public long? OnsiteCourseId { get; set; }
         public string Title { get; set; }
         public int Credits { get; set; }
 
@@ -29,5 +30,6 @@ namespace UMS.Data.Entities.UniversityBoundEntities
         public virtual OnsiteCourse OnsiteCourse { get; set; }
         public virtual ICollection<StudentCourse> StudentCourses { get; set; }
         public virtual ICollection<StudentGrade> StudentGrades { get; set; }
+        public virtual CourseInstructor CourseInstructor { get; set; }
     }
 }

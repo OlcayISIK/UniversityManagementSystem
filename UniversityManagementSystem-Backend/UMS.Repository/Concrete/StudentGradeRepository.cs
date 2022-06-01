@@ -5,24 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UMS.Data.EF;
+using UMS.Data.Entities;
 using UMS.Data.Entities.UniversityBoundEntities;
 using UMS.Repository.Abstract;
 using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Concrete
 {
-    public class StudentRepository : Repository<Student>, IStudentRepository
+    public class StudentGradeRepository : Repository<StudentGrade>, IStudentGradeRepository
     {
-        public StudentRepository(Context context) : base(context)
+        public StudentGradeRepository(Context context) : base(context)
         {
-        }
-        public IQueryable<Student> GetStudentSocialClubs()
-        {
-            IQueryable<Student> query = Context.Students
-                .Include(student => student.StudentsUniversitySocialClubs)
-                .ThenInclude(universityClub => universityClub.UniversitySocialClub);
-            return query;
         }
 
+        public IQueryable<StudentGrade> GetStudentGrades(long CourseId)
+        {
+            IQueryable<StudentGrade> query = Context.StudentGrades
+                .Include(student => student.Student).Where(x => x.CourseId == CourseId);
+            return query;
+        }
     }
 }

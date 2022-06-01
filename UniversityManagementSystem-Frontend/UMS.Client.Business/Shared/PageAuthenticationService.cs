@@ -12,8 +12,8 @@ namespace UMS.Client.Business.Shared
     {
         Dictionary<UserType, List<Pages>> AuthenticationDictionary = new Dictionary<UserType, List<Pages>>
         {
-            [UserType.Teacher] = new List<Pages> { Pages.Home, Pages.TeacherSettings, Pages.Events },
-            [UserType.Student] = new List<Pages> { Pages.Home, Pages.Chat,Pages.Events, Pages.StudentSettings, Pages.SocialClubs },
+            [UserType.Teacher] = new List<Pages> { Pages.Home, Pages.TeacherSettings, Pages.Events,Pages.TeacherCourses },
+            [UserType.Student] = new List<Pages> { Pages.Home, Pages.Chat,Pages.Events, Pages.StudentSettings, Pages.SocialClubs, Pages.Courses,Pages.StudentGrades },
             [UserType.StudentRepresentative] = new List<Pages> { Pages.Home, Pages.Chat, Pages.Events, Pages.StudentSettings }
 
         };

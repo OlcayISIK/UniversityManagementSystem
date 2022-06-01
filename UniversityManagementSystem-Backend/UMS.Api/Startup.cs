@@ -77,7 +77,7 @@ namespace UMS.Api
                         // If the request is for our hub...
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/refreshHub")))
+                            (path.StartsWithSegments("/eventHub")))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
@@ -109,7 +109,7 @@ namespace UMS.Api
                         // If the request is for our hub...
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/refreshHub")))
+                            (path.StartsWithSegments("/eventHub")))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
@@ -141,7 +141,7 @@ namespace UMS.Api
                         // If the request is for our hub...
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/refreshHub")))
+                            (path.StartsWithSegments("/eventHub")))
                         {
                             // Read the token out of the query string
                             context.Token = accessToken;
@@ -217,7 +217,8 @@ namespace UMS.Api
             {
                 endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapHub<EventHub>("/eventHub");
-                endpoints.MapHub<EventHub>("/publishEventHub");
+                endpoints.MapHub<EventHubForSocialClub>("/eventHubForSocialClub");
+                endpoints.MapHub<PublicEventHub>("/publishEventHub");
                 endpoints.MapHub<RefreshHub>("/refreshhub");
                 endpoints.MapControllers();
             });

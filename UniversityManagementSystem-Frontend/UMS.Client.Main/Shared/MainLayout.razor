@@ -5,6 +5,7 @@
 @using UMS.Client.Business.Interface.StudentService
 @using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Shared
+@using UMS.Client.Main.Helpers
 @using UMS.Dto;
 @inject IJSRuntime _jsRuntime
 @inject NavigationManager NavigationManager;
@@ -44,10 +45,11 @@
                     @*<MudNavLink Match="NavLinkMatch.All" Href="/user" Icon="@Icons.Filled.Menu" @onclick="@ToggleDrawer">@UserName</MudNavLink>*@
                     <MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Filled.Home"> Home</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{CommonControl}")" Href="/chat" Icon="@Icons.Filled.ChatBubble"> Chat</MudNavLink>
-                    <MudNavLink Match="NavLinkMatch.All" Href="/student/grade" Icon="@Icons.Filled.Grade"> Grades</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Href="/student/grades" Icon="@Icons.Filled.Grade"> Grades</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{CommonControl}")" Href="/library" Icon="@Icons.Filled.LibraryBooks"> Library</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{TeacherControl}")" Href="/students" Icon="@Icons.Filled.Person"> Students</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Href="/socialclubs" Icon="@Icons.Filled.EmojiPeople"> SocialClubs</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Href="/courses" Icon="@Icons.Filled.Book"> Courses</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{CommonControl}")" Href="/events" Icon="@Icons.Filled.Event"> Events</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{TeacherControl}")" Href="/documents" Icon="@Icons.Filled.Settings">Manage Documents</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Href="/student/Settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>
@@ -74,7 +76,12 @@
         _drawerOpen = !_drawerOpen;
     }
     private HubConnection hubConnection;
+    private HubConnection hubConnection2;
+    private HubConnection hubConnection3;
+
     public bool IsConnected => hubConnection.State == HubConnectionState.Connected;
+    public bool IsConnected2 => hubConnection2.State == HubConnectionState.Connected;
+    public bool IsConnected3 => hubConnection3.State == HubConnectionState.Connected;
     protected override async Task OnInitializedAsync()
     {
         try
@@ -129,6 +136,37 @@
                 });
             }
         });
+        hubConnection2 = new HubConnectionBuilder().WithUrl("http://localhost:5005/publishEventHub").Build();
+        await hubConnection2.StartAsync();
+        hubConnection2.On<string>("SendMessageToEveryone", (message) =>
+        {
+            //_jsRuntime.InvokeAsync<string>("PlayAudio", "notification");
+            Snackbar.Add(message, Severity.Info, config =>
+            {
+                config.VisibleStateDuration = 10000;
+                config.HideTransitionDuration = 500;
+                config.ShowTransitionDuration = 500;
+                config.Action = "You want to join the event ?";
+                config.ActionColor = Color.Info;
+                config.Onclick = snackbar =>
+                {
+                    NavigationManager.NavigateTo($"events");
+                    return Task.CompletedTask;
+                };
+            });
+        });
+        var Token = await LocalStorageService.GetAccessToken();
+        SocketHelper.newhubConnection = new HubConnectionBuilder().WithUrl("https://localhost:5006/eventHub",options =>
+        {
+            options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+            options.AccessTokenProvider = async () => (await LocalStorageService.GetAccessToken());
+        })
+            .WithAutomaticReconnect()
+            .Build();
+        await SocketHelper.newhubConnection.StartAsync();
+        await SocketHelper.newhubConnection.SendAsync("JoinGroup");
+    //await Task.Delay(5000);
+        SocketHelper.ListenEventFromOutside(Snackbar, SocketMessageType.NewEventSentForUniversity, "New Event Published");
     }
     void ToggleDrawer()
     {

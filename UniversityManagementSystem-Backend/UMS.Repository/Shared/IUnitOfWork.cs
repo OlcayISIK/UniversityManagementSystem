@@ -22,5 +22,7 @@ namespace UMS.Repository.Shared
         IUniversityRepository Universities{ get; }
         IFileRepository Files { get; }
         IEventRepository Events { get; }
+        ICourseRepository Courses { get; }
+        IStudentGradeRepository StudentGrades { get; }
     }
 }

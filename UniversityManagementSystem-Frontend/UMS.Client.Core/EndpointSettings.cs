@@ -36,6 +36,16 @@ namespace UMS.Client.Core
                     public const string GetAll = EndpointPrefix + ControllerPrefix + "/getAll";
                     public const string Get = EndpointPrefix + ControllerPrefix + "/get";
                 }
+                public static class CourseService
+                {
+                    public const string ControllerPrefix = "/Course";
+                    public const string GetAll = EndpointPrefix + ControllerPrefix + "/getAll";
+                }
+                public static class StudentGradeService
+                {
+                    public const string ControllerPrefix = "/StudentGrade";
+                    public const string GetStudentGrades = EndpointPrefix + ControllerPrefix + "/GetStudentGrades";
+                }
             }
             public static class Student
             {
@@ -62,6 +72,9 @@ namespace UMS.Client.Core
                     public const string ControllerPrefix = "/Student";
                     public const string GetAll = EndpointPrefix + ControllerPrefix + "/getAll";
                     public const string Get = EndpointPrefix + ControllerPrefix + "/get";
+                    public const string Update = EndpointPrefix + ControllerPrefix + "/update";
+                    public const string GetStudentCourses = EndpointPrefix + ControllerPrefix + "/GetStudentCourses";
+                    public const string GetStudentGrades = EndpointPrefix + ControllerPrefix + "/GetStudentGrades";
                 }
                 public static class Chat
                 {

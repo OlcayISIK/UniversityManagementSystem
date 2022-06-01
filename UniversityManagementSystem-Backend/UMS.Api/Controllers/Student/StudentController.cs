@@ -46,5 +46,21 @@ namespace UMS.Api.Controllers.Student
         {
             return await _studentOperations.Update(studentDto);
         }
+        /// <summary>
+        /// Get Student's Courses.
+        /// </summary>
+        [HttpGet("GetStudentCourses/{id}")]
+        public async Task<Result<IEnumerable<CourseDto>>> GetStudentCourses(long id)
+        {
+            return await _studentOperations.GetStudentCourses(id);
+        }
+        /// <summary>
+        /// Get Student's Grades.
+        /// </summary>
+        [HttpGet("GetStudentGrades/{id}")]
+        public async Task<Result<IEnumerable<StudentGradeDto>>> GetStudentGrades(long id)
+        {
+            return await _studentOperations.GetStudentGrades(id);
+        }
     }
 }

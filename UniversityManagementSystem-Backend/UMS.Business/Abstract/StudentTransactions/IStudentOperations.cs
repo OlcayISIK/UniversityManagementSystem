@@ -13,5 +13,7 @@ namespace UMS.Business.Abstract.StudentTransactions
         Result<IEnumerable<StudentDto>> GetAll();
         Task<Result<StudentDto>> Get(long id);
         Task<Result<bool>> Update(StudentDto studentDto);
+        Task<Result<IEnumerable<CourseDto>>> GetStudentCourses(long id);
+        Task<Result<IEnumerable<StudentGradeDto>>> GetStudentGrades(long id);
     }
 }

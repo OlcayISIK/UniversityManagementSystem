@@ -5,7 +5,9 @@ using UMS.Client.Business.Shared;
 using UMS.Client.Main;
 using MudBlazor.Services;
 using UMS.Client.Business.StudentService;
+using UMS.Client.Business.Teacher;
 using UMS.Client.Business.Interface.StudentService;
+using UMS.Client.Business.Interface.Teacher;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddMudServices();
@@ -20,6 +22,8 @@ builder.Services.AddScoped<ILocalStorageService, LocalStorageService>()
     .AddScoped<IEventService, EventService>()
     .AddScoped<IPageAuthenticationService, PageAuthenticationService>()
     .AddScoped<IPageAuthenticationService, PageAuthenticationService>()
+    .AddScoped<IStudentGradeService, StudentGradeService>()
+    .AddScoped<ICourseService, CourseService>()
     .AddScoped<IUniversitySocialClubService, UniversitySocialClubService>(); 
 
 

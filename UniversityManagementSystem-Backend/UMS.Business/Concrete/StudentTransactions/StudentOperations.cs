@@ -9,6 +9,8 @@ using UMS.Business.Abstract.StudentTransactions;
 using UMS.Business.Helpers;
 using UMS.Core.Enums;
 using UMS.Core.InternalDtos;
+using UMS.Data.Entities;
+using UMS.Data.Entities.UniversityBoundEntities;
 using UMS.Dto;
 using UMS.Dto.Student;
 using UMS.Repository.Shared;
@@ -47,6 +49,23 @@ namespace UMS.Business.Concrete.StudentTransactions
             _mapper.Map(studentDto, existingData,Language.English, _unitOfWork.Now);
             await _unitOfWork.Commit();
             return Result<bool>.CreateSuccessResult(true);
+        }
+        public async Task<Result<IEnumerable<CourseDto>>> GetStudentCourses(long id)
+        {
+            var query =  _unitOfWork.Courses.GetStudentCourses(id).Where(x => !x.IsDeleted);
+            if (query == null)
+                return Result<IEnumerable<CourseDto>>.CreateErrorResult(ErrorCode.ObjectNotFound);
+            var data = _mapper.ProjectTo<CourseDto>(query);
+            return Result<IEnumerable<CourseDto>>.CreateSuccessResult(data);
+        }
+
+        public async Task<Result<IEnumerable<StudentGradeDto>>> GetStudentGrades(long id)
+        {
+            var query = _unitOfWork.StudentGrades.GetAll().Where(x => x.StudentId == id);
+            if (query == null)
+                return Result<IEnumerable<StudentGradeDto>>.CreateErrorResult(ErrorCode.ObjectNotFound);
+            var data = _mapper.ProjectTo<StudentGradeDto>(query);
+            return Result<IEnumerable<StudentGradeDto>>.CreateSuccessResult(data);
         }
     }
 }

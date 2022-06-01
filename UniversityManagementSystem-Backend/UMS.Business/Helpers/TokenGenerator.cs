@@ -38,7 +38,7 @@ namespace UMS.Business.Helpers
         public static TokenDto CreateStudentToken(long userId, string username, UserType userType, long universityId, TokenOptions tokenOptions)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(tokenOptions.TeacherSecretKey);
+            var key = Encoding.ASCII.GetBytes(tokenOptions.StudentSecretKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(ClaimUtils.CreateStudentClaims(userId, username, userType, universityId)),

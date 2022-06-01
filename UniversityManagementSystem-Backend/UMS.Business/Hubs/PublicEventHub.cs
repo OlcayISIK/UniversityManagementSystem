@@ -10,9 +10,9 @@ namespace UMS.Business.Hubs
 {
     public class PublicEventHub : Hub
     {
-        public async Task InvokeHubMethodForEveryone(SocketMessageType messageType, string message)
+        public async Task InvokeHubMethodForEveryone(string message)
         {
-            await Clients.All.SendAsync(messageType.ToString(), message);
+            await Clients.All.SendAsync("SendMessageToEveryone", message);
         }
     }
 }
