@@ -21,9 +21,9 @@ namespace UMS.Api.Controllers.Teacher
         }
 
         [HttpPost]
-        public async Task<Result<bool>> Uploadfile(IFormFile files)
+        public async Task<Result<bool>> Uploadfile(FileDto fileDto)
         {
-            return await _fileOperations.UploadFiles(files);
+            return await _fileOperations.UploadFiles(fileDto);
         }
     }
 }

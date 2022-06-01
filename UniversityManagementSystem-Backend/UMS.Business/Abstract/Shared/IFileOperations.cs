@@ -10,6 +10,6 @@ namespace UMS.Business.Abstract.Shared
 {
     public interface IFileOperations
     {
-        public Task<Result<bool>> UploadFiles(IFormFile files);
+        public Task<Result<bool>> UploadFiles(FileDto fileDto);
     }
 }

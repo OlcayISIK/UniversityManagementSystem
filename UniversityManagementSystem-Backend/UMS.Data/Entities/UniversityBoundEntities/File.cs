@@ -13,6 +13,8 @@ namespace UMS.Data.Entities.UniversityBoundEntities
             public string Name { get; set; }
             [MaxLength(100)]
             public string FileType { get; set; }
+            [MaxLength(100)]
+            public string Description { get; set; }
             [MaxLength]
             public byte[] DataFiles { get; set; }
         }
