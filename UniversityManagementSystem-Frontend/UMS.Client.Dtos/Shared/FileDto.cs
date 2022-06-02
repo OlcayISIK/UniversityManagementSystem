@@ -5,10 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UMS.Data.Entities.UniversityBoundEntities
+namespace UMS.Client.Dtos.Shared
 {
-    public class File : UniversityBoundEntity
+    public class FileDto
     {
+        public long Id { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime LastModifiedAt { get; set; }
+        public long UniversityId { get; set; }
         [MaxLength(100)]
         public string Name { get; set; }
         [MaxLength(100)]

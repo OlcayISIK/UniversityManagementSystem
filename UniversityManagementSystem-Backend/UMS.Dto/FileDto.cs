@@ -14,6 +14,7 @@ namespace UMS.Dto
         public DateTime CreatedAt { get; set; }
         public DateTime LastModifiedAt { get; set; }
         public long UniversityId { get; set; }
+
         [MaxLength(100)]
         public string Name { get; set; }
         [MaxLength(100)]

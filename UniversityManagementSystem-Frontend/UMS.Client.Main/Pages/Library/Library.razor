@@ -1,0 +1,113 @@
+﻿@page "/Library"
+@layout MainLayout
+@using MudBlazor
+@using UMS.Client.Business.Helpers
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Core.Enums
+@using UMS.Client.Dtos.Shared
+@using Microsoft.AspNetCore.Authorization
+@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Dtos.Student
+@using UMS.Client.Main.CustomComponents.DialogComponents
+@using UMS.Client.Main.Pages.Library.Components
+@attribute [Authorize]
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorageService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+@inject IFileService FileService
+@inject IPageAuthenticationService PageAuthenticationService
+
+
+
+@if (FileList == null)
+{
+    <Spinner />
+}
+else
+{
+    <div style="max-width: 75rem; margin-left: auto; margin-right: auto; position:relative; ">
+        <div style=" position:absolute; width:40%; height:13%; margin-left: 30%;  margin-top: 2%; ">
+            @for(int i = 0; i<1;i++)
+            {
+                <img class="Books" src="/Images/Book1.png">
+                <img class="Books" src="/Images/Book2.png">
+                <img class="Books "src="/Images/Book3.png">
+                <img class="Books" src="/Images/Book4.png">
+                <img class="Books" src="/Images/Book5.png">
+                <img class="Books" src="/Images/Book6.png">
+            }
+           <MudFab Color="Color.Primary" OnClick="AddNote" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" Style="margin-top:5%; margin-left:5px;"/>
+        </div>
+        <div style=" position:absolute; width:40%; height:13%; margin-left: 30%;  margin-top: 24.5%; ">
+             @for(int i = 0; i<1;i++)
+            {
+                <img class="Books" src="/Images/Book1.png">
+                <img class="Books" src="/Images/Book2.png">
+                <img class="Books "src="/Images/Book3.png">
+                <img class="Books" src="/Images/Book4.png">
+                <img class="Books" src="/Images/Book5.png">
+                <img class="Books" src="/Images/Book6.png">
+            }
+           <MudFab Color="Color.Primary" OnClick="AddNote" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" Style="margin-top:5%; margin-left:5px;"/>
+        </div>
+        <div style=" position:absolute; width:40%; height:13%; margin-left: 30%;  margin-top: 47%; ">
+             @for(int i = 0; i<1;i++)
+            {
+                <img class="Books" src="/Images/Book1.png">
+                <img class="Books" src="/Images/Book2.png">
+                <img class="Books "src="/Images/Book3.png">
+                <img class="Books" src="/Images/Book4.png">
+                <img class="Books" src="/Images/Book5.png">
+                <img class="Books" src="/Images/Book6.png">
+            }
+           <MudFab Color="Color.Primary" OnClick="AddNote" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" Style="margin-top:5%; margin-left:5px;"/>
+        </div>
+        <img src="/Images/shelf.png" style="width:45%; margin-left: auto; margin-right: auto;">
+    </div>
+}
+
+
+@code {
+    private Result<IEnumerable<FileDto>> FileList;
+    UserType UserControl;
+    bool UserAuthControl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserControl = await LocalStorageService.GetCurrentUserType();
+        UserAuthControl = PageAuthenticationService.ControlAuthentication(Pages.Library, UserControl);
+
+        if (UserAuthControl)
+        {
+            try
+            {
+                FileList = new Result<IEnumerable<FileDto>>();
+                /*  FileList = await FileService.GetAll();
+                if (FileList == null)
+                    return;*/
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+                NavigationManager.NavigateTo("/user");
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/user");
+        }
+    }
+
+    private async void AddNote()
+    {
+        FileDto fileDto = new FileDto();
+        var parameters = new DialogParameters { ["FileObject"] = fileDto, ["operationType"] = OperationType.Add};
+        var options = new MudBlazor.DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+        var dialog = DialogService.Show<LibraryModal>("Add Event", parameters, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+            FileList = await FileService.GetAll(); 
+    }
+}

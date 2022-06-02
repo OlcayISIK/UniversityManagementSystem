@@ -1,0 +1,114 @@
+﻿@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Core.Enums
+@using MudBlazor
+@using Microsoft.AspNetCore.Components
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Dtos.Shared
+@inject ISnackbar Snackbar
+@inject IFileService FileService
+
+
+<MudDialog>
+    <DialogContent>
+        <MudContainer Style="max-height: calc(100vh - 10em); overflow-y: scroll;" Class="scrollable">
+            <EditForm Model="@FileObject" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                    <MudTextField @bind-Value="@FileObject.Name"
+                                  Label=Name
+                                  Variant="Variant.Outlined"
+                                  Margin="MudBlazor.Margin.Dense"
+                                  For="@(() => FileObject.Name)" />
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                    <MudTextField @bind-Value="@FileObject.Description"
+                                  Label=Description
+                                  Variant="Variant.Outlined"
+                                  Margin="MudBlazor.Margin.Dense"
+                                  For="@(() => FileObject.Description)" />
+                </MudItem>
+               
+                <InputFile id="fileInput" OnChange="UploadFiles" hidden multiple accept=".jpg, .jpeg, .png, .rar , .pptx,  .docx" />
+
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Filled.CloudUpload"
+                           for="fileInput">
+                    Upload Files
+                </MudButton>
+
+                <MudGrid Style="margin-top: 10px; margin-bottom: 10px;">
+                    <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                        <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="MudBlazor.Color.Error" Class="dialog-button">Cancel</MudButton>
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" Class="dialog-button">
+                            @if (loading)
+                            {
+                                <span class="spinner-border spinner-border-sm mr-1"></span>
+                            }
+                            @CreateNoteButtontext()
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+</MudDialog>-
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter]
+    public FileDto FileObject { get; set; }
+    [Parameter]
+    public OperationType operationType { get; set; }
+    void Cancel() => MudDialog.Cancel();
+    private bool loading;
+    private async void OnValidSubmit()
+    {
+        if (operationType == OperationType.Add)
+        {
+            loading = true;
+            try
+            {
+                if(FileObject.Name == "" ||FileObject.Description =="" || FileObject.DataFiles == null )
+                {
+                    var error = $"{"Fill All Objects"}";
+                    Snackbar.Add(error, Severity.Warning, options => options.Onclick = snackbar => Task.CompletedTask);
+                    return;
+                }
+                FileService.Uploadfile(FileObject);
+                var message = $"{FileObject.Name} {"Note Added Succesfuly"}";
+                Snackbar.Add(message, Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
+                loading = false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+            }
+        }
+        else
+        {
+            Snackbar.Add("Error Occured", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+        }
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+    string CreateNoteButtontext()
+    {
+        return operationType == OperationType.Add ? "Add Note" : "Confirm";
+    }
+
+    IList<IBrowserFile> files = new List<IBrowserFile>();
+    private async void UploadFiles(InputFileChangeEventArgs e)
+    {
+        if (files.Count > 0) files.Clear();
+        files.Add(e.File);
+        var file = files[0];
+            var buffer = new byte[file.Size];
+            Stream stream = file.OpenReadStream(512000000);
+            await stream.ReadAsync(buffer);
+            FileObject.DataFiles = buffer;
+            FileObject.FileType = file.ContentType;
+    }
+}

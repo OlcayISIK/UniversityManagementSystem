@@ -20,7 +20,7 @@ namespace UMS.Api.Controllers.Teacher
             _fileOperations = fileOperations;
         }
 
-        [HttpPost]
+        [HttpPost("UploadFile")]
         public async Task<Result<bool>> Uploadfile(FileDto fileDto)
         {
             return await _fileOperations.UploadFiles(fileDto);
