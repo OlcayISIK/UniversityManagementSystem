@@ -11,7 +11,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Concrete
 {
-    internal class UniversitySocialClubRepository : Repository<UniversitySocialClub>, IUniversitySocialClubRepository
+    internal class UniversitySocialClubRepository : UniversityBoundRepository<UniversitySocialClub>, IUniversitySocialClubRepository
     {
         public UniversitySocialClubRepository(Context context) : base(context)
         {

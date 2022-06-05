@@ -66,7 +66,7 @@ namespace UMS.Api.Controllers.Student
         }
 
         /// <summary>
-        /// Endpoint for teacher signup
+        /// Endpoint for student signup
         /// </summary>
         [HttpPost("Signup")]
         public async Task<Result<long>> Signup([FromBody] SignUpDto dto)

@@ -8,7 +8,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Abstract
 {
-    public interface ITeacherRepository : IRepository<CourseInstructor>
+    public interface ITeacherRepository : IUniversityBoundRepository<CourseInstructor>
     {
     }
 }

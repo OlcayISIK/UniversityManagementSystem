@@ -12,7 +12,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Concrete
 {
-    public class StudentGradeRepository : Repository<StudentGrade>, IStudentGradeRepository
+    public class StudentGradeRepository : UniversityBoundRepository<StudentGrade>, IStudentGradeRepository
     {
         public StudentGradeRepository(Context context) : base(context)
         {

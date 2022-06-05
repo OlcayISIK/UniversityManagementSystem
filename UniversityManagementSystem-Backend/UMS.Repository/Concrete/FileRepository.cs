@@ -10,7 +10,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Concrete
 {
-    public class FileRepository : Repository<File>, IFileRepository
+    public class FileRepository : UniversityBoundRepository<File>, IFileRepository
     {
         public FileRepository(Context context) : base(context)
         {

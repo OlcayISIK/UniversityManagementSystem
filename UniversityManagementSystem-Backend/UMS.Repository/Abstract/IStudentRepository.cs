@@ -8,7 +8,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Abstract
 {
-    public interface IStudentRepository : IRepository<Student>
+    public interface IStudentRepository : IUniversityBoundRepository<Student>
     {
         IQueryable<Student> GetStudentSocialClubs();
     }

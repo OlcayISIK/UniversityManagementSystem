@@ -11,7 +11,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Concrete
 {
-    public class TeacherRepository : Repository<CourseInstructor>, ITeacherRepository
+    public class TeacherRepository : UniversityBoundRepository<CourseInstructor>, ITeacherRepository
     {
         public TeacherRepository(Context context) : base(context)
         {

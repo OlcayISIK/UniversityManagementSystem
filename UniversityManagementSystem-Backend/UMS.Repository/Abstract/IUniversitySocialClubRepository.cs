@@ -8,7 +8,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Abstract
 {
-    public interface IUniversitySocialClubRepository : IRepository<UniversitySocialClub>
+    public interface IUniversitySocialClubRepository : IUniversityBoundRepository<UniversitySocialClub>
     {
         IQueryable<UniversitySocialClub> GetParticipantsOfSocialClub();
     }

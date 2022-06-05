@@ -8,7 +8,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Abstract
 {
-    public interface IStudentGradeRepository : IRepository<StudentGrade>
+    public interface IStudentGradeRepository : IUniversityBoundRepository<StudentGrade>
     {
         IQueryable<StudentGrade> GetStudentGrades(long CourseId);
     }

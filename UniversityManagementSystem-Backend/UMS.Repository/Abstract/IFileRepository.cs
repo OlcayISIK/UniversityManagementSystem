@@ -8,7 +8,7 @@ using UMS.Repository.Shared.GenericRepositories;
 
 namespace UMS.Repository.Abstract
 {
-    public interface IFileRepository : IRepository<File>
+    public interface IFileRepository : IUniversityBoundRepository<File>
     {
 
     }
