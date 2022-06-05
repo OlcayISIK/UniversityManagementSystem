@@ -9,9 +9,7 @@ namespace UMS.Data.Entities.UniversityBoundEntities
 {
     public class Student : UniversityBoundEntity
     {
-
         public long StudentCourseId { get; set; }
-        public long? FileId { get; set; }
         public string Username { get; set; }
         public string HashedPassword { get; set; }
         public DateTime? EnrollmentDate { get; set; }
@@ -23,6 +21,7 @@ namespace UMS.Data.Entities.UniversityBoundEntities
         public bool IsStudentRepresentative { get; set; }
         public virtual ICollection<StudentCourse> StudentCourses { get; set; }
         public virtual ICollection<StudentsUniversitySocialClub> StudentsUniversitySocialClubs { get; set; }
-        public virtual ICollection<File> Files{ get; set; }
+
+
     }
 }

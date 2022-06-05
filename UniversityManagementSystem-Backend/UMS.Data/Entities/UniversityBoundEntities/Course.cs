@@ -19,7 +19,6 @@ namespace UMS.Data.Entities.UniversityBoundEntities
         public long? StudentGradeId { get; set; }
         public long CourseInstructorId { get; set; }
         public long DepartmentId { get; set; }
-        public long? FileId { get; set; }
         public long? OnlineCourseId { get; set; }
         public long? OnsiteCourseId { get; set; }
         public string Title { get; set; }
@@ -31,7 +30,6 @@ namespace UMS.Data.Entities.UniversityBoundEntities
         public virtual OnsiteCourse OnsiteCourse { get; set; }
         public virtual ICollection<StudentCourse> StudentCourses { get; set; }
         public virtual ICollection<StudentGrade> StudentGrades { get; set; }
-        public virtual ICollection<File> Files{ get; set; }
         public virtual CourseInstructor CourseInstructor { get; set; }
     }
 }
