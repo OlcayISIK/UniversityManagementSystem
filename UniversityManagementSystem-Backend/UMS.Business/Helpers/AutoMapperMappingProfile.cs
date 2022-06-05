@@ -70,6 +70,9 @@ namespace UMS.Business.Helpers
 
             CreateMap<StudentsUniversitySocialClub, StudentsUniversitySocialClubDto>();
             CreateMap<StudentsUniversitySocialClubDto, StudentsUniversitySocialClub>();
+
+            CreateMap<File, FileDto>();
+            CreateMap<FileDto, File>();
         }
 
         private static string MapLanguageBoundString(string source, MultiString destination, Language destinationLanguage, Language sourceLanguage)

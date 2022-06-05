@@ -51,6 +51,7 @@ namespace UMS.Client.Core
                     public const string ControllerPrefix = "/File";
                     public const string UploadFile = EndpointPrefix + ControllerPrefix + "/UploadFile";
                     public const string GetAll = EndpointPrefix + ControllerPrefix + "/GetAll";
+                    public const string Get = EndpointPrefix + ControllerPrefix + "/Get";
                 }
             }
             public static class Student

@@ -23,6 +23,7 @@ namespace UMS.Business.Concrete.Shared
             _mapper = mapper;
         }
 
+
         public async Task<Result<bool>> UploadFiles(FileDto fileDto)
         {
             if (fileDto != null)
@@ -34,19 +35,13 @@ namespace UMS.Business.Concrete.Shared
                     ////Getting file Extension
                     //var fileExtension = Path.GetExtension(fileDto.FileType);
                     //// concatenating  FileName + FileExtension
-                    //var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
 
-                    //var objfiles = new UMS.Data.Entities.UniversityBoundEntities.File()
-                    //{
-                    //    Id = 0,
-                    //    UniversityId = _unitOfWork.UniversityId,
-                    //    Name = newFileName,
-                    //    FileType = fileExtension,
-                    //    CreatedAt = DateTime.Now,
-                    //    LastModifiedAt = DateTime.Now,
-                    //};
+                    //var newFileName = String.Concat(Convert.ToString(Guid.NewGuid()), fileExtension);
                     var document = _mapper.Map<UMS.Data.Entities.UniversityBoundEntities.File>(fileDto);
+                    document.CreatedAt = DateTime.Now;
+                    document.LastModifiedAt = DateTime.Now;
                     document.UniversityId = _unitOfWork.UniversityId;
+                   
 
                     //using (var target = new MemoryStream())
                     //{
@@ -60,6 +55,34 @@ namespace UMS.Business.Concrete.Shared
                 }
             }
             return Result<bool>.CreateSuccessResult(false);
+        }
+
+        public Result<IEnumerable<FileDto>> Get(long fileId)
+        {
+            var query = _unitOfWork.Files.GetAll().Where(x => x.Id == fileId);
+            var data = _mapper.ProjectTo<FileDto>(query);
+            return Result<IEnumerable<FileDto>>.CreateSuccessResult(data);
+        }
+
+        public async Task<Result<IEnumerable<FileDto>>> GetAll(long studentId)
+        {
+            try
+            {
+
+                var courses = _unitOfWork.Courses.GetStudentCourses(studentId);
+                var query = _unitOfWork.Files.GetAll().Where(x => x.UniversityId == _unitOfWork.UniversityId && (x.StudentId == studentId || courses.Where(y => y.Id == x.CourseId).Count() > 0));
+                foreach (var item in query)
+                {
+                    item.DataFiles = new byte[0];
+                }
+                var data = _mapper.ProjectTo<FileDto>(query);
+                return Result<IEnumerable<FileDto>>.CreateSuccessResult(data);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return null;
         }
     }
 }

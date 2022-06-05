@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UMS.Client.Business.Interface.Shared;
 using UMS.Client.Core;
 using UMS.Client.Core.Enums;
+using UMS.Client.Dtos;
 using UMS.Client.Dtos.Shared;
 
 namespace UMS.Client.Business.Shared
@@ -24,14 +25,20 @@ namespace UMS.Client.Business.Shared
             _localStorageService = localStorageService;
         }
 
-        public async Task<Result<bool>> Uploadfile(FileDto fileDto)
+        public async Task<Result<bool>> UploadFiles(FileDto fileDto)
         {
             return await _httpService.SendRequest<Result<bool>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Teacher.FileService.UploadFile, fileDto);
         }
-        public async Task<Result<IEnumerable<FileDto>>> GetAll()
+
+        public async Task<Result<IEnumerable<FileDto>>> Get(long fileId)
         {
-            var response = await _httpService.SendRequest<Result<IEnumerable<FileDto>>>(HttpMethod.Get, EndpointSettings.ServerRoutes.Teacher.FileService.GetAll);
-            return response;
+            return await _httpService.SendRequest<Result<IEnumerable<FileDto>>>(HttpMethod.Get, EndpointSettings.ServerRoutes.Teacher.FileService.Get + $"/{fileId}");
+        }
+
+        public async Task<Result<IEnumerable<FileDto>>> GetAll(long studentId)
+        {
+            Console.WriteLine(studentId);
+            return await _httpService.SendRequest<Result<IEnumerable<FileDto>>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Teacher.FileService.GetAll + $"/{studentId}");
         }
     }
-}
+}   

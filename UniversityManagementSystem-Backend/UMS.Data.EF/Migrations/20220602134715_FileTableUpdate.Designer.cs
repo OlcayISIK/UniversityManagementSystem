@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UMS.Data.EF;
 
 namespace UMS.Data.EF.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20220602134715_FileTableUpdate")]
+    partial class FileTableUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,9 +337,6 @@ namespace UMS.Data.EF.Migrations
                     b.Property<long>("DepartmentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("FileId")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -497,9 +496,6 @@ namespace UMS.Data.EF.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("CourseId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -517,9 +513,6 @@ namespace UMS.Data.EF.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPrivate")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -527,17 +520,10 @@ namespace UMS.Data.EF.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<long?>("StudentId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("UniversityId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("Files");
                 });
@@ -557,9 +543,6 @@ namespace UMS.Data.EF.Migrations
 
                     b.Property<DateTime?>("EnrollmentDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<long?>("FileId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("HashedPassword")
                         .HasColumnType("nvarchar(max)");
@@ -813,23 +796,6 @@ namespace UMS.Data.EF.Migrations
                     b.Navigation("UniversitySocialClub");
                 });
 
-            modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.File", b =>
-                {
-                    b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Course", "Course")
-                        .WithMany("Files")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Student", "Student")
-                        .WithMany("Files")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.StudentCourse", b =>
                 {
                     b.HasOne("UMS.Data.Entities.UniversityBoundEntities.Course", "Course")
@@ -885,8 +851,6 @@ namespace UMS.Data.EF.Migrations
 
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.Course", b =>
                 {
-                    b.Navigation("Files");
-
                     b.Navigation("StudentCourses");
 
                     b.Navigation("StudentGrades");
@@ -899,8 +863,6 @@ namespace UMS.Data.EF.Migrations
 
             modelBuilder.Entity("UMS.Data.Entities.UniversityBoundEntities.Student", b =>
                 {
-                    b.Navigation("Files");
-
                     b.Navigation("StudentCourses");
 
                     b.Navigation("StudentsUniversitySocialClubs");
