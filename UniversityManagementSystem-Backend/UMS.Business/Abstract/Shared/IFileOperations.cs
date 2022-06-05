@@ -11,5 +11,8 @@ namespace UMS.Business.Abstract.Shared
     public interface IFileOperations
     {
         public Task<Result<bool>> UploadFiles(FileDto fileDto);
+        public Result<IEnumerable<FileDto>> Get(long fileId);
+        public Task<Result<IEnumerable<FileDto>>> GetAll(long studentId);
+
     }
 }

@@ -4,12 +4,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UMS.Client.Dtos.Student;
 
-namespace UMS.Data.Entities.UniversityBoundEntities
+namespace UMS.Client.Dtos.Shared
 {
-    public class File : UniversityBoundEntity
+    public class FileDto
     {
-
+        public long Id { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime LastModifiedAt { get; set; }
+        public long UniversityId { get; set; }
         public long? StudentId { get; set; }
         public long? CourseId { get; set; }
 
@@ -22,7 +27,7 @@ namespace UMS.Data.Entities.UniversityBoundEntities
         [MaxLength]
         public byte[] DataFiles { get; set; }
         public bool IsPrivate { get; set; }
-        public virtual Student Student { get; set; }
-        public virtual Course Course { get; set; }
+        public virtual StudentDto Student { get; set; }
+        public virtual CourseDto Course { get; set; }
     }
 }

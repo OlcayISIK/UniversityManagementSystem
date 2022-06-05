@@ -16,6 +16,7 @@ namespace UMS.Client.Core.Enums
         SocialClubs,
         StudentGrades,
         Courses,
-        TeacherCourses
+        TeacherCourses,
+        Library
     }
 }

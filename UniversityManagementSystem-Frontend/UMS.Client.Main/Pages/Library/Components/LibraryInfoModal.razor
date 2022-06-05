@@ -1,0 +1,66 @@
+﻿@using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Core.Enums
+@using MudBlazor
+@using Microsoft.AspNetCore.Components
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Dtos.Shared
+@inject ISnackbar Snackbar
+@inject IFileService FileService
+@inject ILocalStorageService LocalStorageService
+
+@if(FileObject == null )
+{
+    <Spinner/>
+}
+else
+{
+    <MudDialog>
+        <DialogContent>
+            <MudContainer Style="max-height: calc(100vh - 10em); overflow-y: scroll;" Class="scrollable">
+                <EditForm Model="@FileObject" OnValidSubmit="OnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                        <MudTextField @bind-Value="@FileObject.Name"
+                                      Label=Name
+                                      Variant="Variant.Outlined"
+                                      Margin="MudBlazor.Margin.Dense"
+                                      For="@(() => FileObject.Name)" />
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                        <MudTextField @bind-Value="@FileObject.Description"
+                                      Label=Description
+                                      Variant="Variant.Outlined"
+                                      Margin="MudBlazor.Margin.Dense"
+                                      For="@(() => FileObject.Description)" />
+                    </MudItem>
+               
+
+                    <MudGrid Style="margin-top: 10px; margin-bottom: 10px;">
+                        <MudItem xs="12" sm="12" md="12" Style="display: flex; align-items: center; justify-content: center;">
+                            <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" Class="dialog-button">
+                                @if (loading)
+                                {
+                                    <span class="spinner-border spinner-border-sm mr-1"></span>
+                                }
+                                Download File
+                            </MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </EditForm>
+            </MudContainer>
+        </DialogContent>
+    </MudDialog>
+}
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter]
+    public FileDto FileObject { get; set; }
+    void Cancel() => MudDialog.Cancel();
+    private bool loading;
+
+    private async void OnValidSubmit()
+    {
+          Console.WriteLine(FileObject.Name + FileObject.FileType +" - " + FileObject.DataFiles.Length);
+    }
+   
+}
