@@ -4,6 +4,9 @@
 @using Microsoft.AspNetCore.Components
 @using UMS.Client.Business.Interface.Shared
 @using UMS.Client.Dtos.Shared
+@using System.IO
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
 @inject ISnackbar Snackbar
 @inject IFileService FileService
 @inject ILocalStorageService LocalStorageService
@@ -24,12 +27,14 @@ else
                                       Label=Name
                                       Variant="Variant.Outlined"
                                       Margin="MudBlazor.Margin.Dense"
+                                      Disabled=true
                                       For="@(() => FileObject.Name)" />
                     </MudItem>
                     <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
                         <MudTextField @bind-Value="@FileObject.Description"
                                       Label=Description
                                       Variant="Variant.Outlined"
+                                      Disabled=true
                                       Margin="MudBlazor.Margin.Dense"
                                       For="@(() => FileObject.Description)" />
                     </MudItem>
@@ -60,7 +65,20 @@ else
 
     private async void OnValidSubmit()
     {
-          Console.WriteLine(FileObject.Name + FileObject.FileType +" - " + FileObject.DataFiles.Length);
+        var fileStream = GetFileStream();
+        var fileName = FileObject.Name + FileObject.FileType;
+
+
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+        
+        var module = await JS.InvokeAsync<IJSObjectReference>("import","./app.js");
+        await module.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
-   
+     private Stream GetFileStream()
+    {
+        var randomBinaryData = FileObject.DataFiles;
+        var fileStream = new MemoryStream(randomBinaryData);
+        return fileStream;
+    }
 }
