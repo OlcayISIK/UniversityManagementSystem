@@ -121,6 +121,9 @@ else
         selectedCourse = new CourseDto()
         {
             Name = courseDto.Name,
+            Id = courseDto.Id,
+            Credits = courseDto.Credits,
+            Title = courseDto.Title
         };
         var parameters = new DialogParameters { ["CourseDetail"] = selectedCourse };
         var dialog = DialogService.Show<GetInformationsModal>("Course Details", parameters, option);
@@ -133,6 +136,9 @@ else
         selectedCourse = new CourseDto()
         {
             Name = courseDto.Name,
+            Id = courseDto.Id,
+            Credits = courseDto.Credits,
+            Title = courseDto.Title
         };
         var parameters = new DialogParameters { ["CourseDetail"] = selectedCourse };
         var dialog = DialogService.Show<TeacherGrade>("Course Details", parameters, option);

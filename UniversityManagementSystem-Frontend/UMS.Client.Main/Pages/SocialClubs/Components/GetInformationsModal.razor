@@ -25,7 +25,7 @@
                     <tr>
                         <td style="color:white">@ClubDetail.Name</td>
                         <td style="color:white">@ClubDetail.Description</td>
-                        <td style="color:white">12</td>
+                        <td style="color:white">@ClubDetail.StudentsUniversitySocialClubs.ToList().Count()</td>
                     </tr>
                 </tbody>
             </table>
@@ -37,8 +37,10 @@
 </MudDialog>
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
     [Parameter]
     public UniversitySocialClubDto ClubDetail { get; set; }
+
     void Cancel() => MudDialog.Cancel();
 
 }
