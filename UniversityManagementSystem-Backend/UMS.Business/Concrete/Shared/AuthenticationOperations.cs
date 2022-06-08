@@ -90,13 +90,11 @@ namespace UMS.Business.Concrete.Shared
 
         public async Task<Result<bool>> StudentResetPassword(ResetPasswordDto dto)
         {
-            var token = await _unitOfWork.RedisTransactions.Get(dto.PasswordResetToken);
-            if (token == null || token.ConsumerType != ApiConsumerType.Student || token.TokenType != RedisTokenType.PasswordResetToken)
-                return Result<bool>.CreateErrorResult(ErrorCode.InvalidPasswordResetToken);
-            var customer = await _unitOfWork.Students.GetAsTracking(token.UserId).FirstOrDefaultAsync();
+            var customer = await _unitOfWork.Students.GetAsTracking(dto.userId).FirstOrDefaultAsync();
+            if (customer.HashedPassword != new CustomPasswordHasher().HashPassword(dto.OldPasword))
+                return Result<bool>.CreateErrorResult(ErrorCode.InvalidUsernameOrPassword);
             customer.HashedPassword = new CustomPasswordHasher().HashPassword(dto.NewPassword);
             await _unitOfWork.Commit();
-            await _unitOfWork.RedisTransactions.Remove(dto.PasswordResetToken);
             return Result<bool>.CreateSuccessResult(true);
         }
 
@@ -222,6 +220,13 @@ namespace UMS.Business.Concrete.Shared
 
         public async Task<Result<bool>> TeacherResetPassword(ResetPasswordDto dto)
         {
+            var customer = await _unitOfWork.Teachers.GetAsTracking(dto.userId).FirstOrDefaultAsync();
+            if (customer.HashedPassword != new CustomPasswordHasher().HashPassword(dto.OldPasword))
+                return Result<bool>.CreateErrorResult(ErrorCode.InvalidUsernameOrPassword);
+            customer.HashedPassword = new CustomPasswordHasher().HashPassword(dto.NewPassword);
+            await _unitOfWork.Commit();
+            return Result<bool>.CreateSuccessResult(true);
+            /*
             var token = await _unitOfWork.RedisTransactions.Get(dto.PasswordResetToken);
             if (token == null || token.ConsumerType != ApiConsumerType.Teacher || token.TokenType != RedisTokenType.PasswordResetToken)
                 return Result<bool>.CreateErrorResult(ErrorCode.InvalidPasswordResetToken);
@@ -229,7 +234,7 @@ namespace UMS.Business.Concrete.Shared
             customer.HashedPassword = new CustomPasswordHasher().HashPassword(dto.NewPassword);
             await _unitOfWork.Commit();
             await _unitOfWork.RedisTransactions.Remove(dto.PasswordResetToken);
-            return Result<bool>.CreateSuccessResult(true);
+            return Result<bool>.CreateSuccessResult(true);*/
         }
 
         public async Task<Result<long>> TeacherSignUp(SignUpDto dto)

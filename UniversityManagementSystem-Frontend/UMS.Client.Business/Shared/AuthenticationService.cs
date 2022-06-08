@@ -87,9 +87,10 @@ namespace UMS.Client.Business.Shared
             return response;
         }
 
-        public Task<Result<bool>> StudentResetPassword(ResetPasswordDto dto)
+        public async Task<Result<bool>> StudentResetPassword(ResetPasswordDto dto)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("debug");
+            return await _httpService.SendRequest<Result<bool>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Student.Authentication.ResetPassword, dto);
         }
 
         public  async Task<Result<long>> StudentSignUp(SignUpDto dto)

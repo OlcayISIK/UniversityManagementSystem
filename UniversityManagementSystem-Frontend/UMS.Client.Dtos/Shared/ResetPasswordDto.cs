@@ -8,7 +8,8 @@ namespace UMS.Client.Dtos.Shared
 {
     public class ResetPasswordDto
     {
-        public string PasswordResetToken { get; set; }
+        public long userId { get; set; }
+        public string OldPasword { get; set; }
         public string NewPassword { get; set; }
     }
 }

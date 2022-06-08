@@ -1,30 +1,44 @@
-﻿@using UMS.Client.Dtos.Student
+﻿@using MudBlazor
+@using UMS.Client.Dtos.Student
 @using UMS.Client.Dtos.Teacher
-
+@using UMS.Client.Business.Interface.Shared
+@using UMS.Client.Dtos.Shared;
+@inject ISnackbar Snackbar
+@inject IAuthenticationService AuthenticationService
 
 
 <div class="form-group" id="@nameof(currUser.Username)">
     <label>Username</label>
-    <InputText @bind-Value="currUser.Username" class="form-control" />
+    <MudInput  Disabled="true" @bind-Value="currUser.Username" class="form-control" />
     <ValidationMessage For="@(() => currUser.Username)" />
 </div>
 
 <div class="form-group">
     <label>Email</label>
-    <InputText @bind-Value="currUser.Email" class="form-control" type="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" />
+    <MudInput  Disabled="true" @bind-Value="currUser.Email" class="form-control" type="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" />
     <ValidationMessage For="@(() => currUser.Email)" />
 </div>
-
+<hr />
+<h2 style="text-align:center"> Password Change </h2>
 <div class="form-group">
-    <label>Password</label>
-    <InputText @bind-Value="currUser.HashedPassword" class="form-control" type="password" />
-    <ValidationMessage For="@(() => currUser.HashedPassword)" />
+    <label>Old Password</label>
+    <InputText @bind-Value="resetPasswordDto.OldPasword" class="form-control" type="password" />
+   
 </div>
 
 <div class="form-group">
-    <label>Password</label>
-    <InputText @bind-Value="currUser.HashedPassword" class="form-control" type="password" />
+    <label>New Password</label>
+    <InputText @bind-Value="pass" class="form-control" type="password" />
+</div>
+
+<div class="form-group">
+    <label>New Password Repeat</label>
+    <InputText @bind-Value="passRepeat" class="form-control" type="password" />
     <ValidationMessage For="@(() => currUser.HashedPassword)" />
+</div>
+
+<div class="form-group justify-content-center" style="text-align:center">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Button"  FullWidth="true" OnClick="ChangePassword">Change Password</MudButton>
 </div>
 
 
@@ -34,12 +48,39 @@
 @code {
     [Parameter]
     public StudentDto currUser { get; set; }
+    public ResetPasswordDto resetPasswordDto { get; set; } = new ResetPasswordDto();
 
     public bool OrderTimeOutCheckbox = false;
     public bool ManualDeliveryCheckbox = false;
+    public string pass;
+    public string passRepeat;
     protected override void OnInitialized()
     {
-
     }
-
+    async void ChangePassword()
+    {
+        if(pass == passRepeat)
+        {
+            try
+            {
+                resetPasswordDto.userId = currUser.Id;
+                resetPasswordDto.NewPassword = pass;
+                var result = await AuthenticationService.StudentResetPassword(resetPasswordDto);
+                if(result.Success)
+                    Snackbar.Add("Password Changed", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
+                else
+                    Snackbar.Add("Old Pass not True", Severity.Warning, options => options.Onclick = snackbar => Task.CompletedTask);
+            }
+            catch (Exception ex)
+            {
+                Snackbar.Add(ex.Message, Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+            }
+        }
+        else
+        {
+                Snackbar.Add("Password and Repassword Not Match!", Severity.Warning, options => options.Onclick = snackbar => Task.CompletedTask);
+        }
+    }
 }
+
+ 
