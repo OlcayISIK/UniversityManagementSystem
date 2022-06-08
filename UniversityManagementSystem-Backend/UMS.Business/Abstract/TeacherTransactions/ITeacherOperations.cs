@@ -14,5 +14,6 @@ namespace UMS.Business.Abstract.TeacherTransactions
         Result<IEnumerable<CourseInstructorDto>> GetAll();
         Task<Result<CourseInstructorDto>> Get(long id);
         Task<Result<bool>> Update(CourseInstructorDto courseInstructorDto);
+        Task<Result<CourseDto>> GetStudents(long courseInstructorId);
     }
 }

@@ -1,4 +1,4 @@
-﻿@page "/Courses"
+﻿@page "/teacherstudents"
 @layout MainLayout
 @using MudBlazor
 @using Microsoft.Extensions.Configuration
@@ -9,19 +9,20 @@
 @using UMS.Client.Dtos.Shared
 @using Microsoft.AspNetCore.Authorization
 @using UMS.Client.Business.Interface.StudentService
+@using UMS.Client.Business.Interface.Teacher
 @using UMS.Client.Dtos.Student
+@using UMS.Client.Dtos.Teacher
 @using UMS.Client.Main.CustomComponents.DialogComponents
-@using UMS.Client.Main.Pages.Courses.Components
+@using UMS.Client.Main.Pages.Events.Components
 @attribute [Authorize]
 @inject NavigationManager NavigationManager
 @inject IHttpService HttpService
 @inject ILocalStorageService LocalStorageService
 @inject ISnackbar Snackbar
 @inject IDialogService DialogService
-@inject IEventService EventService
 @inject IConfiguration Configuration
 @inject IPageAuthenticationService PageAuthenticationService
-@inject IStudentService StudentService
+@inject ITeacherService TeacherService
 @if (CourseList == null)
 {
     <Spinner />
@@ -31,9 +32,9 @@ else
     <div class="card mt-2 Grid-Card" style="max-width: 75rem; margin-left: auto; margin-right: auto;">
         <div class="card-header">
         </div>
-        <MudTable Items="@CourseList.Data" Dense="true" Hover="true" Filter="new Func<CourseDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
+        <MudTable Items="@CourseList.Data.Courses.SelectMany(x => x.StudentCourses)" Dense="true" Hover="true" Filter="new Func<StudentCourseDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
             <ToolBarContent>
-                <MudText Class="Table-Grid-Header" Typo="Typo.h6">Course List</MudText>
+                <MudText Class="Table-Grid-Header" Typo="Typo.h6">Students List</MudText>
                 <MudSpacer />
                 <input type="text" name="search" placeholder="Search" @bind-value="searchString" @bind-value:event="oninput">
             </ToolBarContent>
@@ -41,17 +42,14 @@ else
                 <col style="width: 50%;" />
                 <col style="width: 50%;" />
             </ColGroup>
-            <HeaderContent>
-                <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<CourseDto, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
-                <MudTh><label Class="Table-Grid-Header">Action</label></MudTh>
-            </HeaderContent>
+                <HeaderContent>
+                    <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<StudentCourseDto, object>(x=>x.Course.Name)">Course Name</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<StudentCourseDto, object>(x=>x.Student.Name)">Course Name</MudTableSortLabel></MudTh>
+
+                </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd>
-                    <MudTooltip Text="Show Details Of Course">
-                        <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
-                    </MudTooltip>
-                </MudTd>
+                <MudTd DataLabel="Course Name">@context.Course.Name</MudTd>
+                <MudTd DataLabel="Course Name">@context.Student.Name</MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager Style="color:white;font-weight:700;" RowsPerPageString="RowsPerPage" PageSizeOptions="new int[]{5, 10, 20}" />
@@ -62,10 +60,10 @@ else
 
 
 @code {
-    private Result<IEnumerable<CourseDto>> CourseList;
+    private Result<CourseInstructorDto> CourseList;
     UserType UserControl;
     long UserId;
-    private CourseDto selectedCourse = new CourseDto();
+    private CourseDto selectedStudent = new CourseDto();
     bool UserAuthControl;
     private string searchString = "";
 
@@ -73,13 +71,13 @@ else
     {
         UserControl = await LocalStorageService.GetCurrentUserType();
         UserId = long.Parse(await LocalStorageService.GetUserId());
-        UserAuthControl = PageAuthenticationService.ControlAuthentication(Pages.Courses, UserControl);
+        UserAuthControl = PageAuthenticationService.ControlAuthentication(Pages.TeacherStudents, UserControl);
 
         if (UserAuthControl)
         {
             try
             {
-                CourseList = await StudentService.GetStudentCourses(UserId);
+                CourseList = await TeacherService.Get(UserId);
                 if (CourseList == null)
                     return;
             }
@@ -96,35 +94,17 @@ else
         }
     }
 
-    private bool FilterFunc(CourseDto courseDto)
+    private bool FilterFunc(StudentCourseDto student)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (courseDto.Name == null)
-            return false;
+        //if (student.Name == null)
+        //    return false;
 
         return false;
     }
     void CancelSearch()
     {
         searchString = null;
-    }
-
-    async Task GetInformationModal(CourseDto courseDto)
-    {
-        MudBlazor.DialogOptions option = new MudBlazor.DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
-        selectedCourse = new CourseDto()
-        {
-            Name = courseDto.Name,
-            OnsiteCourse = courseDto.OnsiteCourse,
-            OnlineCourse = courseDto.OnlineCourse,
-            OnlineCourseId = courseDto.OnlineCourseId,
-            OnsiteCourseId = courseDto.OnsiteCourseId,
-            Credits = courseDto.Credits
-        };
-        var parameters = new DialogParameters { ["CourseDetail"] = selectedCourse };
-        var dialog = DialogService.Show<GetInformationsModal>("Course Details", parameters, option);
-        var result = await dialog.Result;
-
     }
 }

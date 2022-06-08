@@ -36,6 +36,12 @@ namespace UMS.Business.Concrete.TeacherTransactions
             var data = await _mapper.ProjectTo<CourseInstructorDto>(query).FirstOrDefaultAsync();
             return Result<CourseInstructorDto>.CreateSuccessResult(data);
         }
+        public async Task<Result<CourseDto>> GetStudents(long courseInstructorId)
+        {
+            var query = _unitOfWork.Courses.GetAll().Where(x => x.CourseInstructorId == courseInstructorId);
+            var data = await _mapper.ProjectTo<CourseDto>(query).FirstOrDefaultAsync();
+            return Result<CourseDto>.CreateSuccessResult(data);
+        }
         public async Task<Result<bool>> Update(CourseInstructorDto courseInstructorDto)
         {
             var existingData = await _unitOfWork.Students.GetAsTracking(courseInstructorDto.Id).FirstOrDefaultAsync();

@@ -6,7 +6,6 @@
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color:transparent;  margin: auto;max-width:60rem; ">
         <MudTabs Class="card mt-2" Elevation="4" AlwaysShowScrollButtons="false" @ref="tabs" Rounded="true" Centered="true" Color="MudBlazor.Color.Dark" Style="margin-left:-2rem; margin-right:-2rem;  background-color:transparent !important">
             <MudTabPanel @onclick="() => SetTab(General)" @ref="General" Text="General" />
-            <MudTabPanel @onclick="() => SetTab(SocialMedia)" @ref="SocialMedia" Text="Social Media" />
         </MudTabs>
     </nav>
 </center>
@@ -19,10 +18,6 @@
             @if (tabs.ActivePanel == General)
             {
                 <SettingsGeneralTabTeacherComponent currUser="@currUser" />
-            }
-            @if (tabs.ActivePanel == SocialMedia)
-            {
-                <SettingsSocialMediaTabComponent currUser="@currUser" />
             }
             <hr />
             <br />
@@ -46,7 +41,6 @@
 
     MudTabs tabs;
     MudTabPanel General;
-    MudTabPanel SocialMedia;
 
     public SettingFormTabPaneType CurrTab { get; set; } = SettingFormTabPaneType.General;
     private bool loading;

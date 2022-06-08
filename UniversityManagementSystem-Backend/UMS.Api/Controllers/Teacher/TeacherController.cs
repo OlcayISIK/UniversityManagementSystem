@@ -47,5 +47,13 @@ namespace UMS.Api.Controllers.Teacher
         {
             return await _teacherOperations.Update(courseInstructorDto);
         }
+        /// <summary>
+        /// Return a Students with courses.
+        /// </summary>
+        [HttpGet("getStudents/{courseInstructorId}")]
+        public async Task<Result<CourseDto>> getStudents(long courseInstructorId)
+        {
+            return await _teacherOperations.GetStudents(courseInstructorId);
+        }
     }
 }

@@ -28,5 +28,6 @@ namespace UMS.Dto
         public virtual ICollection<StudentCourseDto> StudentCourses { get; set; }
         public virtual ICollection<StudentGradeDto> StudentGrades { get; set; }
         public virtual CourseInstructorDto CourseInstructor { get; set;}
+
     }
 }

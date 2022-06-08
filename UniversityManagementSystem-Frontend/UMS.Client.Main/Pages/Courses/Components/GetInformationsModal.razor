@@ -17,13 +17,18 @@
                     <tr>
                         <th scope="col" style="width: 40%"><span style="color:white">Name</span></th>
                         <th scope="col" style="width: 40%"><span style="color:white">Credits</span></th>
+                        <th scope="col" style="width: 40%"><span style="color:white">Location</span></th>
+                        <th scope="col" style="width: 40%"><span style="color:white">Days</span></th>
+                        <th scope="col" style="width: 40%"><span style="color:white">Time</span></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td style="color:white">@CourseDetail.Name</td>
                         <td style="color:white">@CourseDetail.Credits</td>
-                        <td style="color:white">12</td>
+                        <td style="color:white">@Location</td>
+                        <td style="color:white">@Days</td>
+                        <td style="color:white">@CourseTime</td>
                     </tr>
                 </tbody>
             </table>
@@ -34,9 +39,28 @@
     </DialogActions>
 </MudDialog>
 @code {
+    string Location;
+    string Days;
+    DateTime CourseTime;
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     [Parameter]
     public CourseDto CourseDetail { get; set; }
     void Cancel() => MudDialog.Cancel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (CourseDetail.OnlineCourseId == null || CourseDetail.OnlineCourseId == 0)
+        {
+            Location = CourseDetail.OnsiteCourse.Location;
+            Days = CourseDetail.OnsiteCourse.Days;
+            CourseTime = CourseDetail.OnsiteCourse.Time;
+        }
+        else
+        {
+            Location = CourseDetail.OnlineCourse.Url;
+            Days = CourseDetail.OnlineCourse.Days;
+            CourseTime = CourseDetail.OnlineCourse.Time;
+        }
+    }
 
 }

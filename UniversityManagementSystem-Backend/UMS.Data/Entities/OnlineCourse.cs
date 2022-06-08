@@ -10,6 +10,8 @@ namespace UMS.Data.Entities
     public partial class OnlineCourse : UniversityBoundEntity
     {
         public int CourseId { get; set; }
+        public string Days { get; set; }
+        public DateTime Time { get; set; }
         public string Url { get; set; }
 
         public virtual Course Course { get; set; }

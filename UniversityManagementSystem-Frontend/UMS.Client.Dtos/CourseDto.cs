@@ -4,16 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UMS.Client.Dtos.Student;
+using UMS.Client.Dtos.Teacher;
 
 namespace UMS.Client.Dtos
 {
     public class CourseDto
     {
-        public long Id { get; set; }
         public string Name { get; set; }
+        public long Id { get; set; }
         public long StudentCourseId { get; set; }
         public long StudentGradeId { get; set; }
-        public long CourseInsturctorId { get; set; }
+        public long CourseInstructorId { get; set; }
         public long DepartmentId { get; set; }
         public long OnlineCourseId { get; set; }
         public long OnsiteCourseId { get; set; }
@@ -26,6 +27,6 @@ namespace UMS.Client.Dtos
         public virtual OnsiteCourseDto OnsiteCourse { get; set; }
         public virtual ICollection<StudentCourseDto> StudentCourses { get; set; }
         public virtual ICollection<StudentGradeDto> StudentGrades { get; set; }
-        public virtual CourseDto Course { get; set; }
+        public virtual CourseInstructorDto CourseInstructor { get; set; }
     }
 }

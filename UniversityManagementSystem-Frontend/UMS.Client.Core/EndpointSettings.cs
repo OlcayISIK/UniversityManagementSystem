@@ -35,6 +35,7 @@ namespace UMS.Client.Core
                     public const string ControllerPrefix = "/Teacher";
                     public const string GetAll = EndpointPrefix + ControllerPrefix + "/getAll";
                     public const string Get = EndpointPrefix + ControllerPrefix + "/get";
+                    public const string GetStudents = EndpointPrefix + ControllerPrefix + "/getStudents";
                 }
                 public static class CourseService
                 {

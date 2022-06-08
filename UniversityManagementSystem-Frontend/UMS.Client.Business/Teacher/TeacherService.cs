@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Components;
 using UMS.Client.Business.Interface.Shared;
 using UMS.Client.Business.Interface.Teacher;
 using UMS.Client.Core;
+using UMS.Client.Dtos;
 using UMS.Client.Dtos.Shared;
 using UMS.Client.Dtos.Student;
 using UMS.Client.Dtos.Teacher;
 
 namespace UMS.Client.Business.Teacher
 {
-    internal class TeacherService : ITeacherService
+    public class TeacherService : ITeacherService
     {
         private IHttpService _httpService;
         private NavigationManager _navigationManager;
@@ -34,6 +35,11 @@ namespace UMS.Client.Business.Teacher
         public async Task<Result<CourseInstructorDto>> Get(long userId)
         {
             var response = await _httpService.SendRequest<Result<CourseInstructorDto>>(HttpMethod.Get, EndpointSettings.ServerRoutes.Teacher.TeacherService.Get + $"/{userId}");
+            return response;
+        }
+        public async Task<Result<IEnumerable<CourseDto>>> GetStudents(long userId)
+        {
+            var response = await _httpService.SendRequest<Result<IEnumerable<CourseDto>>>(HttpMethod.Get, EndpointSettings.ServerRoutes.Teacher.TeacherService.GetStudents + $"/{userId}");
             return response;
         }
     }

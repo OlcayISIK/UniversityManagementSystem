@@ -25,7 +25,8 @@ builder.Services.AddScoped<ILocalStorageService, LocalStorageService>()
     .AddScoped<IPageAuthenticationService, PageAuthenticationService>()
     .AddScoped<IStudentGradeService, StudentGradeService>()
     .AddScoped<ICourseService, CourseService>()
-    .AddScoped<IUniversitySocialClubService, UniversitySocialClubService>(); 
+    .AddScoped<IUniversitySocialClubService, UniversitySocialClubService>()
+    .AddScoped<ITeacherService, TeacherService>();
 
 
  builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5005") });

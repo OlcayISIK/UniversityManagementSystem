@@ -17,6 +17,7 @@ namespace UMS.Client.Core.Enums
         StudentGrades,
         Courses,
         TeacherCourses,
-        Library
+        Library,
+        TeacherStudents
     }
 }
