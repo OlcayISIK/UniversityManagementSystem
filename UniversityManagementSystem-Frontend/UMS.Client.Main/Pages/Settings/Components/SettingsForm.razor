@@ -4,14 +4,14 @@
 @using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Student
 @inject IStudentService StudentService
-<center>
-    <nav class="navbar navbar-expand-lg navbar-light align-content-center" style="background-color:transparent; max-width:60rem; ">
+  
+
+<nav>
         <MudTabs Class="card mt-2" Elevation="4" AlwaysShowScrollButtons="false" @ref="tabs" Rounded="true" Centered="true" Color="MudBlazor.Color.Dark" Style="margin-left:-2rem; margin-right:-2rem;  background-color:transparent !important">
             <MudTabPanel @onclick="() => SetTab(General)" @ref="General" Text="General" />
             <MudTabPanel @onclick="() => SetTab(SocialMedia)" @ref="SocialMedia" Text="Social Media" />
          </MudTabs>
-    </nav>
-</center>
+</nav>
 
 <div class="card mt-2" style="max-width: 40rem; margin-left: auto; margin-right: auto">
     <h4 class="card-header">Name : @currUser?.Name</h4>

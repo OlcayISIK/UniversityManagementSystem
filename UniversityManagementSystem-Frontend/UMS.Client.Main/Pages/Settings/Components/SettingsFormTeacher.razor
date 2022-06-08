@@ -2,13 +2,12 @@
 @using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Student
 @using UMS.Client.Dtos.Teacher
-<center>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color:transparent;  margin: auto;max-width:60rem; ">
+
+    <nav>
         <MudTabs Class="card mt-2" Elevation="4" AlwaysShowScrollButtons="false" @ref="tabs" Rounded="true" Centered="true" Color="MudBlazor.Color.Dark" Style="margin-left:-2rem; margin-right:-2rem;  background-color:transparent !important">
             <MudTabPanel @onclick="() => SetTab(General)" @ref="General" Text="General" />
         </MudTabs>
     </nav>
-</center>
 
 <div class="card mt-2" style="max-width: 40rem; margin-left: auto; margin-right: auto">
     <h4 class="card-header">Name : @currUser?.Name</h4>

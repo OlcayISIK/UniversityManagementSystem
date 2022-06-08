@@ -49,7 +49,8 @@
                     <MudNavLink Match="NavLinkMatch.All" Href="/courses" Icon="@Icons.Filled.Book"> Courses</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{CommonControl}")" Href="/events" Icon="@Icons.Filled.Event"> Events</MudNavLink>
                     <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{TeacherControl}")" Href="/documents" Icon="@Icons.Filled.Settings">Manage Documents</MudNavLink>
-                    <MudNavLink Match="NavLinkMatch.All" Href="/student/Settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All" Style="@($"display:{CommonControl}")"Href="/student/Settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>
+                    <MudNavLink Match="NavLinkMatch.All"  Style="@($"display:{TeacherControl}")"Href="/teacher/Settings" Icon="@Icons.Filled.Settings">Settings</MudNavLink>
                 </MudNavMenu>
             </MudDrawer>
             <MudMainContent Class="mud-main-content-user">

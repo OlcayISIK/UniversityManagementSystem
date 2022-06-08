@@ -42,9 +42,7 @@
                                   For="@(() => EventObject.LocationHeader)" />
                 </MudItem>
                 <MudGrid Style="margin-top: 10px; margin-bottom: 10px;">
-                    <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
-                        <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="MudBlazor.Color.Error" Class="dialog-button">Cancel</MudButton>
-                    </MudItem>
+                   
                     <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
                         <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForClub" Class="dialog-button">
                             @if (loading)
@@ -53,20 +51,27 @@
                             }
                             @CreatePublishClubButtontext()
                         </MudButton>
-                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForEveryone" Class="dialog-button">
+                    </MudItem> 
+                    <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForClub" Class="dialog-button">
                             @if (loading)
                             {
                                 <span class="spinner-border spinner-border-sm mr-1"></span>
                             }
                             @CreatePublishEveryoneButtontext()
                         </MudButton>
-                        <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForUniversity" Class="dialog-button">
+                    </MudItem> 
+                    <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                         <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForClub" Class="dialog-button">
                             @if (loading)
                             {
                                 <span class="spinner-border spinner-border-sm mr-1"></span>
                             }
                             @CreatePublishUniversityButtontext()
                         </MudButton>
+                    </MudItem>
+                     <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                        <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="MudBlazor.Color.Error" Class="dialog-button">Cancel</MudButton>
                     </MudItem>
                 </MudGrid>
             </EditForm>
@@ -141,15 +146,15 @@
         }
         string CreatePublishClubButtontext()
         {
-            return operationType == OperationType.Add ? "Social Club" : "Confirm";
+            return operationType == OperationType.Add ? "Add For Social Club" : "Confirm";
         }
         string CreatePublishEveryoneButtontext()
         {
-            return operationType == OperationType.Add ? "Everyone" : "Confirm";
+            return operationType == OperationType.Add ? "Add For Everyone" : "Confirm";
         }
         string CreatePublishUniversityButtontext()
         {
-            return operationType == OperationType.Add ? "University" : "Confirm";
+            return operationType == OperationType.Add ? "Add For University" : "Confirm";
         }
 
         public void CreateEventForClub()
