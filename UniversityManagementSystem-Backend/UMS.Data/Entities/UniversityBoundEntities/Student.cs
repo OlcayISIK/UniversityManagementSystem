@@ -9,7 +9,6 @@ namespace UMS.Data.Entities.UniversityBoundEntities
 {
     public class Student : UniversityBoundEntity
     {
-
         public long StudentCourseId { get; set; }
         public long? FileId { get; set; }
         public string Username { get; set; }
