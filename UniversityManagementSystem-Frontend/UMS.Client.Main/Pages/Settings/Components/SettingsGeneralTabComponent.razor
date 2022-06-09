@@ -9,13 +9,13 @@
 
 <div class="form-group" id="@nameof(currUser.Username)">
     <label>Username</label>
-    <MudInput  Disabled="true" @bind-Value="currUser.Username" class="form-control" />
+    <MudTextField  Disabled="true" Style="@($"color:{Theme.Palette.Black};;")" @bind-Value="currUser.Username" class="form-control" />
     <ValidationMessage For="@(() => currUser.Username)" />
 </div>
 
 <div class="form-group">
     <label>Email</label>
-    <MudInput  Disabled="true" @bind-Value="currUser.Email" class="form-control" type="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" />
+    <MudTextField  Disabled="true" Style="@($"color:{Theme.Palette.Black};;")"   @bind-Value="currUser.Email" class="form-control" type="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" />
     <ValidationMessage For="@(() => currUser.Email)" />
 </div>
 <hr />
@@ -49,7 +49,7 @@
     [Parameter]
     public StudentDto currUser { get; set; }
     public ResetPasswordDto resetPasswordDto { get; set; } = new ResetPasswordDto();
-
+    private MudTheme Theme = new MudTheme();
     public bool OrderTimeOutCheckbox = false;
     public bool ManualDeliveryCheckbox = false;
     public string pass;

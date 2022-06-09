@@ -74,6 +74,7 @@
     public OperationType operationType { get; set; }
     void Cancel() => MudDialog.Cancel();
     private bool loading;
+    UserType UserControl;
     IList<IBrowserFile> files = new List<IBrowserFile>();
 
     private async void OnValidSubmit()
@@ -89,8 +90,12 @@
                     Snackbar.Add(error, Severity.Warning, options => options.Onclick = snackbar => Task.CompletedTask);
                     return;
                 }
-                var studentID= long.Parse(await LocalStorageService.GetUserId());
-                FileObject.StudentId = studentID;
+                UserControl = await LocalStorageService.GetCurrentUserType();
+                if(UserControl != UserType.Teacher && UserControl != UserType.Admin)
+                {
+                    var studentID= long.Parse(await LocalStorageService.GetUserId());
+                    FileObject.StudentId = studentID;
+                }
                 await FileService.UploadFiles(FileObject);
                 var message = $"{FileObject.Name} {"Note Added Succesfuly"}";
                 Snackbar.Add(message, Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);

@@ -4,7 +4,9 @@
 @using Microsoft.AspNetCore.Components
 @using UMS.Client.Business.Interface.Teacher
 @using UMS.Client.Dtos
-<MudTable Items="@Elements" CanCancelEdit="true" Filter="new Func<StudentGradeDto,bool>(FilterFunc)"
+
+
+<MudTable  Style="@($"color:{Theme.Palette.Black}; background:{Theme.Palette.Dark};")"  Items="@Elements" CanCancelEdit="true" Filter="new Func<StudentGradeDto,bool>(FilterFunc)"
           @bind-SelectedItem="selectedItem1" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
           OnCommitEditClick="@(() => Snackbar.Add("Grade is Updated"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues"
           RowEditCommit="ItemHasBeenCommitted">
@@ -46,7 +48,7 @@
     private StudentGradeDto selectedItem1 = null;
     private StudentGradeDto elementBeforeEdit;
     private HashSet<StudentGradeDto> selectedItems1 = new HashSet<StudentGradeDto>();
-
+    private MudTheme Theme = new MudTheme();
     private IEnumerable<StudentGradeDto> Elements = new List<StudentGradeDto>();
 
 
