@@ -1,4 +1,4 @@
-﻿@page "/Courses"
+﻿@page "/student/Courses"
 @layout MainLayout
 @using MudBlazor
 @using Microsoft.Extensions.Configuration
@@ -38,8 +38,8 @@ else
                 <input type="text" name="search" placeholder="Search" @bind-value="searchString" @bind-value:event="oninput">
             </ToolBarContent>
             <ColGroup>
-                <col style="width: 50%;" />
-                <col style="width: 50%;" />
+                <col style="width: 90%;" />
+                <col style="width: 10%;" />
             </ColGroup>
             <HeaderContent>
                 <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<CourseDto, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>

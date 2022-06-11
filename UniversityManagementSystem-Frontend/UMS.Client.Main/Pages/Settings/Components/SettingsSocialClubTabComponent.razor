@@ -8,9 +8,14 @@
 @inject IStudentService StudentService
 @inject IUniversitySocialClubService UniversitySocialClubService
 
-
+<style>
+    .mud-input > input.mud-input-root, div.mud-input-slot.mud-input-root 
+    {
+        color: black !important;
+    }
+</style>
 <div class="form-group row mt-5">
-    <MudSelect T="long?" Placeholder="Select Social Club" @bind-Value="currUser.UniversitySocialClubId" @onchange="BindStudentRepresentative" HelperText="Social CLubs" AdornmentIcon="@Icons.Material.Filled.EmojiPeople" CloseIcon="@Icons.Material.Filled.EmojiPeople" AdornmentColor="Color.Tertiary">
+    <MudSelect T="long?" Placeholder="Select Social Club (Representative)" @bind-Value="currUser.UniversitySocialClubId" @onchange="BindStudentRepresentative" HelperText="Social CLubs" AdornmentIcon="@Icons.Material.Filled.EmojiPeople" CloseIcon="@Icons.Material.Filled.EmojiPeople" AdornmentColor="Color.Tertiary">
         @foreach (var socialClub in SocialClubDto)
         {
             <MudSelectItem T="long?" Value="socialClub.Id">@socialClub.Name</MudSelectItem>

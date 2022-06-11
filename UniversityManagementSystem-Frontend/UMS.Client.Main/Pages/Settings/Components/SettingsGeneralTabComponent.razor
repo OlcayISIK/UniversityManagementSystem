@@ -5,8 +5,12 @@
 @using UMS.Client.Dtos.Shared;
 @inject ISnackbar Snackbar
 @inject IAuthenticationService AuthenticationService
-
-
+<style>
+    .mud-input > input.mud-input-root, div.mud-input-slot.mud-input-root 
+    {
+        color: black !important;
+    }
+</style>
 <div class="form-group" id="@nameof(currUser.Username)">
     <label>Username</label>
     <MudTextField  Disabled="true" Style="@($"color:{Theme.Palette.Black};;")" @bind-Value="currUser.Username" class="form-control" />
