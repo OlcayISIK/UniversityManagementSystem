@@ -84,5 +84,25 @@ namespace UMS.Business.Concrete.Shared
             }
             return null;
         }
+
+        public async Task<Result<IEnumerable<FileDto>>> GetAllForTeacher(long courseInstructorId)
+        {
+            try
+            {
+                var courses = _unitOfWork.Courses.GetAll().Where(x => x.CourseInstructorId == courseInstructorId);
+                var query = _unitOfWork.Files.GetAll().Where(x => x.UniversityId == _unitOfWork.UniversityId && courses.Where(y => y.Id == x.CourseId).Count() > 0);
+                foreach (var item in query)
+                {
+                    item.DataFiles = new byte[0];
+                }
+                var data = _mapper.ProjectTo<FileDto>(query);
+                return Result<IEnumerable<FileDto>>.CreateSuccessResult(data);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return null;
+        }
     }
 }

@@ -5,13 +5,17 @@
 @using UMS.Client.Business.Interface.Teacher
 @using UMS.Client.Dtos
 
-
+@if(Elements == null)
+{
+    <Spinner/>
+}
+else
+{
 <MudTable  Style="@($"color:{Theme.Palette.Black}; background:{Theme.Palette.Dark};")"  Items="@Elements" CanCancelEdit="true" Filter="new Func<StudentGradeDto,bool>(FilterFunc)"
           @bind-SelectedItem="selectedItem1" SortLabel="Sort By" CommitEditTooltip="Commit Edit"
           OnCommitEditClick="@(() => Snackbar.Add("Grade is Updated"))" RowEditPreview="BackupItem" RowEditCancel="ResetItemToOriginalValues"
           RowEditCommit="ItemHasBeenCommitted">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Periodic Elements</MudText>
         <MudSpacer />
         <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
@@ -25,11 +29,11 @@
         <MudTh><MudTableSortLabel SortBy="new Func<StudentGradeDto, object>(x=>x.Grade)">Grade</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="CourseName">@context.CourseName</MudTd>
+        <MudTd DataLabel="StudentName">@context.Student.Name</MudTd>
         <MudTd DataLabel="Grade">@context.Grade</MudTd>
     </RowTemplate>
     <RowEditingTemplate>
-        <MudTd DataLabel="CourseName">@context.CourseName</MudTd>
+        <MudTd DataLabel="CourseName">@context.Student.Name</MudTd>
         <MudTd DataLabel="Grade">
             <MudTextField @bind-Value="@context.Grade" Required />
         </MudTd>
@@ -39,6 +43,7 @@
     </PagerContent>
 </MudTable>
 
+}
 @code { 
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     [Parameter]

@@ -26,10 +26,16 @@ namespace UMS.Api.Controllers.Teacher
         {
             return await _fileOperations.UploadFiles(fileDto);
         }
-        [HttpPost("GetAll/{studentId}")]
+        [HttpGet("GetAll/{studentId}")]
         public async Task<Result<IEnumerable<FileDto>>> GetAll(long studentId)
         {
             return await _fileOperations.GetAll(studentId);
+        }
+
+        [HttpGet("GetAllForTeacher/{courseInstructorId}")]
+        public async Task<Result<IEnumerable<FileDto>>> GetAllForTeacher(long courseInstructorId)
+        {
+            return await _fileOperations.GetAllForTeacher(courseInstructorId);
         }
 
         [HttpGet("Get/{fileId}")]
