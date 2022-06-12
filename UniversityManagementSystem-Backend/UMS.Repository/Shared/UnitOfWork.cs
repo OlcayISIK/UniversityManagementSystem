@@ -22,12 +22,13 @@ namespace UMS.Repository.Shared
         public IEventRepository Events { get; set; }
         public ICourseRepository Courses { get; set; }
         public IStudentGradeRepository StudentGrades { get; set; }
+        public IStudentCourseRepository StudentCourses { get; set; }
 
 
         public UnitOfWork(Context context, ITeacherRepository teachers,IRedisTransactionsRepository redisTransactions, 
             IStudentRepository students, IUniversitySocialClubRepository universitySocialClubs, IRedisTokenRepository redisTokens, 
             IChatMessageRepository chatMessages, IUniversityRepository universities, IFileRepository files, IEventRepository events,
-            ICourseRepository courses, IStudentGradeRepository studentGrades)
+            ICourseRepository courses, IStudentGradeRepository studentGrades, IStudentCourseRepository studentCourses)
         {
             _context = context;
             Teachers = teachers;
@@ -41,6 +42,7 @@ namespace UMS.Repository.Shared
             Events = events;
             Courses = courses;
             StudentGrades = studentGrades;
+            StudentCourses = studentCourses;
         }
         public void Dispose()
         {

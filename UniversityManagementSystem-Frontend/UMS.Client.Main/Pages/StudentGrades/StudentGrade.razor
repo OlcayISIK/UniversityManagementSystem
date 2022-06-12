@@ -59,7 +59,7 @@ else
 
 @code {
     private Result<IEnumerable<StudentGradeDto>> GradeList;
-    private Result<IEnumerable<CourseDto>> CourseList;
+    private Result<IEnumerable<StudentCourseDto>> CourseList;
     UserType UserControl;
     long UserId;
     private StudentGradeDto selectedGrade = new StudentGradeDto();
@@ -84,7 +84,7 @@ else
                     {
                         if (grade.CourseId == course.Id)
                         {
-                            grade.CourseName = course.Name;
+                            grade.CourseName = course.Course.Name;
                         }
                     }
                 }

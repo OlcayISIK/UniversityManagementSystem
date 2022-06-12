@@ -50,7 +50,7 @@ namespace UMS.Api.Controllers.Student
         /// Get Student's Courses.
         /// </summary>
         [HttpGet("GetStudentCourses/{id}")]
-        public async Task<Result<IEnumerable<CourseDto>>> GetStudentCourses(long id)
+        public async Task<Result<IEnumerable<StudentCourseDto>>> GetStudentCourses(long id)
         {
             return await _studentOperations.GetStudentCourses(id);
         }

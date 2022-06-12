@@ -50,13 +50,13 @@ namespace UMS.Business.Concrete.StudentTransactions
             await _unitOfWork.Commit();
             return Result<bool>.CreateSuccessResult(true);
         }
-        public async Task<Result<IEnumerable<CourseDto>>> GetStudentCourses(long id)
+        public async Task<Result<IEnumerable<StudentCourseDto>>> GetStudentCourses(long id)
         {
-            var query =  _unitOfWork.Courses.GetStudentCourses(id).Where(x => !x.IsDeleted);
+            var query =  _unitOfWork.StudentCourses.GetAll().Where(x => x.StudentId == id);
             if (query == null)
-                return Result<IEnumerable<CourseDto>>.CreateErrorResult(ErrorCode.ObjectNotFound);
-            var data = _mapper.ProjectTo<CourseDto>(query);
-            return Result<IEnumerable<CourseDto>>.CreateSuccessResult(data);
+                return Result<IEnumerable<StudentCourseDto>>.CreateErrorResult(ErrorCode.ObjectNotFound);
+            var data = _mapper.ProjectTo<StudentCourseDto>(query);
+            return Result<IEnumerable<StudentCourseDto>>.CreateSuccessResult(data);
         }
 
         public async Task<Result<IEnumerable<StudentGradeDto>>> GetStudentGrades(long id)

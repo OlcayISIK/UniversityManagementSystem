@@ -56,7 +56,7 @@ else
             
              </div>
               <div style=" position:absolute; background-color:white;border:3px solid black;width:20%; height:4%; margin-left: 40%;  margin-top: 10%; ">
-                    <p style=" text-align:center; font-family:Impact, fantasy; font-size:15px; margin-top:auto; margin-bottom:auto;">@courses[Page].Title - @courses[Page].Name</p>
+                    <p style=" text-align:center; font-family:Impact, fantasy; font-size:15px; margin-top:auto; margin-bottom:auto;">@courses[Page].Course.Title - @courses[Page].Course.Name</p>
               </div>
         }
 
@@ -74,7 +74,7 @@ else
                 
                 </div>
                  <div style=" position:absolute; background-color:white;border:3px solid black;width:20%; height:4%; margin-left: 40%;  margin-top: 10%; ">
-                        <p style=" text-align:center; font-family:Impact, fantasy; font-size:15px; margin-top:auto; margin-bottom:auto;">@courses[Page+1].Title - @courses[Page].Name</p>
+                        <p style=" text-align:center; font-family:Impact, fantasy; font-size:15px; margin-top:auto; margin-bottom:auto;">@courses[Page+1].Course.Title - @courses[Page].Course.Name</p>
                 </div>
         }
 
@@ -101,7 +101,7 @@ else
 @code {
     public LibraryFilesDto libraryFileDto = new LibraryFilesDto();
     private Result<IEnumerable<FileDto>> FileList;
-    List<CourseDto> courses;
+    List<StudentCourseDto> courses;
     UserType UserControl;
     bool UserAuthControl;
     int Page = 0;

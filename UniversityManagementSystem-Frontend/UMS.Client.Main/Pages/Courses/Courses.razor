@@ -31,7 +31,7 @@ else
     <div class="card mt-2 Grid-Card" style="max-width: 75rem; margin-left: auto; margin-right: auto;">
         <div class="card-header">
         </div>
-        <MudTable Items="@CourseList.Data" Dense="true" Hover="true" Filter="new Func<CourseDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
+        <MudTable Items="@CourseList.Data" Dense="true" Hover="true" Filter="new Func<StudentCourseDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
             <ToolBarContent>
                 <MudText Class="Table-Grid-Header" Typo="Typo.h6">Course List</MudText>
                 <MudSpacer />
@@ -42,14 +42,14 @@ else
                 <col style="width: 10%;" />
             </ColGroup>
             <HeaderContent>
-                <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<CourseDto, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
+                <MudTh><label Class="Table-Grid-Header">Name</label></MudTh>
                 <MudTh><label Class="Table-Grid-Header">Action</label></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Name">@context.Course.Name</MudTd>
                 <MudTd>
                     <MudTooltip Text="Show Details Of Course">
-                        <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
+                        <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context.Course))"></MudIconButton>
                     </MudTooltip>
                 </MudTd>
             </RowTemplate>
@@ -62,7 +62,7 @@ else
 
 
 @code {
-    private Result<IEnumerable<CourseDto>> CourseList;
+    private Result<IEnumerable<StudentCourseDto>> CourseList;
     UserType UserControl;
     long UserId;
     private CourseDto selectedCourse = new CourseDto();
@@ -96,11 +96,11 @@ else
         }
     }
 
-    private bool FilterFunc(CourseDto courseDto)
+    private bool FilterFunc(StudentCourseDto studentCourseDto)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (courseDto.Name == null)
+        if (studentCourseDto.Course.Name == null)
             return false;
 
         return false;

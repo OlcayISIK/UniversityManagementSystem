@@ -10,7 +10,7 @@ namespace UMS.Api.Controllers.Teacher
 {
     [ApiController]
     [Route("api/teacher/[controller]")]
-    [ApiExplorerSettings(GroupName = Constants.AuthenticationSchemes.Teacher)]
+    [ApiExplorerSettings(GroupName = Constants.AuthenticationSchemes.Student)]
     public class FileController : Controller
     {
         private readonly IFileOperations _fileOperations;

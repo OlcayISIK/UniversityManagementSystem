@@ -219,5 +219,7 @@ else
             Snackbar.Add("You have joined the event", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
         else
             Snackbar.Add("Number of Participant is full", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+
+        EventList = await EventService.GetAll();
     }
 }
