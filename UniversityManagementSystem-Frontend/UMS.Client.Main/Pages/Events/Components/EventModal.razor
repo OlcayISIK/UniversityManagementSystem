@@ -41,6 +41,13 @@
                                   Margin="MudBlazor.Margin.Dense"
                                   For="@(() => EventObject.LocationHeader)" />
                 </MudItem>
+                <MudItem xs="12" sm="12" md="12" Style="margin-bottom: 10px;">
+                    <MudTextField @bind-Value="@EventObject.Quota"
+                                  Label=Quota
+                                  Variant="Variant.Outlined"
+                                  Margin="MudBlazor.Margin.Dense"
+                                  For="@(() => EventObject.Quota)" />
+                </MudItem>
                 <MudGrid Style="margin-top: 10px; margin-bottom: 10px;">
                    
                     <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">

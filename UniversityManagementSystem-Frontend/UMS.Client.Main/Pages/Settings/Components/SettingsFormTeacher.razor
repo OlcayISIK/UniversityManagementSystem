@@ -2,7 +2,12 @@
 @using UMS.Client.Core.Enums
 @using UMS.Client.Dtos.Student
 @using UMS.Client.Dtos.Teacher
-
+<style>
+    .mud-input > input.mud-input-root, div.mud-input-slot.mud-input-root 
+    {
+        color: black !important;
+    }
+</style>
     <nav>
         <MudTabs Class="card mt-2" Elevation="4" AlwaysShowScrollButtons="false" @ref="tabs" Rounded="true" Centered="true" Color="MudBlazor.Color.Dark" Style="margin-left:-2rem; margin-right:-2rem;  background-color:transparent !important">
             <MudTabPanel @onclick="() => SetTab(General)" @ref="General" Text="General" />

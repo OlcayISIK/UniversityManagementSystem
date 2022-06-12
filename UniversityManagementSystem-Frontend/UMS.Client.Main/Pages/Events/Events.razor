@@ -37,9 +37,11 @@ else
                 <input type="text" name="search" placeholder="Search" @bind-value="searchString" @bind-value:event="oninput">
             </ToolBarContent>
             <ColGroup>
-                <col style="width: 40%;" />
-                <col style="width: 50%;" />
-                <col style="width: 10%;" />
+                <col style="width: 20%;" />
+                <col style="width: 20%;" />
+                <col style="width: 20%;" />
+                <col style="width: 20%;" />
+                <col style="width: 20%;" />
             </ColGroup>
             <HeaderContent>
                 <MudTh><MudTableSortLabel Class="Table-Grid-Header" InitialDirection="MudBlazor.SortDirection.Ascending" SortBy="new Func<EventDto, object>(x=>x.Name)">Name</MudTableSortLabel></MudTh>
@@ -52,7 +54,7 @@ else
                 <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd DataLabel="Description">@context.Description</MudTd>
                 <MudTd DataLabel="LocationHeader">@context.LocationHeader</MudTd>
-                <MudTd DataLabel="Participants">@context.Quota / @context.Participants</MudTd>
+                <MudTd DataLabel="Participants">@context.Participants / @context.Quota </MudTd>
                 <MudTd>
                     <MudTooltip Text="Edit Event">
                         <MudIconButton Icon="fas fa-edit" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" Class="Table-Edit-Button" OnClick="@(() => EventEditModal(context))"></MudIconButton>
@@ -64,7 +66,7 @@ else
                         <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
                     </MudTooltip>
                     <MudTooltip Text="Join This Event">
-                        <MudIconButton Icon="fa-solid fa-file-signature" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinEvent(context.Id))"></MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.AddToQueue" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinEvent(context.Id))"></MudIconButton>
                     </MudTooltip>
                 </MudTd>
             </RowTemplate>
@@ -210,10 +212,10 @@ else
 
     }
 
-    public void JoinEvent(long id)
+    public async Task JoinEvent(long id)
     {
-        var result = EventService.Join(id);
-        if(result.Result.Data == true)
+        var result = await EventService.Join(id);
+        if(result.Data == true)
             Snackbar.Add("You have joined the event", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
         else
             Snackbar.Add("Number of Participant is full", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
