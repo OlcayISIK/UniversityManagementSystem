@@ -140,7 +140,7 @@ else
             Title = courseDto.Title
         };
         var parameters = new DialogParameters { ["CourseDetail"] = selectedCourse };
-        var dialog = DialogService.Show<TeacherGrade>("Course Details", parameters, option);
+        var dialog = DialogService.Show<TeacherGrade>("Course Grade Details", parameters, option);
         var result = await dialog.Result;
     }
 }

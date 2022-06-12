@@ -23,5 +23,6 @@ namespace UMS.Repository.Concrete
                 .ThenInclude(studentcourse => studentcourse.Student);
             return query;
         }
+
     }
 }

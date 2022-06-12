@@ -37,8 +37,11 @@ namespace UMS.Client.Business.Shared
 
         public async Task<Result<IEnumerable<FileDto>>> GetAll(long studentId)
         {
-            Console.WriteLine(studentId);
-            return await _httpService.SendRequest<Result<IEnumerable<FileDto>>>(HttpMethod.Post, EndpointSettings.ServerRoutes.Teacher.FileService.GetAll + $"/{studentId}");
+            return await _httpService.SendRequest<Result<IEnumerable<FileDto>>>(HttpMethod.Get, EndpointSettings.ServerRoutes.Teacher.FileService.GetAll + $"/{studentId}");
+        }
+        public async Task<Result<IEnumerable<FileDto>>> GetAllForTeacher(long teacherId)
+        {
+            return await _httpService.SendRequest<Result<IEnumerable<FileDto>>>(HttpMethod.Get, EndpointSettings.ServerRoutes.Teacher.FileService.GetAllForTeacher + $"/{teacherId}");
         }
     }
 }   

@@ -13,6 +13,6 @@ namespace UMS.Business.Abstract.Shared
         public Task<Result<bool>> UploadFiles(FileDto fileDto);
         public Result<IEnumerable<FileDto>> Get(long fileId);
         public Task<Result<IEnumerable<FileDto>>> GetAll(long studentId);
-
+        public Task<Result<IEnumerable<FileDto>>> GetAllForTeacher(long teacherId);
     }
 }
