@@ -42,9 +42,9 @@ namespace UMS.Client.Business.StudentService
             return response;
         }
 
-        public async Task<Result<IEnumerable<StudentCourseDto>>> GetStudentCourses(long id)
+        public async Task<Result<IEnumerable<CourseDto>>> GetStudentCourses(long id)
         {
-            var response = await _httpService.SendRequest<Result<IEnumerable<StudentCourseDto>>>(HttpMethod.Get, EndpointSettings.ServerRoutes.Student.StudentService.GetStudentCourses + $"/{id}");
+            var response = await _httpService.SendRequest<Result<IEnumerable<CourseDto>>>(HttpMethod.Get, EndpointSettings.ServerRoutes.Student.StudentService.GetStudentCourses + $"/{id}");
             return response;
         }
         public async Task<Result<IEnumerable<StudentGradeDto>>> GetStudentGrades(long id)

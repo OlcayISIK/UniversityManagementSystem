@@ -14,7 +14,7 @@ namespace UMS.Client.Business.Interface.StudentService
         Task<Result<IEnumerable<StudentDto>>> GetAll();
         Task<Result<StudentDto>> Get(long userId);
         Task<Result<bool>> Update(StudentDto studentDto);
-        Task<Result<IEnumerable<StudentCourseDto>>> GetStudentCourses(long id);
+        Task<Result<IEnumerable<CourseDto>>> GetStudentCourses(long id);
         Task<Result<IEnumerable<StudentGradeDto>>> GetStudentGrades(long id);
     }
 }

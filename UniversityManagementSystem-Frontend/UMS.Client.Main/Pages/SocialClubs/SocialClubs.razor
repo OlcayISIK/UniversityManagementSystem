@@ -28,12 +28,12 @@
 else
 {
     <div class="card mt-2 Grid-Card" style="max-width: 75rem; margin-left: auto; margin-right: auto;">
-       @if(UserControl == UserType.StudentRepresentative)
+     @*  @if(UserControl == UserType.StudentRepresentative)
         {
           <div class="card-header">
             <MudButton Variant="Variant.Outlined" Class="grid-addbtn">Add New Club</MudButton>
           </div>
-        }
+        }*@
         <MudTable Items="@ClubList.Data" Dense="true" Hover="true" Filter="new Func<UniversitySocialClubDto, bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
             <ToolBarContent>
                 <MudText Class="Table-Grid-Header" Typo="Typo.h6">University Social Clubs List</MudText>
@@ -59,9 +59,12 @@ else
                     <MudTooltip Text="Show Details Of Club">
                         <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
                     </MudTooltip>
-                    <MudTooltip Text="Join This Club">
-                        <MudIconButton Icon="@Icons.Material.Filled.AddToQueue" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinSocialClub(context.Id))"></MudIconButton>
-                    </MudTooltip>
+                    @if(context.StudentsUniversitySocialClubs.Where(x=> x.StudentId == UserId).Count()>0)
+                    {
+                         <MudTooltip Text="Join This Club">
+                            <MudIconButton Icon="@Icons.Material.Filled.AddToQueue" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinSocialClub(context.Id))"></MudIconButton>
+                        </MudTooltip>
+                    }
                 </MudTd>
             </RowTemplate>
             <PagerContent>
@@ -132,7 +135,9 @@ else
         {
             Name = universitySocialClubDto.Name,
             Id = universitySocialClubDto.Id,
-            Description = universitySocialClubDto.Description,
+            Description = universitySocialClubDto.Description, 
+            StudentsUniversitySocialClubs = universitySocialClubDto.StudentsUniversitySocialClubs
+    
         };
         var parameters = new DialogParameters { ["ClubDetail"] = selectedClub };
         var dialog = DialogService.Show<GetInformationsModal>("Social Club Details", parameters, option);

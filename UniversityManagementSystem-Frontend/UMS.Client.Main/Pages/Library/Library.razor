@@ -58,7 +58,7 @@ else
             
              </div>
               <div style=" position:absolute; background-color:white;border:3px solid black;width:20%; height:4%; margin-left: 40%;  margin-top: 10%; ">
-                    <p style=" text-align:center; font-family:Impact, fantasy; font-size:15px; margin-top:auto; margin-bottom:auto;">@courses[Page].Course.Title - @courses[Page].Course.Name</p>
+                    <p style=" text-align:center; font-family:Impact, fantasy; font-size:15px; margin-top:auto; margin-bottom:auto;">@courses[Page].Title - @courses[Page].Name</p>
               </div>
         }
 
@@ -68,6 +68,7 @@ else
                 
                      @foreach(var file in FileList.Data.Where(x=> x.CourseId == courses[Page+1].Id))
                     {
+                        Console.WriteLine(Page);
                         var bookName = CreateBook();
                         var src = "/Images/" + bookName + ".png";
                         <img id="@file.Id" class="Books" src="@src" title="@file.Name" onclick="@(()=>FileInfo(file.Id) )">
@@ -75,8 +76,8 @@ else
                     <MudFab Color="Color.Primary" OnClick="@(() => AddNote(Page+1))" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" Style="margin-top:5%; margin-left:5px;"/>
                 
                 </div>
-                 <div style=" position:absolute; background-color:white;border:3px solid black;width:20%; height:4%; margin-left: 40%;  margin-top: 10%; ">
-                        <p style=" text-align:center; font-family:Impact, fantasy; font-size:15px; margin-top:auto; margin-bottom:auto;">@courses[Page+1].Course.Title - @courses[Page].Course.Name</p>
+                 <div style=" position:absolute; background-color:white;border:3px solid black;width:20%; height:4%; margin-left: 40%;  margin-top: 32.5%; ">
+                     <p style=" text-align:center; font-family:Impact, fantasy; font-size:15px; margin-top:auto; margin-bottom:auto;">@courses[Page+1].Title - @courses[Page+1].Name</p>
                 </div>
         }
 
@@ -103,7 +104,7 @@ else
 @code {
     public LibraryFilesDto libraryFileDto = new LibraryFilesDto();
     private Result<IEnumerable<FileDto>> FileList;
-    List<StudentCourseDto> courses;
+    List<CourseDto> courses;
     UserType UserControl;
     bool UserAuthControl;
     int Page = 0;
@@ -126,9 +127,9 @@ else
                 }   
                 else if(UserControl == UserType.Teacher)
                 {
-                    var _courses = await CourseService.GetAll(_userID);
+                    var _courses = (await CourseService.GetAll(_userID)).Data;
                     FileList = await FileService.GetAllForTeacher(_userID);
-                    courses = _courses.Data.ToList();
+                    courses = _courses.ToList();
                 }
 
                 if (FileList == null)

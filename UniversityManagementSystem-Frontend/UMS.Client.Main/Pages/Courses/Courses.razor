@@ -31,7 +31,7 @@ else
     <div class="card mt-2 Grid-Card" style="max-width: 75rem; margin-left: auto; margin-right: auto;">
         <div class="card-header">
         </div>
-        <MudTable Items="@CourseList.Data" Dense="true" Hover="true" Filter="new Func<StudentCourseDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
+        <MudTable Items="@CourseList.Data" Dense="true" Hover="true" Filter="new Func<CourseDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
             <ToolBarContent>
                 <MudText Class="Table-Grid-Header" Typo="Typo.h6">Course List</MudText>
                 <MudSpacer />
@@ -46,10 +46,10 @@ else
                 <MudTh><label Class="Table-Grid-Header">Action</label></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Name">@context.Course.Name</MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd>
                     <MudTooltip Text="Show Details Of Course">
-                        <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context.Course))"></MudIconButton>
+                        <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
                     </MudTooltip>
                 </MudTd>
             </RowTemplate>
@@ -62,7 +62,7 @@ else
 
 
 @code {
-    private Result<IEnumerable<StudentCourseDto>> CourseList;
+    private Result<IEnumerable<CourseDto>> CourseList;
     UserType UserControl;
     long UserId;
     private CourseDto selectedCourse = new CourseDto();
@@ -96,11 +96,11 @@ else
         }
     }
 
-    private bool FilterFunc(StudentCourseDto studentCourseDto)
+    private bool FilterFunc(CourseDto studentCourseDto)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (studentCourseDto.Course.Name == null)
+        if (studentCourseDto.Name == null)
             return false;
 
         return false;

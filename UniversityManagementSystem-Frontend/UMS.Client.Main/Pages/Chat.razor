@@ -15,6 +15,14 @@
 @inject IJSRuntime _jsRuntime
 @implements IAsyncDisposable
 
+<style>
+    .mud-input > input.mud-input-root, div.mud-input-slot.mud-input-root {
+    color: black;
+}
+.mud-button-label {
+    color: green;
+}
+</style>
 <div class="d-flex flex-grow-1 flex-row">
     <MudPaper Elevation="25" Class="py-4 flex-grow-1">
         <MudToolBar Dense="true">
@@ -130,6 +138,7 @@
         CurrentUserId = long.Parse(await LocalStorageService.GetUserId());
         CurrentUsername = await LocalStorageService.GetUsername();
         ChatUsers = (await StudentService.GetAll()).Data.ToList();
+     
         if (!string.IsNullOrEmpty(ContactId))
         {
             await LoadUserChat(long.Parse(ContactId));
