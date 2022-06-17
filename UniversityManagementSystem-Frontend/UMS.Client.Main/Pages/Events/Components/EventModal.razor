@@ -59,7 +59,8 @@
                             @CreatePublishClubButtontext()
                         </MudButton>
                     </MudItem> 
-                    <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
+                    @if(operationType != OperationType.Update)
+                    {<MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
                         <MudButton ButtonType="MudBlazor.ButtonType.Submit" Variant="Variant.Filled" Color="MudBlazor.Color.Success" Disabled="@loading" OnClick="CreateEventForClub" Class="dialog-button">
                             @if (loading)
                             {
@@ -76,7 +77,7 @@
                             }
                             @CreatePublishUniversityButtontext()
                         </MudButton>
-                    </MudItem>
+                    </MudItem>}
                      <MudItem xs="12" sm="6" md="6" Style="display: flex; align-items: center; justify-content: center;">
                         <MudButton OnClick="Cancel" Variant="Variant.Filled" Color="MudBlazor.Color.Error" Class="dialog-button">Cancel</MudButton>
                     </MudItem>
