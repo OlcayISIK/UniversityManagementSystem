@@ -59,7 +59,7 @@ else
                     <MudTooltip Text="Show Details Of Club">
                         <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
                     </MudTooltip>
-                    @if(context.StudentsUniversitySocialClubs.Where(x=> x.StudentId == UserId).Count()>0)
+                    @if(!(context.StudentsUniversitySocialClubs.Where(x=> x.StudentId == UserId).Count()>0))
                     {
                          <MudTooltip Text="Join This Club">
                             <MudIconButton Icon="@Icons.Material.Filled.AddToQueue" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => JoinSocialClub(context.Id))"></MudIconButton>
@@ -157,5 +157,7 @@ else
             Snackbar.Add("You have joined the club", Severity.Success, options => options.Onclick = snackbar => Task.CompletedTask);
         else
             Snackbar.Add("You can not join this group at the moment", Severity.Error, options => options.Onclick = snackbar => Task.CompletedTask);
+
+        ClubList = await UniversitySocialClubService.GetAll();
     }
 }

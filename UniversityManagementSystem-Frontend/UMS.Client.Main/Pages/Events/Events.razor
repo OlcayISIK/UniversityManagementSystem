@@ -20,6 +20,7 @@
 @inject IEventService EventService
 @inject IConfiguration Configuration
 @inject IPageAuthenticationService PageAuthenticationService
+@inject IStudentService StudentService
 @if (EventList == null)
 {
     <Spinner />
@@ -27,12 +28,12 @@
 else
 {
     <div class="card mt-2 Grid-Card" style="max-width: 75rem; margin-left: auto; margin-right: auto;">
-        @if (UserControl == UserType.StudentRepresentative)
-        {
-            <div class="card-header">
+        <div class="card-header">
+            @if (student.IsStudentRepresentative)
+            {
                 <MudButton Variant="Variant.Outlined" OnClick="PublishEvent" Class="grid-addbtn">Publish New Event</MudButton>
+            }
         </div>
-        }
         <MudTable Items="@EventList.Data" Dense="true" Hover="true" Filter="new Func<EventDto,bool>(FilterFunc)" SortLabel="Sort By" Class="Table-Grid">
             <ToolBarContent>
                 <MudText Class="Table-Grid-Header" Typo="Typo.h6">Events List</MudText>
@@ -59,12 +60,18 @@ else
                 <MudTd DataLabel="LocationHeader">@context.LocationHeader</MudTd>
                 <MudTd DataLabel="Participants">@context.Participants / @context.Quota </MudTd>
                 <MudTd>
-                    <MudTooltip Text="Edit Event">
-                        <MudIconButton Icon="fas fa-edit" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" Class="Table-Edit-Button" OnClick="@(() => EventEditModal(context))"></MudIconButton>
-                    </MudTooltip>
-                    <MudTooltip Text="Delete Event">
-                        <MudIconButton Icon="fas fa-trash" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" Class="Table-Delete-Button" OnClick="@(() => ShowDeleteModal(context))"></MudIconButton>
-                    </MudTooltip>
+                    @if (student.IsStudentRepresentative)
+                    {
+                        <MudTooltip Text="Edit Event">
+                            <MudIconButton Icon="fas fa-edit" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" Class="Table-Edit-Button" OnClick="@(() => EventEditModal(context))"></MudIconButton>
+                        </MudTooltip>
+                    }
+                    @if (student.IsStudentRepresentative)
+                    {
+                        <MudTooltip Text="Delete Event">
+                            <MudIconButton Icon="fas fa-trash" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" Class="Table-Delete-Button" OnClick="@(() => ShowDeleteModal(context))"></MudIconButton>
+                        </MudTooltip>
+                    }
                     <MudTooltip Text="Show Details Of Event">
                         <MudIconButton Icon="fas fa-info-circle" Variant="Variant.Outlined" Size="MudBlazor.Size.Small" OnClick="@(() => GetInformationModal(context))"></MudIconButton>
                     </MudTooltip>
@@ -85,18 +92,23 @@ else
     private Result<IEnumerable<EventDto>> EventList;
     UserType UserControl;
     private EventDto selectedEvent = new EventDto();
+    private StudentDto student = new StudentDto();
     bool UserAuthControl;
     private string searchString = "";
+    private long UserId;
 
     protected override async Task OnInitializedAsync()
     {
         UserControl = await LocalStorageService.GetCurrentUserType();
         UserAuthControl = PageAuthenticationService.ControlAuthentication(Pages.Events, UserControl);
+        UserId = long.Parse(await LocalStorageService.GetUserId());
+
 
         if (UserAuthControl)
         {
             try
             {
+                student = (await StudentService.Get(UserId)).Data;
                 EventList = await EventService.GetAll();
                 if (EventList == null)
                     return;
